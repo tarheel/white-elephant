@@ -223,9 +223,9 @@ const CONFIG = {
     "    W.......#....#uu#sssc................#        ",
     "    #.......##dd##uu#sssc................W        ",
     "    #########....#uu#sssc................#        ",
-    "            #########sssc................#        ",
-    "            #########sssc................#        ",
-    "    ##############gg#sssc................#        ",
+    "    #.......#########sssc................#        ",
+    "    #.......#########sssc................#        ",
+    "    #............#gg#sssc................#        ",
     "  ###............#......c................#        ",
     "  #..............#......c................#        ",
     "  #..............d......##################        ",
@@ -263,7 +263,7 @@ const CONFIG = {
     { name: "Entry",       x0: 15, y0: 26, x1: 24, y1: 35, floor: "trav", depth: 0 },
     { name: "Living room", x0: 25, y0: 21,  x1: 40, y1: 43, floor: "wood", depth: 0 },
     { name: "Stairs",      x0: 18, y0: 36, x1: 24, y1: 41, floor: "wood", depth: 0 },
-    { name: "Dining room", x0: 3,  y0: 42, x1: 17, y1: 50, floor: "wood", depth: 1 },
+    { name: "Dining room", x0: 3,  y0: 39, x1: 17, y1: 50, floor: "wood", depth: 1 },
     { name: "Hall",        x0: 18, y0: 42, x1: 24, y1: 50, floor: "wood", depth: 1 },
     { name: "Kitchen",     x0: 25, y0: 47, x1: 40, y1: 66, floor: "wood", depth: 1 },
     { name: "Front steps", x0: 25, y0: 0, x1: 49, y1: 19, floor: "paver", depth: 0 },
@@ -295,8 +295,8 @@ const CONFIG = {
     { t: "roundtable", x: 31, y: 23, w: 4, h: 4 }, { t: "rocker", x: 29, y: 27 }, { t: "lamp", x: 39, y: 28 },
     { t: "ottoman", x: 31, y: 35 }, { t: "chair", x: 33, y: 32 }, { t: "chair", x: 33, y: 38 },
     { t: "plant", x: 26, y: 42 }, { t: "sideboard", x: 31, y: 42, w: 6 },
-    { t: "dining", x: 8, y: 45, w: 4, h: 3 }, { t: "sideboard", x: 7, y: 49, w: 4, dark: true, back: true, under: true }, { t: "sideboard", x: 8, y: 42, w: 4 },
-    { t: "plant", x: 5, y: 42 }, { t: "cattree", x: 14, y: 42 }, { t: "pantry", x: 15, y: 48, h: 3, side: true },
+    { t: "dining", x: 8, y: 45, w: 4, h: 3 }, { t: "sideboard", x: 7, y: 49, w: 4, dark: true, back: true, under: true }, { t: "sideboard", x: 8, y: 39, w: 4 },
+    { t: "plant", x: 5, y: 42 }, { t: "cattree", x: 14, y: 41 }, { t: "pantry", x: 15, y: 48, h: 3, side: true },
     { t: "bookside", x: 18, y: 47, w: 1, h: 4 }, { t: "armoire", x: 28, y: 47, w: 3 },
     { t: "pantry", x: 31, y: 47 }, { t: "fridge", x: 33, y: 47, w: 3 }, { t: "counter", x: 36, y: 47, w: 3 },
     { t: "counter", x: 39, y: 47, h: 12 }, { t: "ovens", x: 39, y: 59, h: 4 },
@@ -321,7 +321,7 @@ const CONFIG = {
   /* WALL DECOR. Drawn on the wall tile at x,y (w tiles wide). */
   decor: [ // x = left square, y = the lower of the two wall-face rows, w in squares
     { t: "tv", x: 9, y: 53, w: 4 }, { t: "mirror", x: 6, y: 53 }, { t: "nook", x: 14, y: 53 },
-    { t: "cabinets", x: 36, y: 46, w: 4 }, { t: "art", x: 10, y: 41, v: 2 }, { t: "art", x: 8, y: 33 }, { t: "cave", x: 13, y: 33 }, { t: "door", x: 19, y: 28 }, { t: "bell", x: 17, y: 24, w: 1 }
+    { t: "cabinets", x: 36, y: 46, w: 4 }, { t: "art", x: 10, y: 38, v: 2 }, { t: "art", x: 8, y: 33 }, { t: "cave", x: 13, y: 33 }, { t: "door", x: 19, y: 28 }, { t: "bell", x: 17, y: 24, w: 1 }
   ],
   /* LIGHTS. Tile coordinates, radius in tiles. fire:true flickers. */
   lights: [
@@ -1949,7 +1949,7 @@ function buildStatic(sc) {
   hStairwell(); CONFIG.chamfers.forEach(hChamfer); CONFIG.arcs.forEach(hArc); hYard(); CONFIG.decor.filter(d => d.t === "bell").forEach(d => { g.save(); g.translate(d.x * TS, (d.y - 1) * TS); g.scale(2, 2); DECOR.bell(); g.restore(); });
   { const cx = 25 * TS, cy = 44 * TS, R = 26; g.beginPath(); g.moveTo(cx - 1, cy - R); g.lineTo(cx - 1, cy + 1); g.lineTo(cx + R, cy + 1); g.arc(cx + R, cy - R, R, Math.PI / 2, Math.PI); g.closePath(); g.fillStyle = "#f6f2ea"; g.fill(); g.strokeStyle = EDG; g.lineWidth = .6; g.beginPath(); g.arc(cx + R, cy - R, R, Math.PI / 2, Math.PI); g.stroke(); g.strokeStyle = "rgba(0,0,0,.25)"; g.lineWidth = 2; g.beginPath(); g.arc(cx + R, cy - R, R - 1.6, Math.PI / 2, Math.PI); g.stroke(); }
   for (const f of CONFIG.furniture) if (f.under) drawFurn(g, f, 0); /* under: drawn below wall decor, e.g. the credenza behind the family-room TV */
-  CONFIG.decor.forEach(d => { g.save(); g.translate(d.x * TS, (d.y - 1) * TS); g.scale(2, 2); DECOR[d.t]((d.w || 2) / 2, d); g.restore(); });
+  CONFIG.decor.forEach(d => { if (d.t === "tv") return; g.save(); g.translate(d.x * TS, (d.y - 1) * TS); g.scale(2, 2); DECOR[d.t]((d.w || 2) / 2, d); g.restore(); });
 }
 const flick = (t, s) => reduced ? 0 : Math.sin(t * 9 + s) * 1.6;
 const pillow = (c, x, y) => { rr(shade(c, -.28), x + .3, y + .4, 5.2, 5.2, 1.6); rr(c, x, y, 5, 5, 1.5); rr(shade(c, .22), x + .8, y + .8, 2.2, 1, .5); };
@@ -2231,9 +2231,10 @@ function draw(t, dt) {
   ctx.drawImage(staticCv, 0, 0, mw, mh);
   const x0 = Math.max(0, (view.cx / TS | 0) - 1), x1 = Math.min(MW - 1, ((view.cx + view.w) / TS | 0) + 1), y0 = Math.max(0, (view.cy / TS | 0) - 1), y1 = Math.min(MH - 1, ((view.cy + view.h) / TS | 0) + 1);
   for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) if (MAP[y][x] === "H") for (let i = 0; i < 2; i++) { const on = reduced || Math.sin(t * 2.5 + y * 1.7 + i * 2.4) > -.3, c = BULBS[(y + i) % 4], lx = x * TS + 6 + i * 4, ly = y * TS + 3.5 + i * 8; if (on) { g.fillStyle = rad(lx, ly, 3.6, [[0, c + "cc"], [1, c + "00"]]); g.fillRect(lx - 3.6, ly - 3.6, 7.2, 7.2); } ell(on ? c : "#6b6355", lx, ly, .8, .8); }
-  for (const d of CONFIG.decor) if (d.t === "tv") { const fl = flick(t, 1); g.save(); g.translate(d.x * TS, (d.y - 1) * TS); g.scale(2, 2); g.fillStyle = rad(16, 11, 10, [[0, "rgba(255,170,90,.7)"], [1, "rgba(255,170,90,0)"]]); g.fillRect(8, 7.4, 16, 6.6); poly("#e8892b", [[12, 13.6], [20, 13.6], [17 + fl * .3, 8.6 - fl * .4], [15, 10.6]]); poly("#ffe38a", [[14, 13.6], [18, 13.6], [16.2, 10.4 - fl * .3]]); rr("#4a2e1e", 11, 13, 10, 1, .4); g.restore(); }
+  const tvDraw = d => { const fl = flick(t, 1); g.save(); g.translate(d.x * TS, (d.y - 1) * TS); g.scale(2, 2); DECOR.tv((d.w || 2) / 2, d); g.fillStyle = rad(16, 11, 10, [[0, "rgba(255,170,90,.7)"], [1, "rgba(255,170,90,0)"]]); g.fillRect(8, 7.4, 16, 6.6); poly("#e8892b", [[12, 13.6], [20, 13.6], [17 + fl * .3, 8.6 - fl * .4], [15, 10.6]]); poly("#ffe38a", [[14, 13.6], [18, 13.6], [16.2, 10.4 - fl * .3]]); rr("#4a2e1e", 11, 13, 10, 1, .4); g.restore(); } /* the TV wall is drawn with the sorted sprites, so anyone standing north of it goes behind */
   const list = [];
   const LOW = { island: 1, counter: 1, bench: 1, coffee: 1, ottoman: 1, kidtable: 1, dining: 1, roundtable: 1, desk: 1, sofa: 1, chaise: 1, chaisev: 1, stools: 1, sideboard: 1 };
+  for (const d of CONFIG.decor) if (d.t === "tv") list.push({ k: d.y - 1.5, f: () => tvDraw(d) });
   for (const f of CONFIG.furniture) if (!f.under) list.push({ k: f.y + (f.h || 2) - 1 + .2, low: LOW[f.t] ? f : null, f: () => drawFurn(ctx, f, t) });
   for (const n of live) list.push({ k: n.fy, who: n, f: () => {
     const moving = n.fx !== n.x || n.fy !== n.y, k = n.def.kind, L = n.def.look; let top = 47 * (L.tall || 1);
