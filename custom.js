@@ -31,7 +31,7 @@ window.CUSTOM = {
   // The TV: a video file (mp4, H.264 + AAC) plays on the screen when you press the remote.
   reach: {
     tv: {
-      video: "480p.mov", // e.g. "tv.mp4"
+      video: "tv.mp4", // e.g. "tv.mp4"
       videoLoop: true, // false = play once and stop on the last frame
     },
   },
