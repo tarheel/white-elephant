@@ -229,8 +229,11 @@ window.CUSTOM = {
     c: ["Columns. Load-bearing, probably. Do not lean with intent."],
     W: ["A wall of windows. Somewhere out there is the backyard."],
     B: ["The backyard. It's December. Stay in."],
+    shoebasket: [
+      "A basket of shoes. Shoes off is the house rule. The cats can smell your choices.",
+    ],
     rattan: ["A rattan cabinet. Shoes in the bottom, mysteries in the top."],
-    basket: ["A basket of shells. Do not take one. Somebody counts them."],
+    basket: ["An empty basket. It is waiting for something to deserve it."],
     mailbox: ["The mailbox. Nothing but catalogs. And one more catalog."],
     pot: ["A potted plant. It has seen many coats come and go."],
     maple: ["A Japanese maple, lit from below like it is about to make an announcement."],
@@ -269,6 +272,8 @@ window.CUSTOM = {
     unwrapHint: "Tap it to tear off the paper.",
     water: "You drink it right there. The walls hold still.",
     lit: "It's lit.",
+    chugStart: "You take a knee. Tradition is tradition.",
+    chugDone: "Pounded. +3 HP. Your dignity is somewhere back by the stairs.",
     doorGreet: [
       "HRRRAAAWWWRRGH!",
       "(It steps aside and waves you in. The party hat survived the doorframe. Barely.)",
@@ -454,7 +459,6 @@ window.CUSTOM = {
     },
     tv: {
       title: "The Frame TV. Tap to press the power button.",
-      video: "",
       embedUrl: "https://www.youtube-nocookie.com/embed/OWR3zMaRKis?autoplay=1&playsinline=1&rel=0",
       show: ["PARTY RULES:", "THE OFFICIAL VIDEO"],
       linkLabel: "▶ Play it",

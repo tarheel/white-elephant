@@ -8,6 +8,10 @@
    Delete or leave out anything you don't want to change. */
 window.CUSTOM = {
 
+  // Folder for sound and video files given by name only. "" = next to the HTML file.
+  // A name with a folder or a web address (e.g. "clips/a.mp3", "https://...") is used as written.
+  mediaDir: "media/",
+
   // Sound files (mp3 is safest). Empty "" keeps the built-in synthesized sound.
   // A list plays one at random each time, never the same one twice in a row.
   sounds: {
@@ -650,7 +654,6 @@ window.CUSTOM = {
     },
     "tv": {
       "title": "The Frame TV. Tap to press the power button.",
-      "video": "",
       "embedUrl": "https://www.youtube-nocookie.com/embed/OWR3zMaRKis?autoplay=1&playsinline=1&rel=0",
       "show": [
         "PARTY RULES:",

@@ -486,6 +486,7 @@ const CONFIG = {
      kind: can | bottle | carton | jar | wedge | slice | plate.  item = key in `items` above. */
   /* (set these in custom.js) YOUR OWN SOUNDS: file names or addresses of sound files sitting next to this page (mp3 works everywhere).
      Leave a slot empty ("") to keep the built-in synthesized sound. A list plays one at random each time. */
+  mediaDir: "media/",     /* folder for sound and video files named without a folder; "" = next to the HTML file */
   sounds: {
     stairs: "",            // walking down into the cave, e.g. "stairs.mp3"
     ice: "",               // raising the Smirnoff Ice, e.g. "item.mp3"
@@ -574,7 +575,8 @@ const CONFIG = {
 };
 /* custom.js: anything in window.CUSTOM is merged over CONFIG (objects merge key by key; lists and values replace). */
 const CUSTOM = (typeof window !== "undefined" && window.CUSTOM) || {};
-for (const [k, o] of Object.entries(CUSTOM.viewText || {})) if (CONFIG.reach[k]) Object.assign(CONFIG.reach[k], o);
+for (const [k, o] of Object.entries(CUSTOM.viewText || {})) if (CONFIG.reach[k]) for (const [f, v] of Object.entries(o)) if (f !== "video" && f !== "videoLoop") CONFIG.reach[k][f] = v; /* video settings live in reach, so stale copies here never override them */
+function mediaUrl(u) { return !u || /[\/:]/.test(u) ? u : (CONFIG.mediaDir || "") + u; } /* bare file names are looked up in CONFIG.mediaDir */
 if (CUSTOM.gifts && !Array.isArray(CUSTOM.gifts)) for (const [icon, o] of Object.entries(CUSTOM.gifts)) { const gf = CONFIG.gifts.find(x => x.icon === icon); if (gf) Object.assign(gf, o); }
 for (const [id, o] of Object.entries(CUSTOM.people || {})) { const d = CONFIG.npcs.concat(CONFIG.monsters).find(n => n.id === id); if (d && o) for (const k in o) d[k] = k === "look" ? Object.assign({}, d.look, o.look) : o[k]; }
 (function merge(dst, src) { for (const k in src) { if (k === "songs" || k === "people" || (k === "gifts" && !Array.isArray(src[k]))) continue; const v = src[k]; if (v && typeof v === "object" && !Array.isArray(v) && dst[k] && typeof dst[k] === "object" && !Array.isArray(dst[k])) merge(dst[k], v); else dst[k] = v; } })(CONFIG, CUSTOM);
@@ -1215,7 +1217,7 @@ const CLIPS = {};
 function clip(key) { // plays one of CONFIG.sounds[key]; false means "nothing set (or the file is broken), use the built-in sound"
   const c = CONFIG.sounds && CONFIG.sounds[key], list = (Array.isArray(c) ? c : [c]).filter(u => u && CLIPS[u] !== false); if (!list.length) return false; if (!AU.on) return true;
   let i = Math.floor(Math.random() * list.length); if (list.length > 1 && list[i] === CLIPS["last:" + key]) i = (i + 1) % list.length; const src = list[i]; CLIPS["last:" + key] = src;
-  let a = CLIPS[src]; if (!a) { a = CLIPS[src] = new Audio(src); a.preload = "auto"; a.onerror = () => { CLIPS[src] = false; }; }
+  let a = CLIPS[src]; if (!a) { a = CLIPS[src] = new Audio(mediaUrl(src)); a.preload = "auto"; a.onerror = () => { CLIPS[src] = false; }; }
   try { a.currentTime = 0; } catch (e) {} const pr = a.play(); if (pr && pr.catch) pr.catch(() => {}); return true;
 }
 function paintSound() { $("snd").textContent = !AU.on ? "Sound: off" : AU.ctx && AU.ctx.state !== "running" ? "Sound: tap here" : "Sound: on"; }
@@ -1246,7 +1248,7 @@ function closeReach() { if (RV && RV.anim) reachRelease(false); if (RV && RV.def
 function paintReach() { $("rtoast").textContent = RV.toast; $("rbag").hidden = !!(RV.def.piano || RV.def.cave); $("rbag").textContent = RV.def.pile ? "Your lap" : "Bag " + S.items.length; $("rbag").classList.toggle("hot", RV.carry != null); const l = $("rlink"), d = RV.def; const live2 = !!(d.remote && RV.on && RV.onT > .9); const vid = !!(d.video && !d.videoBroken); l.hidden = !live2 || !!d.embed || vid; if (d.link) { const q = reachXform(); l.href = d.link; l.innerHTML = "<span></span>"; l.firstChild.textContent = d.linkLabel; l.style.cssText = "left:" + (q.ox + 32 * q.sc) + "px;top:" + (q.oy + 102 * q.sc) + "px;width:" + 296 * q.sc + "px;height:" + 174 * q.sc + "px"; } tvEmbed(live2 && d.embed && !vid ? d.embedUrl : null); tvVideo(vid && d.remote && RV.on, live2); }
 function tvVideo(on, show) { /* CONFIG.reach.tv.video: started by the remote tap itself (phones only allow sound from a tap), shown once the static clears */
   let v = $("rvideo"); const d = CONFIG.reach.tv; if (!on) { if (v) { v.pause(); v.remove(); } return; }
-  if (!v) { v = document.createElement("video"); v.id = "rvideo"; v.src = d.video; v.playsInline = true; v.setAttribute("playsinline", ""); v.loop = d.videoLoop !== false; v.preload = "auto"; v.style.cssText = "position:absolute;object-fit:cover;background:#000;opacity:0;pointer-events:none";
+  if (!v) { v = document.createElement("video"); v.id = "rvideo"; v.src = mediaUrl(d.video); v.playsInline = true; v.setAttribute("playsinline", ""); v.loop = d.videoLoop !== false; v.preload = "auto"; v.style.cssText = "position:absolute;object-fit:cover;background:#000;opacity:0;pointer-events:none";
     v.onerror = () => { d.videoBroken = 1; v.remove(); if (RV) paintReach(); }; $("reach").appendChild(v); const pr = v.play(); if (pr && pr.catch) pr.catch(() => {}); }
   const q = reachXform(); v.style.left = q.ox + 32 * q.sc + "px"; v.style.top = q.oy + 102 * q.sc + "px"; v.style.width = 296 * q.sc + "px"; v.style.height = 174 * q.sc + "px";
   if (show) { if (v.style.opacity !== "1") { v.style.opacity = "1"; try { v.currentTime = 0; } catch (e) {} const pr = v.play(); if (pr && pr.catch) pr.catch(() => {}); } if (AU.mix) AU.mix.gain.value = 0; }
