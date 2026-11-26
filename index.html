@@ -295,7 +295,7 @@ const CONFIG = {
     { t: "roundtable", x: 31, y: 23, w: 4, h: 4 }, { t: "rocker", x: 29, y: 27 }, { t: "lamp", x: 39, y: 28 },
     { t: "ottoman", x: 31, y: 35 }, { t: "chair", x: 33, y: 32 }, { t: "chair", x: 33, y: 38 },
     { t: "plant", x: 26, y: 42 }, { t: "sideboard", x: 31, y: 42, w: 6 },
-    { t: "dining", x: 8, y: 45, w: 4, h: 3 }, { t: "sideboard", x: 7, y: 49, w: 4, dark: true }, { t: "sideboard", x: 8, y: 42, w: 4 },
+    { t: "dining", x: 8, y: 45, w: 4, h: 3 }, { t: "sideboard", x: 7, y: 48, oy: .25, w: 4, h: 1.75, dark: true, back: true }, { t: "sideboard", x: 8, y: 42, w: 4 },
     { t: "plant", x: 5, y: 42 }, { t: "cattree", x: 14, y: 42 }, { t: "pantry", x: 15, y: 48, h: 3, side: true },
     { t: "bookside", x: 18, y: 47, w: 1, h: 4 }, { t: "armoire", x: 28, y: 47, w: 3 },
     { t: "pantry", x: 31, y: 47 }, { t: "fridge", x: 33, y: 47, w: 3 }, { t: "counter", x: 36, y: 47, w: 3 },
@@ -321,7 +321,7 @@ const CONFIG = {
   /* WALL DECOR. Drawn on the wall tile at x,y (w tiles wide). */
   decor: [ // x = left square, y = the lower of the two wall-face rows, w in squares
     { t: "tv", x: 9, y: 53, w: 4 }, { t: "mirror", x: 6, y: 53 }, { t: "nook", x: 14, y: 53 },
-    { t: "cabinets", x: 36, y: 46, w: 4 }, { t: "art", x: 10, y: 41 }, { t: "art", x: 8, y: 33 }, { t: "cave", x: 13, y: 33 }, { t: "door", x: 19, y: 28 }, { t: "bell", x: 17, y: 24, w: 1 }
+    { t: "cabinets", x: 36, y: 46, w: 4 }, { t: "art", x: 10, y: 41, v: 2 }, { t: "art", x: 8, y: 33 }, { t: "cave", x: 13, y: 33 }, { t: "door", x: 19, y: 28 }, { t: "bell", x: 17, y: 24, w: 1 }
   ],
   /* LIGHTS. Tile coordinates, radius in tiles. fire:true flickers. */
   lights: [
@@ -1892,7 +1892,7 @@ function hChamfer(c) {
     for (const [sa, sb] of [[-4000, -8.5], [8.5, 4000]]) { hp(0, 16, 4000, CAPC, sa, sb); hp(.7, 1.4, 4000, "rgba(255,255,255,.4)", sa, sb); hp(-.35, .35, 4000, EDG, sa, sb); hp(15.3, 16.05, 4000, EDG, sa, sb); }
     hp(0, 16, 4000, "rgba(0,0,0,.14)", -8.5, 8.5); for (const sd of [-8.5, 7.3]) { hp(-13, 1, 4000, "#fdfbf6", sd, sd + 1.2); hp(-13, 1, 4000, "rgba(120,160,190,.35)", sd + .35, sd + .85); }
     g.restore(); g.restore(); return; }
-  g.save(); g.beginPath(); g.rect(c.clipL ? -8 : -TS, -TS, N + (c.clipL ? 8 : TS) + (c.clipR ? 8 : TS), N + 2 * TS); g.clip(); g.globalCompositeOperation = "destination-out"; hp(16, 6000, 4000, "#000"); g.restore();
+  g.save(); g.beginPath(); g.rect(c.clipL ? -8 : -TS - 2, -TS - 2, N + (c.clipL ? 8 : TS + 2) + (c.clipR ? 8 : TS + 2), N + 2 * TS + 4); g.clip(); g.globalCompositeOperation = "destination-out"; /* 2px past the wall tiles so their antialiased outer edge lines go too */ hp(16, 6000, 4000, "#000"); g.restore();
   g.save(); g.beginPath(); g.rect(0, 0, N, N); g.clip();
   if (top) { hp(-22.8, -22, 4000, "rgba(0,0,0,.35)"); hp(-22, 0, 4000, "#ece6d9"); hp(-22, -18, 4000, "#fdfbf6"); }
   hp(0, 16, 4000, CAPC); hp(.7, 1.4, 4000, "rgba(255,255,255,.4)");
@@ -1901,7 +1901,7 @@ function hChamfer(c) {
   g.restore(); g.restore();
 }
 function hArc(a) {
-  const cx = (a.x0 + a.x1 + 1) / 2 * TS, hw = (a.x1 - a.x0 + 1) / 2 * TS, yb = a.yBase * TS, d = a.d, top = yb - d - TS - 1;
+  const cx = (a.x0 + a.x1 + 1) / 2 * TS, hw = (a.x1 - a.x0 + 1) / 2 * TS, yb = a.yBase * TS, d = a.d, top = Math.min(yb - d - TS - 1, Math.floor((yb - d - TS) / TS) * TS); /* erase from the top of the wall row, so no sliver of the straight wall shows above the curve */
   const band = (rxo, ryo, rxi, ryi, col) => { g.beginPath(); g.ellipse(cx, yb, rxo, Math.max(.1, ryo), 0, Math.PI, 0); g.ellipse(cx, yb, rxi, Math.max(.1, ryi), 0, 0, Math.PI, true); g.closePath(); g.fillStyle = col; g.fill(); };
   const arc = (rx, ry, col, lw) => { g.strokeStyle = col; g.lineWidth = lw; g.beginPath(); g.ellipse(cx, yb, rx, Math.max(.1, ry), 0, Math.PI, 0); g.stroke(); };
   g.save(); g.globalCompositeOperation = "destination-out"; g.beginPath(); g.rect(cx - hw - TS - 1, top, 2 * (hw + TS) + 2, yb - top); g.moveTo(cx - hw - TS, yb); g.ellipse(cx, yb, hw + TS, d + TS, 0, Math.PI, 0); g.closePath(); g.fillStyle = "#000"; g.fill("evenodd"); g.restore();
@@ -1926,7 +1926,7 @@ const DECOR = {
     for (let i = 0; i < 7; i++) ell(i % 2 ? "#215c40" : "#2b7350", 2 + i * 2, -8.6 - Math.sin(i / 6 * Math.PI) * 2.4, 2.2, 1.3, i); ell("#b3273a", 4.5, -7.6, .7, .7); seg("#8f1d2c", .8, 4.4, -6, 4, 0); seg("#3d5a7a", .8, 5.6, -6.4, 5.4, -1); },
   nook() { rr("#fdfbf6", 1, 2, 14, 12.4, .8); bx("#e4dfd2", 1.8, 2.8, 12.4, 10.8); for (let j = 0; j < 2; j++) { for (let i = 0; i < 8; i++) { const bh = 3.6 + prn(i, j) * 1; bx(BOOKS[(i * 3 + j) % 7], 2.2 + i * 1.5, 3.2 + j * 5.4 + (4.6 - bh), 1.3, bh); } bx("#fdfbf6", 1.8, 7.8 + j * 5.4, 12.4, .6); } },
   cabinets(w) { for (let i = 0; i < w; i++) { rr("#e3ddd0", i * 16 + .3, 1.6, 15.4, 9.6, .8); rr("#fdfbf6", i * 16 + .8, 2, 14.4, 8.6, .6); bx("#17140f", i * 16 + 12.4, 8, .9, 1.7); } g.fillStyle = lin(0, 11, 0, 15.6, [[0, "rgba(255,243,201,.9)"], [1, "rgba(255,243,201,0)"]]); g.fillRect(0, 11.2, w * 16, 4.4); },
-  art() { rr("rgba(0,0,0,.2)", 3.4, 3.4, 10, 9.4, .5); rr("#d9b98a", 3, 3, 10, 9.4, .5); bx("#f0e8dc", 4, 4, 8, 7.4); ell("#3a3a3a", 7, 7.6, 1.6, 2.6); ell("#b9603f", 9.6, 8.6, 1.4, 1.8); seg("#5f86ad", .6, 4.6, 10.4, 11.4, 9.6); },
+  art(w, d) { if (d && d.v === 2) { /* dining room: dark frame, night sea */ rr("rgba(0,0,0,.2)", 3.4, 3.4, 10, 9.4, .5); rr("#2a2622", 3, 3, 10, 9.4, .5); bx("#f3eee4", 3.8, 3.8, 8.4, 7.8); bx("#2c3e5c", 4.8, 4.8, 6.4, 3.6); ell("#f1e2b8", 9.2, 6, .9, .9); bx("#3f7f86", 4.8, 8.4, 6.4, 2.2); seg("#8fc2c0", .5, 5, 8.6, 11, 8.6); seg("#8fc2c0", .4, 5.6, 9.6, 10.4, 9.6); return; } rr("rgba(0,0,0,.2)", 3.4, 3.4, 10, 9.4, .5); rr("#d9b98a", 3, 3, 10, 9.4, .5); bx("#f0e8dc", 4, 4, 8, 7.4); ell("#3a3a3a", 7, 7.6, 1.6, 2.6); ell("#b9603f", 9.6, 8.6, 1.4, 1.8); seg("#5f86ad", .6, 4.6, 10.4, 11.4, 9.6); },
   window(w) { hGlass(1, 3, w * 16 - 2, 9); },
   door() { rr("#0b0b0d", .6, 1, 14.8, 15, 1); rr("#1c1d21", 1.6, 2, 12.8, 13.4, .6); g.strokeStyle = "#6a6c72"; g.lineWidth = .5; for (let j = 0; j < 2; j++) for (let k = 0; k < 3; k++) { g.beginPath(); g.arc(4 + k * 4, 5.4 + j * 6, 1.7, (k + j) % 2 ? 0 : Math.PI, (k + j) % 2 ? Math.PI : 0); g.stroke(); } bx("#6a6c72", 1.6, 8.4, 12.8, .5); rr("#c9a035", 12.6, 8, 1.2, 2.4, .5); },
   bell() { rr("rgba(0,0,0,.3)", 6.2, 10, 2.4, 4.6, 1); rr("#e9ecef", 5.4, 9.4, 2.6, 4.6, 1); ell("#7ad1ff", 6.7, 12.6, .9, .9); ell("#1c1d21", 6.7, 10.8, .55, .55); },
@@ -1948,7 +1948,7 @@ function buildStatic(sc) {
     else if (ch === "D") { const L = tileAt(x - 1, y) !== "D", Rr = tileAt(x + 1, y) !== "D", first = tileAt(x, y - 1) !== "D"; if (first) bx("#b3a17e", px, py, TS + .2, 1); if (Rr) { const o = 11.4; rr("#0b0b0d", px + o, py - .2, 4.6, TS + .4, 1); bx("#2c2d31", px + o + 1.2, py, 2.2, TS + .2); for (let k = 0; k < 2; k++) { g.strokeStyle = "#6a6c72"; g.lineWidth = .5; g.beginPath(); g.arc(px + o + 2.3, py + 4 + k * 8, 1.6, k ? 0 : Math.PI, k ? Math.PI : 0); g.stroke(); } } } }
   hStairwell(); CONFIG.chamfers.forEach(hChamfer); CONFIG.arcs.forEach(hArc); hYard(); CONFIG.decor.filter(d => d.t === "bell").forEach(d => { g.save(); g.translate(d.x * TS, (d.y - 1) * TS); g.scale(2, 2); DECOR.bell(); g.restore(); });
   { const cx = 25 * TS, cy = 44 * TS, R = 26; g.beginPath(); g.moveTo(cx - 1, cy - R); g.lineTo(cx - 1, cy + 1); g.lineTo(cx + R, cy + 1); g.arc(cx + R, cy - R, R, Math.PI / 2, Math.PI); g.closePath(); g.fillStyle = "#f6f2ea"; g.fill(); g.strokeStyle = EDG; g.lineWidth = .6; g.beginPath(); g.arc(cx + R, cy - R, R, Math.PI / 2, Math.PI); g.stroke(); g.strokeStyle = "rgba(0,0,0,.25)"; g.lineWidth = 2; g.beginPath(); g.arc(cx + R, cy - R, R - 1.6, Math.PI / 2, Math.PI); g.stroke(); }
-  CONFIG.decor.forEach(d => { g.save(); g.translate(d.x * TS, (d.y - 1) * TS); g.scale(2, 2); DECOR[d.t]((d.w || 2) / 2); g.restore(); });
+  CONFIG.decor.forEach(d => { g.save(); g.translate(d.x * TS, (d.y - 1) * TS); g.scale(2, 2); DECOR[d.t]((d.w || 2) / 2, d); g.restore(); });
 }
 const flick = (t, s) => reduced ? 0 : Math.sin(t * 9 + s) * 1.6;
 const pillow = (c, x, y) => { rr(shade(c, -.28), x + .3, y + .4, 5.2, 5.2, 1.6); rr(c, x, y, 5, 5, 1.5); rr(shade(c, .22), x + .8, y + .8, 2.2, 1, .5); };
@@ -2034,7 +2034,7 @@ const F = {
   chair(f, w, h) { rr(SHD, 3.4, 4, 10, 11, 1.4); rr("#5a3a26", 3, 2, 10, 12, 1.4); rr("#7a4a2a", 3.4, 2.4, 9.2, 2.2, 1); rr("#26241f", 4, 5, 8, 7.6, 1); rr("#3a372f", 4.6, 5.6, 6.8, 1.4, .6); bx("#5a3a26", 3, 12.6, 1.4, 2.4); bx("#5a3a26", 11.6, 12.6, 1.4, 2.4); },
   rocker(f, w, h) { curve("#3a2418", 1.4, [1, 13.4, 5, 15.4, 11, 15.4, 15, 13.4]); rr(SHD, 4.4, 5.6, 9, 8, 1); rr("#5a3a26", 4, 4.6, 9, 8.4, 1.2); rr("#7d5438", 4.8, 5.6, 7.4, 5.8, .8); rr("#4a2e1e", 3.2, -5.4, 10.6, 2.2, 1); for (let i = 0; i < 5; i++) bx("#5a3a26", 4.2 + i * 2, -3.6, .9, 8.6); bx("#4a2e1e", 2.6, 3.6, 1.6, 6); bx("#4a2e1e", 11.8, 3.6, 1.6, 6); },
   sideboard(f, w, h) { const c = f.dark ? "#262b2e" : "#b9895a", l = f.dark ? "#3d4447" : "#d6ab7c", d = f.dark ? "#17191b" : "#8f6238";
-    if (w >= h) { rr(SHD, .5, 2.6, w, h - 1, .8); rr(d, 0, 2.6, w, h - 3.2, .8); rr(c, 0, 2.6, w, h - 5, .8); rr(l, -.3, 1, w + .6, 5, .8); for (let i = 0; i * 12 + 2 < w - 6; i++) { rr(d, 2 + i * 12, 7.2, 10, h - 10.4, .5); rr(c, 2.5 + i * 12, 7.6, 9, h - 11.4, .4); for (let k = 0; k < 4; k++) bx("rgba(0,0,0,.14)", 3.4 + i * 12 + k * 2.2, 7.8, .5, h - 11.8); }
+    if (w >= h) { rr(SHD, .5, 2.6, w, h - 1, .8); rr(d, 0, 2.6, w, h - 3.2, .8); rr(c, 0, 2.6, w, h - 5, .8); if (f.back) rr(l, -.3, 1, w + .6, h - 7, .8); /* faces away (doors on the far side): mostly top, plain back below */ else rr(l, -.3, 1, w + .6, 5, .8); for (let i = 0; !f.back && i * 12 + 2 < w - 6; i++) { rr(d, 2 + i * 12, 7.2, 10, h - 10.4, .5); rr(c, 2.5 + i * 12, 7.6, 9, h - 11.4, .4); for (let k = 0; k < 4; k++) bx("rgba(0,0,0,.14)", 3.4 + i * 12 + k * 2.2, 7.8, .5, h - 11.8); }
       rr("#fff7dc", 4.6, -1.6, 1.6, 3.4, .5); ell("#ffd38a", 5.4, -2, .6, .8); rr("#e9e4da", w - 9, -3.6, 3.4, 5.6, 1); leaf("#3f9a66", w / 2, -.4, 5, 2.4); rr("#c9a035", w / 2 + 5, 1.4, 5, 1.2, .4); return; }
     rr(SHD, 3.6, .6, w - 3, h, .8); rr(d, 4, 0, w - 4, h, .8); rr(c, 4, 0, w - 5, h, .8); rr(l, 5, .4, w - 6.6, h - 1.4, .6); rr("#fff7dc", 8, 5.6, 1.6, 2.6, .5); rr("#fff7dc", 10.6, 9.6, 1.5, 2.4, .5); ell("#ffd38a", 8.8, 5.2, .6, .8); ell("#ffd38a", 11.3, 9.2, .6, .8); leaf("#3f9a66", 9.6, h - 8, 6, 3); rr("#8f1d2c", 7.6, h / 2 - .6, 3.4, 4.4, .8); rr("#c9a035", 6.4, 17.6, 6.4, 1.2, .4); },
   bench(f, w, h) { rr(SHD, 4.6, 1.6, 10, h - 1, 1); rr("#9a7044", 4, .6, 10.4, h - 1.2, 1); rr("#b9b4aa", 4, .6, 10.4, h - 4.4, 1.4); rr("#dedad2", 4.8, 1.2, 8.8, h - 6.4, 1.2); bx("rgba(0,0,0,.12)", 4.8, h / 2 - 2, 8.8, .5); },
