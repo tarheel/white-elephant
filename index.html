@@ -224,17 +224,17 @@ const CONFIG = {
     "    W.......#....#uu#sssc................#        ",
     "    #.......##dd##uu#sssc................W        ",
     "    #########....#uu#sssc................#        ",
-    "    #.......#########sssc................#        ",
-    "    #.......#########sssc................#        ",
-    "  ###............#gg#sssc................#        ",
+    "    #################sssc................#        ",
+    "    #################sssc................#        ",
+    "    #............#gg#sssc................#        ",
+    "    #............#......c................#        ",
     "  #..............#......c................#        ",
-    "  #..............#......c................#        ",
-    "  W..............d......##################        ",
+    "  #..............d......##################        ",
     "  W..............d......##################        ",
     "  W..............#.......#################        ",
     "  #..............#.......................#        ",
     "  #..............#.......................#        ",
-    "  ###............#.......................#        ",
+    "    #............#.......................#        ",
     "    #............#.......................#        ",
     "    ##############=====#H................#        ",
     "    ##############=====#H................W        ",
@@ -264,7 +264,7 @@ const CONFIG = {
     { name: "Entry",       x0: 15, y0: 26, x1: 24, y1: 35, floor: "trav", depth: 0 },
     { name: "Living room", x0: 25, y0: 21,  x1: 40, y1: 43, floor: "wood", depth: 0 },
     { name: "Stairs",      x0: 18, y0: 36, x1: 24, y1: 41, floor: "wood", depth: 0 },
-    { name: "Dining room", x0: 3,  y0: 39, x1: 17, y1: 50, floor: "wood", depth: 1 },
+    { name: "Dining room", x0: 3,  y0: 41, x1: 17, y1: 50, floor: "wood", depth: 1 },
     { name: "Hall",        x0: 18, y0: 42, x1: 24, y1: 50, floor: "wood", depth: 1 },
     { name: "Kitchen",     x0: 25, y0: 47, x1: 40, y1: 66, floor: "wood", depth: 1 },
     { name: "Front steps", x0: 25, y0: 0, x1: 49, y1: 19, floor: "paver", depth: 0 },
@@ -275,10 +275,10 @@ const CONFIG = {
   rugs: [ // styles: kilim, moroccan, persian, coral, red, mat
     { x0: 21, y0: 25, x1: 22, y1: 25, style: "mat" }, { x0: 19, y0: 29, x1: 23, y1: 29, style: "stripe" },
     { x0: 27, y0: 31, x1: 37, y1: 40, style: "kilim" }, { x0: 7, y0: 23, x1: 12, y1: 27, style: "jute" }, { x0: 7, y0: 35, x1: 10, y1: 35, style: "persian" },
-    { x0: 7,  y0: 42, x1: 14, y1: 48, style: "moroccan" },
+    { x0: 7,  y0: 43, x1: 14, y1: 48, style: "moroccan" },
     { x0: 19, y0: 44, x1: 21, y1: 48, style: "persian" },
     { x0: 26, y0: 55, x1: 27, y1: 62, style: "coral" },
-    { x0: 8,  y0: 55, x1: 17, y1: 65, style: "red" }
+    { x0: 7,  y0: 55, x1: 17, y1: 65, style: "red" }
   ],
 
   /* FURNITURE. Solid. x,y = top-left tile; w,h in squares (default 2). t picks the drawing and the poke text. */
@@ -296,17 +296,16 @@ const CONFIG = {
     { t: "roundtable", x: 31, y: 23, w: 4, h: 4 }, { t: "rocker", x: 29, y: 27 }, { t: "lamp", x: 39, y: 28 },
     { t: "ottoman", x: 31, y: 35 }, { t: "chair", x: 33, y: 32 }, { t: "chair", x: 33, y: 38 },
     { t: "plant", x: 26, y: 42 }, { t: "sideboard", x: 31, y: 42, w: 6 },
-    { t: "dining", x: 8, y: 44, w: 4, h: 3 }, { t: "sideboard", x: 7, y: 49, w: 4, dark: true, back: true, under: true }, { t: "sideboard", x: 8, y: 39, w: 4 },
-    { t: "plant", x: 5, y: 40 }, { t: "cattree", x: 14, y: 41 }, { t: "pantry", x: 15, y: 48, h: 3, side: true },
+    { t: "dining", x: 8, y: 44, w: 4, h: 3 }, { t: "sideboard", x: 7, y: 49, w: 4, dark: true, back: true, under: true }, { t: "sideboard", x: 8, y: 41, w: 4 },
+    { t: "plant", x: 5, y: 41 }, { t: "cattree", x: 14, y: 41 }, { t: "pantry", x: 15, y: 48, h: 3, side: true },
     { t: "bookside", x: 18, y: 47, w: 1, h: 4 }, { t: "armoire", x: 28, y: 47, w: 3 },
     { t: "pantry", x: 31, y: 47 }, { t: "fridge", x: 33, y: 47, w: 3 }, { t: "counter", x: 36, y: 47, w: 3 },
     { t: "counter", x: 39, y: 47, h: 12 }, { t: "ovens", x: 39, y: 59, h: 4 },
     { t: "island", x: 30, y: 52, w: 5, h: 11 }, { t: "stools", x: 28, y: 56, h: 6 }, { t: "bench", x: 25, y: 57, h: 4, ox: -.5 }, { t: "basket", x: 25, y: 61, w: 1, h: 1 },
     { t: "bins", x: 38, y: 64, diag: true }, { t: "kidtable", x: 26, y: 63, w: 3, rot: .785, ox: -.3, oy: .8 },
-    { t: "sofa", x: 7, y: 56, h: 10, color: "#a8622e", back: "left", p1: "#c9552f", p2: "#6f8a5a" },
-    { t: "gap", x: 5, y: 54, w: 2, h: 12 },
-    { t: "sofa", x: 9, y: 64, w: 5, color: "#a8622e", back: "bottom", p1: "#3f5f78", join: true },
-    { t: "coffee", x: 11, y: 59 }, { t: "lamp", x: 7, y: 54, table: true },
+    { t: "secv", x: 6, ox: .3, y: 56, w: 2.5, h: 6.5, color: "#a8622e", p1: "#1f2a44" }, // leather sectional: end seat with arm and a seat along the windows...
+    { t: "sech", x: 6, ox: .3, y: 62, oy: .5, w: 7, h: 2.5, color: "#a8622e", p1: "#c9552f", p2: "#6f8a5a", p3: "#3f5f78" }, // ...then the corner, a seat, and a backless square
+    { t: "coffee", x: 9, y: 57 }, { t: "lamp", x: 6, ox: .3, y: 54, table: true }, { t: "gap", x: 5, y: 54, w: 1, h: 10 },
     { t: "chaise", x: 17, y: 65, w: 3 }, { t: "sideboard", x: 22, y: 56, h: 5 },
     { t: "tree", x: 20, y: 61, w: 3, h: 3 }, { t: "gifts", x: 17, y: 62 }
   ],
@@ -317,12 +316,12 @@ const CONFIG = {
   chamfers: [
     { x: 5, y: 64, n: 3, corner: "bl", win: true }, { x: 21, y: 64, n: 3, corner: "br", win: true, clipR: true },
     { x: 25, y: 64, n: 3, corner: "bl", win: true, clipL: true }, { x: 38, y: 64, n: 3, corner: "br", win: true },
-    { x: 15, y: 28, n: 3, corner: "br", inner: "trav", door: [1, 1] }, { x: 3, y: 42, n: 2, corner: "tl", win: true }, { x: 3, y: 47, n: 2, corner: "bl", win: true }
+    { x: 15, y: 28, n: 3, corner: "br", inner: "trav", door: [1, 1] }, { x: 3, y: 43, n: 2, corner: "tl", win: true, flush: true }, { x: 3, y: 47, n: 2, corner: "bl", win: true, flush: true }
   ],
   /* WALL DECOR. Drawn on the wall tile at x,y (w tiles wide). */
   decor: [ // x = left square, y = the lower of the two wall-face rows, w in squares
     { t: "tv", x: 9, y: 53, w: 4 }, { t: "mirror", x: 6, y: 53 }, { t: "nook", x: 14, y: 53 },
-    { t: "cabinets", x: 36, y: 46, w: 4 }, { t: "art", x: 10, y: 38, v: 2 }, { t: "art", x: 8, y: 33 }, { t: "cave", x: 13, y: 33 }, { t: "door", x: 19, y: 28 }, { t: "bell", x: 17, y: 24, w: 1 }
+    { t: "cabinets", x: 36, y: 46, w: 4 }, { t: "art", x: 10, y: 40, v: 2 }, { t: "art", x: 8, y: 33 }, { t: "cave", x: 13, y: 33 }, { t: "door", x: 19, y: 28 }, { t: "bell", x: 17, y: 24, w: 1 }
   ],
   /* LIGHTS. Tile coordinates, radius in tiles. fire:true flickers. */
   lights: [
@@ -1260,20 +1259,20 @@ function tvEmbed(url) { // only used when CONFIG.reach.tv.embed is true
   f.style.cssText = "position:absolute;border:0;left:" + (q.ox + 32 * q.sc) + "px;top:" + (q.oy + 102 * q.sc) + "px;width:" + 296 * q.sc + "px;height:" + 174 * q.sc + "px";
   $("reach").appendChild(f); if (AU.mix) AU.mix.gain.value = 0;
 }
-function reachXform() { const w = rcv.clientWidth || 360, h = rcv.clientHeight || 640, sc = Math.min(w / 360, h / 560); return { sc, ox: (w - 360 * sc) / 2, oy: (h - 560 * sc) / 2, w, h }; }
+function reachXform() { const W = RV && RV.def.cave ? CAVE.W : 360, H = RV && RV.def.cave ? CAVE.H : 560, w = rcv.clientWidth || 360, h = rcv.clientHeight || 640, sc = Math.min(w / W, h / H); return { sc, ox: (w - W * sc) / 2, oy: (h - H * sc) / 2, w, h }; } /* the cave has its own wider stage */
 function reachPoint(ev) { const r = rcv.getBoundingClientRect(), q = reachXform(); return { x: (ev.clientX - r.left - q.ox) / q.sc, y: (ev.clientY - r.top - q.oy) / q.sc }; }
 function reachGrab(i) { if (RV.anim || S.taken[RV.id].includes(i)) return; sfx("grab"); RV.anim = { i, ph: "reach", t: 0 }; }
 rcv.addEventListener("pointermove", e => { if (!RV) return; RV.aim = reachPoint(e); if (RV.def.piano && RV.held && e.pointerId in RV.held) pianoPress(e.pointerId, RV.aim); });
 /* THE CAVE: an old man, two fires, one bottle. */
 function drawIce(x, y, k) { g.save(); g.translate(x, y); g.scale(k, k); ell("rgba(255,255,255,.12)", 0, 1, 9, 2.4); rr("#dfeef2", -5.5, -30, 11, 31, 3); rr("#f6fbfc", -5.5, -30, 4, 31, 2); rr("#dfeef2", -2.6, -42, 5.2, 14, 2); rr("#b3273a", -3.2, -45, 6.4, 4.4, 1.2); rr("#fffaf0", -5.5, -22, 11, 13, 1); rr("#b3273a", -5.5, -17.4, 11, 3.6, 0); g.fillStyle = "#3d5a7a"; g.font = "700 5px ui-monospace, monospace"; g.textAlign = "center"; g.fillText("ICE", 0, -10.6); g.restore(); }
-const CAVE = { fires: [84, 276], top: 292, ice: [180, 362] };
+const CAVE = { W: 528, H: 504, x0: 48, x1: 480, y0: 108, y1: 420, fires: [132, 396], top: 278, ice: [264, 312] }; /* a wide room like the original: 16 x 12 squares of 24 */
 function caveLines(r) { return S.iced ? (r.gotNow ? r.def.got : r.def.again) : r.def.say; }
-function caveTap(p) { const r = RV; if (r.hold > 0) return; const f = CAVE.fires.findIndex(fx => Math.abs(p.x - fx) < 34 && p.y > 190 && p.y < 262);
-  r.want = f; r.tx = f >= 0 ? CAVE.fires[f] : Math.max(52, Math.min(308, p.x)); r.ty = f >= 0 ? CAVE.top : Math.max(CAVE.top, p.y + 20); }
+function caveTap(p) { const r = RV; if (r.hold > 0) return; const f = CAVE.fires.findIndex(fx => Math.abs(p.x - fx) < 34 && p.y > 188 && p.y < 260);
+  r.want = f; r.tx = f >= 0 ? CAVE.fires[f] : Math.max(CAVE.x0 + 16, Math.min(CAVE.x1 - 16, p.x)); r.ty = f >= 0 ? CAVE.top : Math.max(CAVE.top, p.y + 20); }
 function caveAnger(r) { if (r.fire) return; r.fire = 1; r.cool = .5; r.toast = CONFIG.text.firesAngry; sfx("hurt"); paintReach(); }
 function caveTick(dt) {
   const r = RV, tot = caveLines(r).join("").length, n0 = Math.floor(r.ct * 12); r.ct += dt; { const n1 = Math.floor(r.ct * 12); if (n1 !== n0 && n1 <= tot) sfx("type"); }
-  if (r.px === undefined) { r.px = 180; r.py = 446; r.dir = "up"; r.balls = []; r.want = -1; r.ct = -.8; r.side = 0; clip("stairs") || sfx("stairs"); }
+  if (r.px === undefined) { r.px = 264; r.py = 446; r.dir = "up"; r.balls = []; r.want = -1; r.ct = -.8; r.side = 0; clip("stairs") || sfx("stairs"); }
   r.flash = Math.max(0, (r.flash || 0) - dt);
   if (r.hold > 0) { r.hold -= dt; r.moving = false; if (r.hold <= 0 && r.gotNow && !r.chugged) { r.chug = 3.2; r.chugged = 1; r.toast = CONFIG.text.chugStart; paintReach(); } }
   else if (r.chug > 0) { const g0 = Math.floor(r.chug / .42); r.chug -= dt; r.moving = false; if (Math.floor(r.chug / .42) !== g0 && r.chug > .5) clip("gulp") || sfx("gulp");
@@ -1283,27 +1282,27 @@ function caveTick(dt) {
     else if (r.tx !== undefined) { dx = r.tx - r.px; dy = r.ty - r.py; if (Math.hypot(dx, dy) < 4) { if (r.want >= 0) caveAnger(r); r.tx = undefined; r.want = -1; dx = dy = 0; } }
     const m = Math.hypot(dx, dy); r.moving = m > 0;
     if (m > 0) { const sp = 120 * dt / m; let nx = r.px + dx * sp, ny = r.py + dy * sp; r.dir = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? "left" : "right") : dy < 0 ? "up" : "down";
-      const inGap = nx > 156 && nx < 204; nx = Math.max(52, Math.min(308, nx)); if (ny < CAVE.top) { ny = CAVE.top; if (keys.has("up") && CAVE.fires.some(fx => Math.abs(nx - fx) < 28)) caveAnger(r); }
-      if (ny > 450 && !inGap) ny = 450; if (ny > 450) nx = Math.max(160, Math.min(200, nx)); r.px = nx; r.py = ny; r.step = (r.step || 0) + dt * 9;
-      if (ny > 486) { keys.clear(); return closeReach(); } }
-    if (!S.iced && Math.abs(r.px - CAVE.ice[0]) < 22 && r.py < CAVE.ice[1] + 46) { S.iced = 1; r.gotNow = 1; S.items.push("ice"); r.hold = 2.2; r.ct = 0; r.dir = "down"; r.tx = undefined; keys.clear(); r.toast = "You got a Smirnoff Ice. " + CONFIG.items.ice.note; clip("ice") || sfx("fanfare"); paintReach(); }
+      const inGap = nx > 240 && nx < 288; nx = Math.max(CAVE.x0 + 16, Math.min(CAVE.x1 - 16, nx)); if (ny < CAVE.top) { ny = CAVE.top; if (keys.has("up") && CAVE.fires.some(fx => Math.abs(nx - fx) < 28)) caveAnger(r); }
+      if (ny > CAVE.y1 && !inGap) ny = CAVE.y1; if (ny > CAVE.y1) nx = Math.max(244, Math.min(284, nx)); r.px = nx; r.py = ny; r.step = (r.step || 0) + dt * 9;
+      if (ny > CAVE.y1 + 40) { keys.clear(); return closeReach(); } }
+    if (!S.iced && Math.abs(r.px - CAVE.ice[0]) < 22 && r.py < CAVE.ice[1] + 24) { S.iced = 1; r.gotNow = 1; S.items.push("ice"); r.hold = 2.2; r.ct = 0; r.dir = "down"; r.tx = undefined; keys.clear(); r.toast = "You got a Smirnoff Ice. " + CONFIG.items.ice.note; clip("ice") || sfx("fanfare"); paintReach(); }
   }
-  if (r.fire) { r.cool -= dt; if (r.cool <= 0) { r.cool = 1.7; r.side = 1 - r.side; for (const fx of [CAVE.fires[r.side]]) { const ax = r.px - fx, ay = r.py - 30 - 232, m = Math.hypot(ax, ay) || 1; r.balls.push({ x: fx, y: 232, vx: ax / m * 150, vy: ay / m * 150 }); } sfx("blip"); }
+  if (r.fire) { r.cool -= dt; if (r.cool <= 0) { r.cool = 1.7; r.side = 1 - r.side; for (const fx of [CAVE.fires[r.side]]) { const ax = r.px - fx, ay = r.py - 30 - 230, m = Math.hypot(ax, ay) || 1; r.balls.push({ x: fx, y: 230, vx: ax / m * 150, vy: ay / m * 150 }); } sfx("blip"); }
     for (const b of r.balls) { b.x += b.vx * dt; b.y += b.vy * dt; if (!b.dead && Math.hypot(b.x - r.px, b.y - (r.py - 30)) < 15) { b.dead = 1; S.hp = Math.max(0, S.hp - 1); r.flash = .5; sfx("hit"); r.toast = "Ow. HP " + S.hp + "/" + S.maxHp + "."; paintReach(); } }
-    r.balls = r.balls.filter(b => !b.dead && b.x > 30 && b.x < 330 && b.y > 90 && b.y < 470);
+    r.balls = r.balls.filter(b => !b.dead && b.x > CAVE.x0 - 10 && b.x < CAVE.x1 + 10 && b.y > CAVE.y0 - 10 && b.y < CAVE.y1 + 30);
     if (r.chug > 0) r.balls.length = 0; if (S.hp <= 0) { keys.clear(); closeReach(); S.hp = S.maxHp; S.x = CONFIG.faintAt.x; S.y = CONFIG.faintAt.y; P.fx = S.x; P.fy = S.y; P.dir = "down"; paintHud(); sfx("lose"); say("", CONFIG.text.firesWon); } }
 }
 function drawCave(t) {
-  const r = RV, d = r.def; g.fillStyle = "#000"; g.fillRect(-400, -300, 1160, 1200); if (r.hold > 0) r.py = Math.max(r.py, 414);
-  for (let ty = -12; ty < 36; ty++) for (let tx = -16; tx < 32; tx++) { const x = tx * 24, y = ty * 24; if (x >= 36 && x < 324 && y >= 96 && y < 456) continue; if (y >= 456 && x >= 144 && x < 216) continue; const k = prn(tx, ty);
+  const r = RV, d = r.def; g.fillStyle = "#000"; g.fillRect(-400, -300, 1160, 1200); if (r.hold > 0) r.py = Math.max(r.py, CAVE.ice[1] + 28);
+  for (let ty = -12; ty < 36; ty++) for (let tx = -16; tx < 40; tx++) { const x = tx * 24, y = ty * 24; if (x >= CAVE.x0 && x < CAVE.x1 && y >= CAVE.y0 && y < CAVE.y1) continue; if (y >= CAVE.y1 && x >= 240 && x < 288) continue; const k = prn(tx, ty);
     rr("#6b3410", x + 1, y + 2, 22, 21, 7); rr("#8a4a1c", x + 2, y + 2, 19, 17, 6); poly("#4a2208", [[x + 6 + k * 6, y + 5], [x + 9 + k * 6, y + 12], [x + 5 + k * 5, y + 18], [x + 8 + k * 6, y + 12]]); ell("rgba(255,190,120,.16)", x + 8, y + 6, 4, 2); }
   const lines = caveLines(r), n = Math.floor(r.ct * 12); g.fillStyle = "#fcfcfc"; g.font = "700 17px ui-monospace, Menlo, monospace"; g.textAlign = "center"; let used = 0;
-  lines.forEach((ln, i) => { const part = ln.slice(0, Math.max(0, n - used)); used += ln.length; g.fillText(part, 180, 150 + i * 24); });
-  for (const fx of CAVE.fires) { const big = r.fire ? 1.25 : 1, a = reduced ? 0 : Math.sin(t * 11 + fx) * 3, b = reduced ? 0 : Math.cos(t * 7 + fx) * 3; g.fillStyle = rad(fx, 236, 46 * big, [[0, "rgba(255,140,40," + (r.fire ? .55 : .35) + ")"], [1, "rgba(255,140,40,0)"]]); g.fillRect(fx - 60, 176, 120, 120);
-    g.save(); g.translate(fx, 250); g.scale(big, big); poly("#d8401a", [[-17, 0], [-13 + b, -28], [-6, -16], [a, -44], [7, -18], [14 - b, -30], [17, 0]]); poly("#f29a2e", [[-11, 0], [-6 + a * .5, -20], [0, -10], [4 + b * .5, -26], [11, 0]]); poly("#ffe9a0", [[-5, 0], [a * .4, -14], [5, 0]]); g.restore(); }
-  g.save(); g.translate(180, 256); g.scale(1.5, 1.5); drawChar(d.look, t, "down", 0, false); g.restore();
+  lines.forEach((ln, i) => { const part = ln.slice(0, Math.max(0, n - used)); used += ln.length; g.fillText(part, 264, 140 + i * 24); });
+  for (const fx of CAVE.fires) { const big = r.fire ? 1.25 : 1, a = reduced ? 0 : Math.sin(t * 11 + fx) * 3, b = reduced ? 0 : Math.cos(t * 7 + fx) * 3; g.fillStyle = rad(fx, 234, 46 * big, [[0, "rgba(255,140,40," + (r.fire ? .55 : .35) + ")"], [1, "rgba(255,140,40,0)"]]); g.fillRect(fx - 60, 174, 120, 120);
+    g.save(); g.translate(fx, 248); g.scale(big, big); poly("#d8401a", [[-17, 0], [-13 + b, -28], [-6, -16], [a, -44], [7, -18], [14 - b, -30], [17, 0]]); poly("#f29a2e", [[-11, 0], [-6 + a * .5, -20], [0, -10], [4 + b * .5, -26], [11, 0]]); poly("#ffe9a0", [[-5, 0], [a * .4, -14], [5, 0]]); g.restore(); }
+  g.save(); g.translate(264, 256); g.scale(1.5, 1.5); drawChar(d.look, t, "down", 0, false); g.restore();
   if (!S.iced) { const bob = reduced ? 0 : Math.sin(t * 3) * 2; drawIce(CAVE.ice[0], CAVE.ice[1] + bob, 1); }
-  const px = r.px === undefined ? 180 : r.px, py = r.py === undefined ? 446 : r.py, hold = r.hold > 0, chug = r.chug > 0;
+  const px = r.px === undefined ? 264 : r.px, py = r.py === undefined ? 446 : r.py, hold = r.hold > 0, chug = r.chug > 0;
   if (!(r.flash > 0 && (t * 14 | 0) % 2)) { g.save(); g.translate(px, py); g.scale(1.5, 1.5); drawChar(hold ? Object.assign({}, CONFIG.player.look, { cheer: true }) : chug ? Object.assign({}, CONFIG.player.look, { kneel: true, chug: true, gulp: reduced ? 0 : Math.sin(t * 15) * .08 }) : CONFIG.player.look, t, hold || chug ? "down" : r.dir || "up", ((r.step || 0) | 0) % 2, !!r.moving); g.restore(); }
   if (hold) { const up = Math.min(1, (2.2 - r.hold) / .25), by = py - 90 + (1 - up) * 14;
     drawIce(px, by + 2, 1); for (let i = 0; i < 6; i++) { const a = i / 6 * 6.2832 + t * 1.5, r2 = 30 + (reduced ? 0 : Math.sin(t * 6 + i) * 3); seg("rgba(255,240,170,.8)", 1.4, px + Math.cos(a) * 22, by - 18 + Math.sin(a) * 22, px + Math.cos(a) * r2, by - 18 + Math.sin(a) * r2); } }
@@ -1910,7 +1909,7 @@ function hChamfer(c) {
     for (const [sa, sb] of [[-4000, -8.5], [8.5, 4000]]) { hp(0, 16, 4000, CAPC, sa, sb); hp(.7, 1.4, 4000, "rgba(255,255,255,.4)", sa, sb); hp(-.35, .35, 4000, EDG, sa, sb); hp(15.3, 16.05, 4000, EDG, sa, sb); }
     hp(0, 16, 4000, "rgba(0,0,0,.14)", -8.5, 8.5); for (const sd of [-8.5, 7.3]) { hp(-13, 1, 4000, "#fdfbf6", sd, sd + 1.2); hp(-13, 1, 4000, "rgba(120,160,190,.35)", sd + .35, sd + .85); }
     g.restore(); g.restore(); return; }
-  g.save(); g.beginPath(); g.rect(c.clipL ? -8 : -TS - 2, -TS - 2, N + (c.clipL ? 8 : TS + 2) + (c.clipR ? 8 : TS + 2), N + 2 * TS + 4); g.clip(); g.globalCompositeOperation = "destination-out"; /* 2px past the wall tiles so their antialiased outer edge lines go too */ hp(16, 6000, 4000, "#000"); g.restore();
+  g.save(); g.beginPath(); { const yt = c.flush && c.corner[0] === "t" ? -2 : -TS - 2, yb = c.flush && c.corner[0] === "b" ? N + 2 : N + TS + 2; g.rect(c.clipL ? -8 : -TS - 2, yt, N + (c.clipL ? 8 : TS + 2) + (c.clipR ? 8 : TS + 2), yb - yt); } g.clip(); /* flush: the wall past the cut along the house side stays (a bay set back from the room corners) */ g.globalCompositeOperation = "destination-out"; /* 2px past the wall tiles so their antialiased outer edge lines go too */ hp(16, 6000, 4000, "#000"); g.restore();
   g.save(); g.beginPath(); g.rect(0, 0, N, N); g.clip();
   if (top) { hp(-22.8, -22, 4000, "rgba(0,0,0,.35)"); hp(-22, 0, 4000, "#ece6d9"); hp(-22, -18, 4000, "#fdfbf6"); }
   hp(0, 16, 4000, CAPC); hp(.7, 1.4, 4000, "rgba(255,255,255,.4)");
@@ -2022,6 +2021,16 @@ const F = {
     else { rr(m, .4, h - 5.6, w - .8, 5.2, 2.4); rr(l, 1.4, h - 2.6, w - 2.8, 1.4, .7); if (!f.join) rr(m, .4, .4, 3, h - 5, 1.5); rr(m, w - 3.4, .4, 3, h - 5, 1.5);
       const x0 = f.join ? .6 : 3.6, n = Math.max(1, Math.round((w - x0 - 3.4) / 16)); for (let i = 0; i < n; i++) { const xx = x0 + i * (w - x0 - 3.6) / n, cw = (w - x0 - 3.6) / n - .7; rr(c, xx, .8, cw, h - 6.8, 2); rr(l, xx + .8, 1.5, cw - 1.6, 1.1, .55); }
       pillow(f.p1, w - 10, 2.6); } },
+  secv(f, w, h) { const c = f.color, d = shade(c, -.3), l = shade(c, .18), m = shade(c, -.14), half = h / 2; /* sectional, the part along the left wall (open end at the top) */
+    rr(SHD, .6, 1.6, w, h, 3); rr(d, 0, 0, w, h + 3, 2.5); rr(m, .4, .4, 5.2, h + 2, 2.4); rr(l, 1.1, 1.4, 1.6, h, .8); rr(m, .4, .4, w - .8, 4.6, 2); rr(l, 1.4, 1, w - 2.8, 1.1, .55);
+    for (const [y0, y1] of [[5.2, half - .4], [half + .4, h + 2]]) { rr(c, 5.8, y0, w - 6.6, y1 - y0, 2); rr(l, w - 2.6, y0 + 1, 1.1, y1 - y0 - 2, .55); }
+    if (f.p1) pillow(f.p1, 6.2, half - 6); },
+  sech(f, w, h) { const c = f.color, d = shade(c, -.3), l = shade(c, .18), m = shade(c, -.14), D = h; /* corner, a seat, then a backless square, back along the bottom */
+    rr(SHD, .6, 1.6, w, h, 3); rr(d, 0, 0, 2 * D, h, 2.5); rr(d, 2 * D - 1, .5, w - 2 * D + 1, h - .5, 2.5);
+    rr(m, .4, h - 5.6, 2 * D - .8, 5.2, 2.4); rr(l, 1.4, h - 2.6, 2 * D - 2.8, 1.4, .7); rr(m, .4, -3, 5.2, h - 2.4, 2.4); rr(l, 1.1, -2, 1.6, h - 4, .8);
+    rr(c, 5.8, .4, D - 6.2, h - 6.4, 2); rr(c, D + .4, .4, D - 1.2, h - 6.4, 2); rr(l, 6.6, 1, D - 7.8, 1.1, .55); rr(l, D + 1.2, 1, D - 2.8, 1.1, .55);
+    rr(c, 2 * D + .4, 1.2, w - 2 * D - 1.2, h - 2.4, 2.4); rr(l, 2 * D + 1.2, 1.9, w - 2 * D - 2.8, 1.1, .55); rr(shade(c, -.06), 2 * D + .4, h - 3.2, w - 2 * D - 1.2, 2, 1);
+    if (f.p1) pillow(f.p1, 6.6, 3.2); if (f.p2) pillow(f.p2, 12.6, 1.4); if (f.p3) pillow(f.p3, 6.4, -5); },
   chaise(f, w, h) { rr(SHD, .6, 3, w, h - 2, 3); rr("#35506a", 0, 1.6, w, h - 2.6, 3); rr("#557a94", 4, 2.6, w - 5, h - 5.4, 2.2); rr("#6f93ad", 4.8, 3.2, w - 7, 1.2, .6); rr("#3f5c72", .4, 2, 4, h - 3.4, 2); pillow("#f0e8dc", 5, 4.4); rr("#c8621e", w - 12.4, 4.2, 9.4, 7.2, 1.4); rr("#e8782b", w - 12.6, 4, 9, 7, 1.4); bx("#f29a4a", w - 11.6, 5, 7, .7); bx("#f29a4a", w - 11.6, 7, 7, .7); },
   dining(f, w, h) { const r = w / 2 - 2, cx = w / 2, cy = h / 2, rt = f.t === "roundtable", n = rt ? 3 : 6;
     for (let i = 0; i < n; i++) { const a = rt ? -Math.PI / 2 + (i - 1) * 2.1 : i * Math.PI / 3 + Math.PI / 6; g.save(); g.translate(cx + Math.cos(a) * (r + 2.4), cy - 1 + Math.sin(a) * (r + 2.4)); g.rotate(a + Math.PI / 2); rr(SHD, -3.2, -2.4, 7, 7, 1.4); rr("#4a2e1e", -3.6, -3.4, 7.2, 7.2, 1.4); rr("#a8522e", -2.8, -2.4, 5.6, 5, 1); for (let k = 0; k < 3; k++) bx("rgba(0,0,0,.18)", -2.6 + k * 1.9, -2.2, .5, 4.6); bx("#5a3a26", -3.6, 2.4, 7.2, 1.5); g.restore(); }
@@ -2263,7 +2272,7 @@ function draw(t, dt) {
   for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) if (MAP[y][x] === "H") for (let i = 0; i < 2; i++) { const on = reduced || Math.sin(t * 2.5 + y * 1.7 + i * 2.4) > -.3, c = BULBS[(y + i) % 4], lx = x * TS + 6 + i * 4, ly = y * TS + 3.5 + i * 8; if (on) { g.fillStyle = rad(lx, ly, 3.6, [[0, c + "cc"], [1, c + "00"]]); g.fillRect(lx - 3.6, ly - 3.6, 7.2, 7.2); } ell(on ? c : "#6b6355", lx, ly, .8, .8); }
   const tvDraw = d => { const fl = flick(t, 1); g.save(); g.translate(d.x * TS, (d.y - 1) * TS); g.scale(2, 2); DECOR.tv((d.w || 2) / 2, d); g.fillStyle = rad(16, 11, 10, [[0, "rgba(255,170,90,.7)"], [1, "rgba(255,170,90,0)"]]); g.fillRect(8, 7.4, 16, 6.6); poly("#e8892b", [[12, 13.6], [20, 13.6], [17 + fl * .3, 8.6 - fl * .4], [15, 10.6]]); poly("#ffe38a", [[14, 13.6], [18, 13.6], [16.2, 10.4 - fl * .3]]); rr("#4a2e1e", 11, 13, 10, 1, .4); g.restore(); } /* the TV wall is drawn with the sorted sprites, so anyone standing north of it goes behind */
   const list = [];
-  const LOW = { island: 1, counter: 1, bench: 1, coffee: 1, ottoman: 1, kidtable: 1, dining: 1, roundtable: 1, desk: 1, sofa: 1, chaise: 1, chaisev: 1, stools: 1, sideboard: 1 };
+  const LOW = { island: 1, counter: 1, bench: 1, coffee: 1, ottoman: 1, kidtable: 1, dining: 1, roundtable: 1, desk: 1, sofa: 1, chaise: 1, chaisev: 1, stools: 1, sideboard: 1, secv: 1, sech: 1 };
   for (const d of CONFIG.decor) if (d.t === "tv") list.push({ k: d.y - 1.5, f: () => tvDraw(d) });
   for (const f of CONFIG.furniture) if (!f.under) list.push({ k: f.y + (f.h || 2) - 1 + .2, low: LOW[f.t] ? f : null, f: () => drawFurn(ctx, f, t) });
   for (const n of live) list.push({ k: n.fy, who: n, f: () => {
