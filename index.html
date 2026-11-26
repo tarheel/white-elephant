@@ -295,7 +295,7 @@ const CONFIG = {
     { t: "roundtable", x: 31, y: 23, w: 4, h: 4 }, { t: "rocker", x: 29, y: 27 }, { t: "lamp", x: 39, y: 28 },
     { t: "ottoman", x: 31, y: 35 }, { t: "chair", x: 33, y: 32 }, { t: "chair", x: 33, y: 38 },
     { t: "plant", x: 26, y: 42 }, { t: "sideboard", x: 31, y: 42, w: 6 },
-    { t: "dining", x: 8, y: 45, w: 4, h: 3 }, { t: "sideboard", x: 7, y: 48, oy: .25, w: 4, h: 1.75, dark: true, back: true }, { t: "sideboard", x: 8, y: 42, w: 4 },
+    { t: "dining", x: 8, y: 45, w: 4, h: 3 }, { t: "sideboard", x: 7, y: 49, w: 4, dark: true, back: true, under: true }, { t: "sideboard", x: 8, y: 42, w: 4 },
     { t: "plant", x: 5, y: 42 }, { t: "cattree", x: 14, y: 42 }, { t: "pantry", x: 15, y: 48, h: 3, side: true },
     { t: "bookside", x: 18, y: 47, w: 1, h: 4 }, { t: "armoire", x: 28, y: 47, w: 3 },
     { t: "pantry", x: 31, y: 47 }, { t: "fridge", x: 33, y: 47, w: 3 }, { t: "counter", x: 36, y: 47, w: 3 },
@@ -1948,6 +1948,7 @@ function buildStatic(sc) {
     else if (ch === "D") { const L = tileAt(x - 1, y) !== "D", Rr = tileAt(x + 1, y) !== "D", first = tileAt(x, y - 1) !== "D"; if (first) bx("#b3a17e", px, py, TS + .2, 1); if (Rr) { const o = 11.4; rr("#0b0b0d", px + o, py - .2, 4.6, TS + .4, 1); bx("#2c2d31", px + o + 1.2, py, 2.2, TS + .2); for (let k = 0; k < 2; k++) { g.strokeStyle = "#6a6c72"; g.lineWidth = .5; g.beginPath(); g.arc(px + o + 2.3, py + 4 + k * 8, 1.6, k ? 0 : Math.PI, k ? Math.PI : 0); g.stroke(); } } } }
   hStairwell(); CONFIG.chamfers.forEach(hChamfer); CONFIG.arcs.forEach(hArc); hYard(); CONFIG.decor.filter(d => d.t === "bell").forEach(d => { g.save(); g.translate(d.x * TS, (d.y - 1) * TS); g.scale(2, 2); DECOR.bell(); g.restore(); });
   { const cx = 25 * TS, cy = 44 * TS, R = 26; g.beginPath(); g.moveTo(cx - 1, cy - R); g.lineTo(cx - 1, cy + 1); g.lineTo(cx + R, cy + 1); g.arc(cx + R, cy - R, R, Math.PI / 2, Math.PI); g.closePath(); g.fillStyle = "#f6f2ea"; g.fill(); g.strokeStyle = EDG; g.lineWidth = .6; g.beginPath(); g.arc(cx + R, cy - R, R, Math.PI / 2, Math.PI); g.stroke(); g.strokeStyle = "rgba(0,0,0,.25)"; g.lineWidth = 2; g.beginPath(); g.arc(cx + R, cy - R, R - 1.6, Math.PI / 2, Math.PI); g.stroke(); }
+  for (const f of CONFIG.furniture) if (f.under) drawFurn(g, f, 0); /* under: drawn below wall decor, e.g. the credenza behind the family-room TV */
   CONFIG.decor.forEach(d => { g.save(); g.translate(d.x * TS, (d.y - 1) * TS); g.scale(2, 2); DECOR[d.t]((d.w || 2) / 2, d); g.restore(); });
 }
 const flick = (t, s) => reduced ? 0 : Math.sin(t * 9 + s) * 1.6;
@@ -2233,7 +2234,7 @@ function draw(t, dt) {
   for (const d of CONFIG.decor) if (d.t === "tv") { const fl = flick(t, 1); g.save(); g.translate(d.x * TS, (d.y - 1) * TS); g.scale(2, 2); g.fillStyle = rad(16, 11, 10, [[0, "rgba(255,170,90,.7)"], [1, "rgba(255,170,90,0)"]]); g.fillRect(8, 7.4, 16, 6.6); poly("#e8892b", [[12, 13.6], [20, 13.6], [17 + fl * .3, 8.6 - fl * .4], [15, 10.6]]); poly("#ffe38a", [[14, 13.6], [18, 13.6], [16.2, 10.4 - fl * .3]]); rr("#4a2e1e", 11, 13, 10, 1, .4); g.restore(); }
   const list = [];
   const LOW = { island: 1, counter: 1, bench: 1, coffee: 1, ottoman: 1, kidtable: 1, dining: 1, roundtable: 1, desk: 1, sofa: 1, chaise: 1, chaisev: 1, stools: 1, sideboard: 1 };
-  for (const f of CONFIG.furniture) list.push({ k: f.y + (f.h || 2) - 1 + .2, low: LOW[f.t] ? f : null, f: () => drawFurn(ctx, f, t) });
+  for (const f of CONFIG.furniture) if (!f.under) list.push({ k: f.y + (f.h || 2) - 1 + .2, low: LOW[f.t] ? f : null, f: () => drawFurn(ctx, f, t) });
   for (const n of live) list.push({ k: n.fy, who: n, f: () => {
     const moving = n.fx !== n.x || n.fy !== n.y, k = n.def.kind, L = n.def.look; let top = 47 * (L.tall || 1);
     ctx.save(); ctx.translate(Math.round(n.fx * TS) + 8 + (n.def.wide ? 8 : 0), Math.round(n.fy * TS) + 15);
