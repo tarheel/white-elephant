@@ -59,6 +59,95 @@ window.CUSTOM = {
     "bring": "One wrapped gift, about $[TBD]. No name on it."
   },
 
+  // THE FAQS. One per stop on the quest, in this order: sign, bell, coats, bath, cave, coraline, piano, rules, charlotte, moldover, fridge, bar, louis.
+  // goal  = the hint shown in the corner while that stop is next
+  // title = the question on the card;  text = the answer (a list makes several pages)
+  // says  = what that person says when the guest reaches them (people only)
+  // [TBD] marks placeholder facts to fill in.
+  faqs: {
+    "sign": {
+      "goal": "Read the sign by the front steps",
+      "title": "When and where is it?",
+      "text": "When: {when}\nWhere: {where}\n[TBD: parking, and which door.]"
+    },
+    "bell": {
+      "goal": "Ring the doorbell, beside the front door",
+      "title": "How do I get in?",
+      "text": "Ring the bell. Knocking loses to the music every time.\n[TBD: what time to show up, and how late is too late.]"
+    },
+    "coats": {
+      "goal": "Find the coat closet, off the entry",
+      "title": "Where do coats and shoes go?",
+      "text": "Coats: the closet off the entry, next to the bathroom.\nShoes: [TBD: on or off].\nGifts: under the tree, down in the family room."
+    },
+    "bath": {
+      "goal": "Find the bathroom, next to the coat closet",
+      "title": "Where's the bathroom?",
+      "text": "Off the entry, first door past the stairs.\n[TBD: anything else guests should know. The lock, for instance.]"
+    },
+    "cave": {
+      "goal": "Investigate the hole in the wall by the bathroom",
+      "title": "Will there be drinking games?",
+      "text": "Only the one. If you find a Smirnoff Ice, you take a knee and finish it. Those are the rules and we did not write them.\n[TBD: anything real about this.]"
+    },
+    "coraline": {
+      "goal": "Meet Coraline, on the stairs",
+      "title": "Are there pets?",
+      "text": "Four cats: Coraline, Hobbes, Pom Pom and Top Hat. They will investigate your coat and your gift.\nUpstairs and the garage are closed.\n[TBD: allergy note.]"
+    },
+    "piano": {
+      "goal": "Try the piano in the living room",
+      "title": "Is this a quiet party?",
+      "text": "No. There are instruments and you may touch them.\n[TBD: music, noise, and when it winds down.]"
+    },
+    "rules": {
+      "goal": "Ask the Rules Lawyer how this works",
+      "title": "How does the exchange work?",
+      "text": [
+        "Everyone draws a number. On your turn you open a wrapped gift or steal an opened one. If yours is stolen, you go again right away.",
+        "A gift can be stolen {maxSteals} times, then it's locked. You can't steal back what was just taken from you.\n[TBD: house rules.]"
+      ],
+      "says": [
+        "On your turn you either open a wrapped gift or steal an opened one.",
+        "If yours gets stolen, you go again right away. Open or steal.",
+        "A gift can be stolen {maxSteals} times. After that it's locked and its owner is safe."
+      ]
+    },
+    "charlotte": {
+      "goal": "Find Charlotte in the kitchen",
+      "title": "What should I bring?",
+      "text": "{bring}\n[TBD: price range, how weird is too weird, and whether regifting counts.]",
+      "says": [
+        "Hi {player}! You made it past the yeti.",
+        "What to bring? {bring}"
+      ]
+    },
+    "moldover": {
+      "goal": "Say hi to Moldover, in the kitchen",
+      "title": "Who's invited?",
+      "text": "Adults only this year. No kids.\n[TBD: plus-ones, and what the party is and isn't friendly to.]"
+    },
+    "fridge": {
+      "goal": "Raid the fridge",
+      "title": "Will there be food?",
+      "text": "[TBD: dinner or snacks, and what to eat beforehand.]\n[TBD: where to send dietary restrictions.]"
+    },
+    "bar": {
+      "goal": "Visit the bar, on the kitchen counter",
+      "title": "What about drinks?",
+      "text": "[TBD: what we're providing, and whether to bring your own.]\nThere will be things without alcohol in them too."
+    },
+    "louis": {
+      "goal": "Find Louis by the tree, down in the family room",
+      "title": "Anything else?",
+      "text": "[TBD: RSVP by when, and to whom.]\n[TBD: who to text if you get lost on the front steps.]",
+      "says": [
+        "You found everything. Most people never make it past the cave.",
+        "One last thing before we play."
+      ]
+    }
+  },
+
   // People, cats and monsters, by id. Change a name or any of their lines.
   // "lines" is a list of conversations; each conversation is a list of pages.
   // Any other field you leave out keeps the built-in version.
@@ -166,6 +255,10 @@ window.CUSTOM = {
         [
           "Coraline is sitting on the stairs. Upstairs is closed. She is the sign."
         ]
+      ],
+      "noFood": [
+        "Coraline sniffs the can once and looks at you like you have insulted her ancestors.",
+        "She does not move. The cat food stays yours."
       ]
     },
     "hobbes": {
@@ -175,13 +268,31 @@ window.CUSTOM = {
           "Hobbes is loafed across the top of the garage stairs.",
           "The game room is not part of the party. Hobbes is very much part of the party."
         ]
+      ],
+      "noFood": [
+        "Hobbes opens one eye, sees the can, and closes the eye.",
+        "He has standards. He also has a loaf to maintain."
       ]
     },
     "k1": {
       "name": "Pom Pom",
       "lines": [
         [
-          "Pom Pom holds the office doorway. Pom Pom is mostly tail and has never lost."
+          "Pom Pom holds the office doorway. Pom Pom is mostly tail and has never lost.",
+          "She cannot be beaten. She can, possibly, be bought. She keeps glancing toward the kitchen."
+        ]
+      ],
+      "fedNow": [
+        "Pom Pom considers the can. Pom Pom considers her post.",
+        "The can wins. She abandons the doorway without a backward glance.",
+        "The office is open."
+      ],
+      "fed": [
+        [
+          "Pom Pom is off duty. She regrets nothing."
+        ],
+        [
+          "(Pom Pom licks her whiskers and pretends not to know you.)"
         ]
       ]
     },
@@ -314,7 +425,7 @@ window.CUSTOM = {
       "A desk. Someone is definitely not checking work email on it."
     ],
     "toilet": [
-      "The bathroom is here, off the entry. This has been a FAQ."
+      "The bathroom. You found it without asking anyone. Well done."
     ],
     "sink": [
       "Wash your hands. There is shared cheese."
@@ -383,17 +494,19 @@ window.CUSTOM = {
       "The doorbell."
     ],
     "sign": [
-      "When: {when}\nWhere: {where}",
-      "Bring: {bring}"
+      "A sign, staked into the planter with real commitment."
     ],
     "pantry": [
       "The pantry. Crackers live here. So does the good chocolate, which you did not see."
     ],
     "coats": [
-      "The coat closet. Coats go here. Yes, there is room. This has been a FAQ."
+      "The coat closet. Coats go here. Yes, there is room."
     ],
     "bins": [
       "Trash, compost, recycling. In that order. There will be a quiz."
+    ],
+    "canebench": [
+      "A cane bench behind the couch. Mostly it holds whatever the cats knock off the windowsill."
     ],
     "kidtable": [
       "A very small table. No kids tonight, so it's available. You will not fit."
@@ -403,7 +516,8 @@ window.CUSTOM = {
   // Narration, goals and short lines from around the house.
   text: {
     "hostNotYet": [
-      "Not yet, {player}. Go mingle. Talk to {need} more before we start."
+      "Not yet, {player}. You still have {need} to collect.",
+      "Next: {next}."
     ],
     "hostReady": [
       "Everyone's here and nobody has left with the good snacks. Ready to do this?"
@@ -437,6 +551,12 @@ window.CUSTOM = {
     "petPurr": [
       "Purring. +1 HP. The way remains closed."
     ],
+    "catNoFood": [
+      "Not interested. The cat food stays yours."
+    ],
+    "catFed": [
+      "It works. The way is open."
+    ],
     "firesWon": [
       "The fires won. You wake up on the family room rug with all of your HP and none of your dignity."
     ],
@@ -452,9 +572,13 @@ window.CUSTOM = {
       "HRRRAAAWWWRRGH!",
       "(It steps aside and waves you in. The party hat survived the doorframe. Barely.)"
     ],
-    "goalMingle": "Mingle: {done}/{total}",
-    "goalHost": "Find Louis by the tree, down in the family room",
+    "goalHost": "Tell Louis you're ready, by the tree in the family room",
+    "goalWater": "Drink water from the fridge",
     "goalDone": "Exchange survived",
+    "faqCard": "FAQ {n} of {total}",
+    "faqAll": "That's all {total}. You now know more about this party than the hosts do.",
+    "bookTitle": "The FAQs",
+    "bookLocked": "Not found yet.",
     "verdicts": [
       {
         "min": 8,
@@ -519,7 +643,7 @@ window.CUSTOM = {
     },
     "catfood": {
       "name": "Cat food",
-      "note": "Restores 1 HP. You have made a choice."
+      "note": "Restores 1 HP if you eat it. Someone smaller might want it more."
     },
     "red": {
       "name": "Glass of red",
@@ -651,6 +775,18 @@ window.CUSTOM = {
     },
     "joint": {
       "title": "Bring the flame to the tip and hold it there."
+    },
+    "laptop": {
+      "title": "The office laptop. Someone left a game running.",
+      "boot": "White Elephant: The Game. Early build. Arrows or tap to move. Walk into things.",
+      "inside": "A laptop. On its screen: this game, but older.",
+      "deeper": [
+        "A laptop, inside the laptop. The graphics have not improved.",
+        "Another one. This build predates colour."
+      ],
+      "bottom": "It's laptops all the way down. Go back to the party.",
+      "noView": "{name}: not implemented in this build.",
+      "monster": "A wild {name}. Combat is not implemented. It wins on a technicality."
     },
     "tv": {
       "title": "The Frame TV. Tap to press the power button.",

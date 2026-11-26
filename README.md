@@ -13,7 +13,17 @@ A small browser game that doubles as the FAQ for our white elephant party. Every
 | `tools/midi2song.py` | Turns a MIDI file into a song for the game. |
 | `.nojekyll` | Tells GitHub Pages to serve the files as they are. |
 
-Put sound and video files next to `index.html` (or in a folder, e.g. `media/`, and use paths like `"media/doorbell.mp3"` in `custom.js`).
+Sound and video files go in `media/`. A bare file name in `custom.js` (`"doorbell.mp3"`) is looked up there; change the folder with `mediaDir`.
+
+## The FAQ quest
+
+Guests collect one FAQ card at each of 13 stops, then play a practice exchange with Louis. The corner of the screen names the next stop, a dotted trail leads to it, and the GO button walks there. A stop also counts if a guest wanders into it early.
+
+The stops, in order: the sign, the doorbell, the coat closet, the bathroom, the cave, Coraline, the piano, the Rules Lawyer, Charlotte, Moldover, the fridge, the bar, Louis.
+
+The card text is placeholder: every `[TBD]` in the `faqs` section of `custom.js` is a fact to fill in. Each stop has a `goal` (the hint), a `title` (the question), a `text` (the answer) and, for people, `says` (their line when the guest arrives).
+
+Not on the quest: feed Pom Pom the cat food from the fridge and she leaves the office doorway. The laptop on the office desk is worth a look.
 
 ## Settings (`custom.js`)
 
