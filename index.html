@@ -34,7 +34,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;displa
 .meter i{display:block;height:100%;width:0;background:var(--cranberry);transition:width .5s}
 @media (max-width:560px){#hud{display:flex;flex-wrap:wrap;align-items:center}#hud .br{display:block;flex-basis:100%;height:0}#faqs{margin-left:auto}#goal{flex:1 1 100%;max-width:none;text-align:left;justify-content:space-between}}
 #dialog.card{bottom:0;top:0;height:fit-content;margin:auto;max-width:540px;padding:20px 16px 26px;box-shadow:0 0 0 4px var(--gold),0 0 0 7px var(--ink),0 12px 0 3px rgba(0,0,0,.45)}
-#dialog.card #dname{background:var(--gold);color:var(--ink);top:-19px}
+#dialog.card #dname{background:var(--gold);color:var(--ink);top:-21px;font-family:var(--body);font-weight:400;font-size:24px;line-height:1;padding:1px 10px 2px;text-transform:uppercase;letter-spacing:.03em}
 #dtitle{font-family:var(--body);font-weight:400;font-size:32px;line-height:.95;color:var(--cranberry);margin:4px 0 8px;text-wrap:balance}
 #book{background:rgba(14,28,25,.96);z-index:30;gap:12px}
 #book .bookwrap{width:100%;max-width:580px;display:flex;flex-direction:column;gap:10px;margin:0 auto}
@@ -49,7 +49,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;displa
 /* Phones and tablets: the pixel font runs small, so everything you read gets a size up. */
 @media (max-width:700px),(pointer:coarse){
   #hud .pill,#stats,#snd,#goal,#faqs{font-size:24px}#room{font-size:16px!important}#goalgo{font-size:14px}
-  #dtext{font-size:29px}#dname{font-size:17px;top:-19px}#dtitle{font-size:36px}#dialog{min-height:128px}#dmore{font-size:18px}
+  #dtext{font-size:29px}#dname{font-size:17px;top:-19px}#dialog.card #dname{font-size:26px;top:-22px}#dtitle{font-size:36px}#dialog{min-height:128px}#dmore{font-size:18px}
   button{font-size:18px}
   .win{font-size:27px}button.cmd{font-size:30px}.dimtxt{font-size:23px}
   #exmsg{font-size:27px}#exprompt{font-size:24px}#order{font-size:22px}#exturn{font-size:22px}
