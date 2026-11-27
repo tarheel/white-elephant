@@ -74,6 +74,12 @@ h1 small{display:block;font-size:.36em;font-weight:600;letter-spacing:.3em;color
 #title p{max-width:30ch;margin:0}
 #title form{display:flex;flex-direction:column;gap:10px;align-items:center}
 #title label{font-size:20px;color:var(--gold)}
+#looks{display:flex;gap:10px;justify-content:center}
+#looks button{padding:4px 6px 2px;background:#22352f;box-shadow:none;border:3px solid transparent;line-height:0}
+#looks button[aria-checked="true"]{background:var(--paper);border-color:var(--gold)}
+#looks canvas{position:static;inset:auto;width:60px;height:94px;display:block;touch-action:auto}
+#keyhint{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);padding:4px 12px 5px;font-size:20px;white-space:nowrap;pointer-events:none}
+#keyhint b{font-family:var(--display);font-weight:600;font-size:14px;background:var(--ink);color:var(--paper);padding:1px 6px 2px;margin:0 2px}
 input{font-family:var(--body);font-size:26px;text-align:center;width:220px;padding:4px 8px;background:var(--paper);color:var(--ink);border:3px solid var(--ink);-webkit-user-select:text;user-select:text}
 .hint{font-size:19px;color:#b9c7bd}
 #exchange,#end,#battle{background:var(--night);gap:12px}
@@ -144,6 +150,7 @@ body.trip .panel,body.trip .win{animation:tripWob 5s ease-in-out infinite;text-s
     <i class="br"></i>
     <button id="goal" type="button" title="Walk to the next stop"><span id="goaltxt"></span><span id="goalgo">GO &#9656;</span></button>
   </div>
+  <div id="keyhint" class="panel pill" hidden></div>
   <div id="dialog" class="panel" hidden><div id="dname"></div><div id="dtitle" hidden></div><p id="dtext"></p><div id="dchoices"></div><span id="dmore">&#9660;</span></div>
 
   <div id="title" class="overlay">
@@ -152,6 +159,7 @@ body.trip .panel,body.trip .win{animation:tripWob 5s ease-in-out infinite;text-s
     <form id="startform">
       <label for="pname">Your name</label>
       <input id="pname" maxlength="16" autocomplete="off" placeholder="Guest">
+      <div id="looks" role="radiogroup" aria-label="Pick your character"></div>
       <button id="startbtn" type="submit">Walk in</button>
     </form>
     <p class="hint">Follow the dotted trail, or tap anywhere to walk there. Tap a person, cat, monster or object to bother it. Keyboard: arrows and Space.</p>
@@ -335,7 +343,7 @@ const CONFIG = {
     { t: "toilet", x: 7, y: 36, flip: true }, { t: "gap", x: 5, y: 36, w: 2, h: 2 }, { t: "sink", x: 10, y: 36, flip: true }, { t: "plant", x: 5, y: 34 },
     { t: "coats", x: 13, y: 38, w: 4, h: 1 },
     { t: "fireplace", x: 39, y: 32, h: 5 }, { t: "piano", x: 39, y: 38, h: 4 }, { t: "catbed", x: 39, y: 30 }, { t: "globe", x: 39, y: 42 },
-    { t: "sofa", x: 28, y: 32, h: 8, color: "#8a8d92", back: "left", p1: "#9a9da2", p2: "#9a9da2" }, { t: "bench", x: 25, y: 35, h: 5 }, { t: "pouf", x: 30, y: 30 },
+    { t: "sofa", x: 28, y: 32, h: 8, color: "#8a8d92", back: "left", p1: "#9a9da2", p2: "#9a9da2" }, { t: "bench", x: 25, y: 37, h: 3.5, ox: -.5 }, { t: "pouf", x: 30, y: 30 },
     { t: "roundtable", x: 31, y: 23, w: 4, h: 4 }, { t: "rocker", x: 29, y: 27 }, { t: "lamp", x: 39, y: 28 },
     { t: "ottoman", x: 31, y: 35 }, { t: "chair", x: 33, y: 32 }, { t: "chair", x: 33, y: 38 },
     { t: "plant", x: 26, y: 42 }, { t: "sideboard", x: 31, y: 42, w: 6 },
@@ -377,66 +385,19 @@ const CONFIG = {
   ],
 
     /* What happens when you poke things. Keys are furniture/decor types or map characters. */
-  objects: {
-    tree: ["A tree. It is doing its best."],
-    gifts: ["The gift pile. Yours is in there somewhere, anonymous and wrapped.", "Talk to the host when you're ready to start."],
-    tv: ["The TV is displaying art. It is not for watching. This has been discussed.", "Below it, a fire. Stockings hung with care, and one hung with indifference."],
-    fireplace: ["A second fireplace. This house does not ration them."],
-    fridge: ["The fridge. Mostly water at this point."],                                    // these three open views instead (see views)
-    counter: ["The bar. Drinks live here."],
-    island: ["The island. Every party ends up standing around it. This one will too."],
-    stools: ["Three stools. Four people will try."],
-    sofa: ["Prime exchange seating. Claim it early."],
-    chaise: ["The chaise. Whoever gets it is not getting up to steal anything."],
-    chaisev: ["A chaise. Technically office furniture."],
-    door: ["This door stays shut. Use the other one like everybody else."],
-    coffee: ["A coffee table. Coasters are implied."],
-    ottoman: ["An ottoman. Technically seating."],
-    chair: ["A chair with opinions about posture."],
-    rocker: ["A rocking chair. Sit at your own tempo."],
-    piano: ["A piano. If you can play, you may. If you can't, you also may, briefly."],
-    guitar: ["A guitar. No Wonderwall."],
-    guitars: ["Two more guitars. Still no Wonderwall."],
-    bookshelf: ["Books, sorted by color. Do not re-shelve them by author."],
-    bookside: ["Books, sorted by color. Do not re-shelve them by author."],
-    nook: ["More books. The low shelf is not a seat."],
-    armoire: ["An armoire. It has seen things. Mostly coats."],
-    roundtable: ["A round table. Neutral ground for people avoiding the island."],
-    dining: ["The dining table. It has a lazy Susan. Spin responsibly."],
-    sideboard: ["Candles, a lamp, and a place to put a drink you will forget about."],
-    bench: ["A bench with a view of the family room, for guests who prefer to heckle."],
-    ovens: ["Something is in the oven. It is not ready. Stop opening it."],
-    cabinets: ["Cabinets. The glasses are in the one you open last."],
-    desk: ["A desk. Someone is definitely not checking work email on it."], // not shown while views.desk opens the laptop
+  objects: { // only things with a purpose respond to a tap: everything else (plants, sofas, chairs, shelves, art, tables) is scenery
+    sign: ["A sign, staked into the planter with real commitment."],
+    coats: ["The coat closet. Coats go here. Yes, there is room."],
     toilet: ["The bathroom. You found it without asking anyone. Well done."],
     sink: ["Wash your hands. There is shared cheese."],
-    plant: ["A plant. Do not put your drink in it."],
-    shelves: ["Books, sorted by color. Do not re-shelve them by author."],
-    catbed: ["A cat bed. Unoccupied, which means a cat is on your coat."],
-    globe: ["A globe. Spin it and go wherever your finger lands. After the party."],
-    pouf: ["A pouf and a side table. Overflow seating for the fashionably late."],
-    cattree: ["A cat tree. Reserved seating. You are not on the list."],
-    lamp: ["A lamp, doing mood lighting on purpose."],
-    mirror: ["A mirror with a garland. You look ready to lose a gift."],
-    art: ["Art. Nod thoughtfully."],
-    window: ["Dark out. It's December."],
-    H: ["A half wall with garland. The family room is down there. Use the steps like a civilized guest."],
-    c: ["Columns. Load-bearing, probably. Do not lean with intent."],
-    W: ["A wall of windows. Somewhere out there is the backyard."],
-    B: ["The backyard. It's December. Stay in."],
-    shoebasket: ["A basket of shoes. Shoes off is the house rule. The cats can smell your choices."],
-    rattan: ["A rattan cabinet. Shoes in the bottom, mysteries in the top."],
-    basket: ["An empty basket. It is waiting for something to deserve it."],
-    mailbox: ["The mailbox. Nothing but catalogs. And one more catalog."],
-    pot: ["A potted plant. It has seen many coats come and go."],
-    maple: ["A Japanese maple, lit from below like it is about to make an announcement."],
     bell: ["The doorbell."],
-    sign: ["A sign, staked into the planter with real commitment."],
-    pantry: ["The pantry. Crackers live here. So does the good chocolate, which you did not see."],
-    coats: ["The coat closet. Coats go here. Yes, there is room."],
-    bins: ["Trash, compost, recycling. In that order. There will be a quiz."],
-    canebench: ["A cane bench behind the couch. Mostly it holds whatever the cats knock off the windowsill."],
-    kidtable: ["A very small table. No kids tonight, so it's available. You will not fit."]
+    // The rest open a close-up view instead (see views). Their line is only used if you remove them from views.
+    tv: ["The TV is displaying art. It is not for watching. This has been discussed.", "Below it, a fire. Stockings hung with care, and one hung with indifference."],
+    fridge: ["The fridge. Mostly water at this point."],
+    counter: ["The bar. Drinks live here."],
+    island: ["The island. Every party ends up standing around it. This one will too."],
+    piano: ["A piano. If you can play, you may. If you can't, you also may, briefly."],
+    desk: ["A desk. Someone is definitely not checking work email on it."]
   },
 
   /* PEOPLE AND CATS. kind: person | cat | kitten. host:true starts the exchange.
@@ -480,11 +441,11 @@ const CONFIG = {
     { id: "hobbes", name: "Hobbes", kind: "cat", guard: true, wide: true, x: 18, y: 41, look: { fluffy: true, fur: "#86705a", stripe: "#33291f", patch: "#b89f7c", muzzle: "#cbb696", eye: "#c4bd55" },
       lines: [["Hobbes is loafed across the top of the garage stairs.", "The game room is not part of the party. Hobbes is very much part of the party."]],
       noFood: ["Hobbes opens one eye, sees the can, and closes the eye.", "He has standards. He also has a loaf to maintain."] },
-    { id: "k1", name: "Pom Pom", kind: "kitten", guard: true, x: 16, y: 29, look: { fluffy: true, fur: "#6f6558", stripe: "#2b2622", patch: "#d8ccb8", muzzle: "#d8ccb8", eye: "#b9a85a" },
-      lines: [["Pom Pom holds the office doorway. Pom Pom is mostly tail and has never lost.", "She cannot be beaten. She can, possibly, be bought. She keeps glancing toward the kitchen."]],
+    { id: "k1", name: "Pompom", kind: "kitten", guard: true, x: 16, y: 29, look: { fluffy: true, fur: "#6f6558", stripe: "#2b2622", patch: "#d8ccb8", muzzle: "#d8ccb8", eye: "#b9a85a" },
+      lines: [["Pompom holds the office doorway. Pompom is mostly tail and has never lost.", "She cannot be beaten. She can, possibly, be bought. She keeps glancing toward the kitchen."]],
       bribe: true, // the one guard who takes cat food (it's in the fridge)
-      fedNow: ["Pom Pom considers the can. Pom Pom considers her post.", "The can wins. She abandons the doorway without a backward glance.", "The office is open."],
-      fed: [["Pom Pom is off duty. She regrets nothing."], ["(Pom Pom licks her whiskers and pretends not to know you.)"]] },
+      fedNow: ["Pompom takes the can and abandons her post without a backward glance. The office is open."],
+      fed: [["Pompom is off duty. She regrets nothing."], ["(Pompom licks her whiskers and pretends not to know you.)"]] },
     { id: "k2", name: "Top Hat", kind: "kitten", x: 14, y: 59, look: { fur: "#1c1a17", patch: "#1c1a17" },
       lines: [["(Top Hat attacks your shoelace and declares victory.)"], ["(Top Hat is not part of the exchange. Top Hat disagrees.)"]] }
   ],
@@ -494,20 +455,19 @@ const CONFIG = {
      thing = furniture or decor type(s) to look at; view = a first-person view to open; npc = someone to talk to. */
   quest: [
     { id: "sign", thing: "sign" }, { id: "bell", thing: "bell" }, { id: "coats", thing: "coats" }, { id: "bath", thing: ["toilet", "sink"] },
-    { id: "cave", view: "cave" }, { id: "coraline", npc: "coraline" }, { id: "piano", view: "piano" }, { id: "rules", npc: "g1" },
+    { id: "coraline", npc: "coraline" }, { id: "rules", npc: "g1" },
     { id: "charlotte", npc: "charlotte" }, { id: "moldover", npc: "g5" }, { id: "food", view: "food" }, { id: "bar", view: "bar" }, { id: "louis", npc: "louis" }
   ],
   /* One entry per stop, by id. goal = the hint in the corner; title + text = the FAQ card the guest collects (a list = several pages);
      says = what that person says when the guest reaches them (people only; leave it out to keep their usual line).
      EVERYTHING HERE IS PLACEHOLDER TEXT: [TBD] marks the facts to fill in. */
+  marks: ["cave", "fridge", "piano", "tv"], // views that get a "!" over them until the guest has opened them once (they are not quest stops)
   faqs: {
     sign:      { goal: "Read the sign by the front steps", title: "When and where is it?", text: "When: {when}\nWhere: {where}\n[TBD: parking, and which door.]" },
     bell:      { goal: "Ring the doorbell, beside the front door", title: "How do I get in?", text: "Ring the bell. Knocking loses to the music every time.\n[TBD: what time to show up, and how late is too late.]" },
     coats:     { goal: "Find the coat closet, off the entry", title: "Where do coats and shoes go?", text: "Coats: the closet off the entry, next to the bathroom.\nShoes: [TBD: on or off].\nGifts: under the tree, down in the family room." },
     bath:      { goal: "Find the bathroom, next to the coat closet", title: "Where's the bathroom?", text: "Off the entry, first door past the stairs.\n[TBD: anything else guests should know. The lock, for instance.]" },
-    cave:      { goal: "Investigate the hole in the wall by the bathroom", title: "Will there be drinking games?", text: "Only the one. If you find a Smirnoff Ice, you take a knee and finish it. Those are the rules and we did not write them.\n[TBD: anything real about this.]" },
-    coraline:  { goal: "Meet Coraline, on the stairs", title: "Are there pets?", text: "Four cats: Coraline, Hobbes, Pom Pom and Top Hat. They will investigate your coat and your gift.\nUpstairs and the garage are closed.\n[TBD: allergy note.]" },
-    piano:     { goal: "Try the piano in the living room", title: "Is this a quiet party?", text: "No. There are instruments and you may touch them.\n[TBD: music, noise, and when it winds down.]" },
+    coraline:  { goal: "Meet Coraline, on the stairs", title: "Are there pets?", text: "Four cats: Coraline, Hobbes, Pompom and Top Hat. They will investigate your coat and your gift.\nUpstairs and the garage are closed.\n[TBD: allergy note.]" },
     rules:     { goal: "Ask the Rules Lawyer how this works", title: "How does the exchange work?", text: ["Everyone draws a number. On your turn you open a wrapped gift or steal an opened one. If yours is stolen, you go again right away.", "A gift can be stolen {maxSteals} times, then it's locked. You can't steal back what was just taken from you.\n[TBD: house rules.]"],
                  says: ["On your turn you either open a wrapped gift or steal an opened one.", "If yours gets stolen, you go again right away. Open or steal.", "A gift can be stolen {maxSteals} times. After that it's locked and its owner is safe."] },
     charlotte: { goal: "Find Charlotte in the kitchen", title: "What should I bring?", text: "{bring}\n[TBD: price range, how weird is too weird, and whether regifting counts.]",
@@ -516,8 +476,12 @@ const CONFIG = {
     food:      { goal: "Check out the food, on the kitchen island", title: "Will there be food?", text: "[TBD: dinner or snacks, and what to eat beforehand.]\n[TBD: where to send dietary restrictions.]" },
     bar:       { goal: "Visit the bar, on the kitchen counter", title: "What about drinks?", text: "[TBD: what we're providing, and whether to bring your own.]\nThere will be things without alcohol in them too." },
     louis:     { goal: "Find Louis by the tree, down in the family room", title: "Anything else?", text: "[TBD: RSVP by when, and to whom.]\n[TBD: who to text if you get lost on the front steps.]",
-                 says: ["You found everything. Most people never make it past the cave.", "One last thing before we play."] }
+                 says: ["You found everything. Most people never make it past the yeti.", "One last thing before we play."] }
   },
+
+  /* The exchange screen. speed: 1 = the original pace, lower = slower. openLead: how many seconds before the paper comes off
+     the unwrapping sound starts (set it to about the length of your sound). */
+  exchangeAnim: { speed: .8, openLead: .5 },
 
   /* GIFTS. One is dealt per player. appeal 1-10 drives how badly the others want it.
      icon: fish oil candle waffle tickets pickles blanket gong uke pillow (anything else draws a plain box). */
@@ -537,7 +501,11 @@ const CONFIG = {
   /* RPG LAYER. Small on purpose. */
   /* LOOKS for people: skin, hair, hairStyle (short long bob bun curly pony bald), beard, glasses, shirt, top (sweater hoodie blazer vest dress),
      trim + pattern (zigzag dots), scarf, pants, hat (santa beanie antlers), prop (wine gift clipboard mug plate joint), tall, wide. */
-  player: { hp: 10, look: { skin: "#e8b990", hair: "#3a2a20", hairStyle: "short", shirt: "#f3e6c8", trim: "#b3273a", pattern: "zigzag", pants: "#3b4a7a", hat: "santa" } },
+  player: { hp: 10, speed: 15, // speed = squares walked per second
+    looks: [ // the characters offered on the first screen
+      { skin: "#e8b990", hair: "#3a2a20", hairStyle: "short", shirt: "#f3e6c8", trim: "#b3273a", pattern: "zigzag", pants: "#3b4a7a", hat: "santa" },
+      { skin: "#e8b990", hair: "#8a4f2a", hairStyle: "long", shirt: "#2f7a52", top: "dress", trim: "#f3e6c8", pattern: "zigzag", tights: "#f3e6c8", shoes: "#7a2a2a", hat: "santa" },
+      { skin: "#e8b990", hair: "#2a211c", hairStyle: "bob", shirt: "#3f6f9a", top: "hoodie", trim: "#f3e6c8", pants: "#4a4a55", hat: "santa" } ] },
   faintAt: { x: 10, y: 59 },   // where you wake up after losing a fight
   items: {                     // heal: HP restored when eaten (0 = trophy)
     cookie:    { name: "Cookie",          heal: 4, note: "Restores 4 HP." },
@@ -562,7 +530,7 @@ const CONFIG = {
   },
   loot: {}, // furniture type -> item given on first poke (the fridge and bar use first-person views instead)
   /* FIRST-PERSON VIEWS. Poking furniture of a type listed in `views` opens that view.
-     Items sit on a 360x520 board: x = centre, y = the shelf or counter line they stand on.
+     Items sit on a 360x520 board: x = center, y = the shelf or counter line they stand on.
      kind: can | bottle | carton | jar | wedge | slice | plate.  item = key in `items` above. */
   /* (set these in custom.js) YOUR OWN SOUNDS: file names or addresses of sound files sitting next to this page (mp3 works everywhere).
      Leave a slot empty ("") to keep the built-in synthesized sound. A list plays one at random each time. */
@@ -598,10 +566,8 @@ const CONFIG = {
     laptop: { title: "The office laptop. Someone left a game running.", laptop: true, items: [],
               boot: "White Elephant: The Game. Arrows or tap to move. Walk into people and things.",
               inside: "A laptop. On its screen: this game, but an older build.",
-              deeper: ["A laptop, inside the laptop. An older build: the art budget had not arrived yet.", "Another one. This build predates most colours.", "And another. This build predates the rest of them."],
-              bottom: "It's laptops all the way down. Go back to the party.",
-              noView: "{name}: not implemented in this build.",
-              monster: "A wild {name}. Combat is not implemented. It wins on a technicality." },
+              deeper: ["A laptop, inside the laptop. An older build: the art budget had not arrived yet.", "Another one. This build predates most colors.", "And another. This build predates the rest of them."],
+              bottom: "It's laptops all the way down. Go back to the party.", },
     tv: { title: "The Frame TV. Tap to press the power button.", remote: true, items: [],
           video: "",        // (set this in custom.js) YOUR OWN VIDEO: a file name or address, e.g. "tv.mp4" (a file sitting next to this page). When set, it plays on the TV screen.
           videoLoop: true,  // false = play once and stop on the last frame
@@ -641,7 +607,7 @@ const CONFIG = {
     backAway: ["You back away slowly. It lets you. It has nowhere to be."],
     backAwayGuard: ["Wise."],
     faint: ["You faint, gracefully.", "You wake up on the sectional with full HP. Nobody mentions it."],
-    petPurr: ["Purring. +1 HP. The way remains closed."],
+    catNeedFood: ["You have nothing a cat would want.", "There's a can of cat food in the fridge."],
     catNoFood: ["Not interested. The cat food stays yours."],
     catFed: ["It works. The way is open."],
     firesWon: ["The fires won. You wake up on the family room rug with all of your HP and none of your dignity."],
@@ -737,7 +703,7 @@ const cv = $("c"); let ctx = cv.getContext("2d");
 const npcById = Object.fromEntries(CONFIG.npcs.map(n => [n.id, n]));
 
 let S; // saved state: plain JSON
-const fresh = () => ({ v: 15, faq: {}, fq: [], fed: {}, name: "", started: false, x: CONFIG.start.x, y: CONFIG.start.y, talked: {}, talkIdx: {}, done: false, ex: null, result: null,
+const fresh = () => ({ v: 16, faq: {}, seen: {}, fq: [], fed: {}, viewed: {}, keys: {}, look: 0, name: "", started: false, x: CONFIG.start.x, y: CONFIG.start.y, talked: {}, talkIdx: {}, done: false, ex: null, result: null,
   hp: CONFIG.player.hp, maxHp: CONFIG.player.hp, xp: 0, lvl: 1, items: [], got: {}, defeated: {}, taken: {}, high: 0, smoked: 0 });
 const P = { fx: 0, fy: 0, dir: "down", path: [], pending: null, step: 0 };
 let live = [];
@@ -770,14 +736,16 @@ function fill(s, extra) {
 /* ---------------------------------------------------------------- the quest */
 const QUEST = (CONFIG.quest || []).filter(q => (CONFIG.faqs || {})[q.id]), FAQS = CONFIG.faqs || {};
 const faqCount = () => QUEST.filter(q => S.faq[q.id]).length;
+const plook = () => CONFIG.player.looks[S.look] || CONFIG.player.looks[0];
 const questNext = () => QUEST.find(q => !S.faq[q.id]) || null;
+const guideNext = () => QUEST.find(q => !S.seen[q.id]) || null; /* the guide stays on a stop until its card has been read and closed */
 const questFor = (kind, v) => { const q = QUEST.find(q => kind === "thing" ? [].concat(q.thing || []).includes(v) : q[kind] === v); return q ? q.id : null; };
 const hostDef = () => CONFIG.npcs.find(n => n.host);
 function questMark(id) { if (!id || !FAQS[id] || S.faq[id]) return false; S.faq[id] = 1; S.fq.push(id); return true; }
 function questAim() { /* what the guide points at: the next stop, the fridge while the walls are dripping, then the host */
   if (!S.started || S.done) return null;
   if (S.high > 0) return { view: "fridge" };
-  const h = hostDef(); return questNext() || (h ? { npc: h.id } : null);
+  const h = hostDef(); return guideNext() || (h ? { npc: h.id } : null);
 }
 function questSpots(q) { /* the squares each matching thing covers, one entry per thing */
   if (q.npc) { const n = live.find(l => l.def.id === q.npc); return n ? [{ npc: n, tiles: n.def.wide ? [[n.x, n.y], [n.x + 1, n.y]] : [[n.x, n.y]] }] : []; }
@@ -789,7 +757,7 @@ function questSpots(q) { /* the squares each matching thing covers, one entry pe
 const QG = { key: "", spot: null, path: null };
 function questGuide() { /* the route from where you stand to the nearest matching thing; worked out again only when something has moved */
   const q = questAim(); if (!q) { QG.key = ""; QG.spot = QG.path = null; return QG; }
-  const n = q.npc && live.find(l => l.def.id === q.npc), key = [q.id || q.view || q.npc, S.x, S.y, S.door, n ? n.x + "," + n.y : "", live.length, Object.keys(S.fed).length].join("|");
+  const n = q.npc && live.find(l => l.def.id === q.npc), key = [q.id || q.view || q.npc, S.x, S.y, S.door, n ? n.x + "," + n.y : "", live.length, Object.keys(S.fed).length, Object.keys(S.seen).length].join("|");
   if (key === QG.key) return QG; QG.key = key;
   const spots = questSpots(q), nearSpot = (s, x, y) => s.tiles.some(([a, b]) => Math.abs(x - a) + Math.abs(y - b) <= 1);
   const path = spots.length ? findPath(S.x, S.y, (x, y) => spots.some(s => nearSpot(s, x, y))) : null, end = path && path.length ? path[path.length - 1] : [S.x, S.y];
@@ -805,6 +773,7 @@ function showFaq(id) { /* the card for a stop just collected; the last one hands
   const f = FAQS[id], n = faqCount(), total = QUEST.length, h = hostDef(), last = !questNext();
   sfx("level");
   say(fill(CONFIG.text.faqCard, { n, total }), [].concat(f.text), { card: f.title, then: () => {
+    S.seen[id] = 1; paintHud();
     if (!last || S.fq.length || S.done) return; const all = [fill(CONFIG.text.faqAll, { total })];
     if (h && questFor("npc", h.id) === id) say(h.name, all.concat(CONFIG.text.hostReady), { choices: hostChoices() }); else say("", all);
   } });
@@ -939,7 +908,7 @@ function talk(def) {
 }
 function paintHud() {
   const r = roomAt(S.x, S.y); $("room").textContent = r ? r.name : "";
-  const t = CONFIG.text, total = QUEST.length, done = faqCount(), q = questNext();
+  const t = CONFIG.text, total = QUEST.length, done = faqCount(), q = guideNext();
   $("stats").textContent = "HP " + S.hp + "/" + S.maxHp + (NARROW.matches ? "" : " \u00B7 LV " + S.lvl) + " \u00B7 Bag " + S.items.length; /* narrow screens: the level is in the bag */
   $("faqn").textContent = done + "/" + total; $("faqfill").style.width = (total ? done / total * 100 : 0) + "%"; $("faqs").hidden = !total;
   $("goaltxt").textContent = S.high > 0 ? t.goalWater : S.done ? t.goalDone : q ? FAQS[q.id].goal : t.goalHost; $("goalgo").hidden = !questAim();
@@ -983,9 +952,10 @@ function paintBattle() {
   else {
     if (B.menu === "items" && !wait) {
       const seen = {}; S.items.forEach((id, i) => { const it = CONFIG.items[id]; if (it.heal > 0 && !seen[id]) { seen[id] = 1; add(it.name + " +" + it.heal, () => bItem(i)); } });
+      if (B.guard && S.items.includes("catfood")) { seen.catfood = 1; add(CONFIG.items.catfood.name, bFeed); }
       if (!Object.keys(seen).length) cm.appendChild(el("span", "dimtxt", "Nothing edible."));
       add("Back", () => { B.menu = null; paintBattle(); });
-    } else { add("Attack", bAttack); if (B.guard) add("Pet", bPet); add("Items", () => { B.menu = "items"; paintBattle(); }); add(B.guard ? "Surrender" : "Run", bRun); if (wait) cm.querySelectorAll("button").forEach(b => { b.disabled = true; }); }
+    } else { add("Attack", bAttack); if (B.guard) add("Feed", bFeed); add("Items", () => { B.menu = "items"; paintBattle(); }); add(B.guard ? "Surrender" : "Run", bRun); if (wait) cm.querySelectorAll("button").forEach(b => { b.disabled = true; }); }
   }
   const gauge = (v, max, foe) => { const b = el("div", "gauge" + (foe ? " foe" : "")), f = el("i"); f.style.width = Math.max(0, v / max * 100) + "%"; b.appendChild(f); return b; };
   const fr = el("div", "frow"); fr.append(el("span", "", d.name), el("span", "", B.dead ? "0" : "1")); fo.append(fr, el("div", "dimtxt", "HP " + B.mhp + "/" + B.max), gauge(B.mhp, B.max, true));
@@ -1006,8 +976,9 @@ function bAttack() {
 }
 function bItem(i) { const it = eat(i); B.menu = null; bSay("You eat the " + it.name + ". +" + it.heal + " HP.");
   bStep(.9, "heal", () => { sfx("heal"); B.num = { who: "p", text: "+" + it.heal, color: "#8ff0a0" }; paintBattle(); }, () => { B.num = null; }); bEnemyTurn(); paintBattle(); }
-function bPet() { S.hp = Math.min(S.maxHp, S.hp + 1); bSay("Purring. +1 HP. The way remains closed.");
-  bStep(.9, "heal", () => { sfx("heal"); B.num = { who: "p", text: "+1", color: "#8ff0a0" }; paintBattle(); }, () => { B.num = null; B.over = "pet"; }); paintBattle(); }
+function bFeed() { const d = B.def, r = feedCat(d), T = CONFIG.text; B.menu = null; /* cat food works mid-battle too */
+  bSay((r === "none" ? T.catNeedFood : r === "no" ? d.noFood || T.catNoFood : d.fedNow || T.catFed).join(" "));
+  if (r === "yes") bStep(.9, "heal", () => sfx("heal"), () => { B.over = "fed"; }); paintBattle(); }
 function bRun() { const g = B.guard, n = B.def.name; closeBattle(); say(g ? n : "", g ? CONFIG.text.backAwayGuard : CONFIG.text.backAway); }
 function bContinue() { const d = B.def, o = B.over; closeBattle(); if (o === "win") winBattle(d); else if (o === "lose") loseBattle(); }
 /* ---- battle art: drawn as shapes at 480x270, then shown at whole-number pixel scale ---- */
@@ -1170,17 +1141,22 @@ function loseBattle() {
 }
 function guardTalk(def) {
   S.talked[def.id] = 1;
-  const ch = [{ label: "Fight", fn: () => startBattle(def) }, { label: "Pet", fn: () => { S.hp = Math.min(S.maxHp, S.hp + 1); paintHud(); say(def.name, CONFIG.text.petPurr); } }];
-  if (S.items.includes("catfood")) ch.push({ label: "Offer cat food", fn: () => feedCat(def) });
-  ch.push({ label: "Back away", alt: true });
-  say(def.name, def.lines[0], { choices: ch });
+  say(def.name, def.lines[0], { choices: [{ label: "Fight", fn: () => startBattle(def) }, { label: "Feed", fn: () => { const r = feedCat(def); say(def.name, r === "none" ? CONFIG.text.catNeedFood : r === "no" ? def.noFood || CONFIG.text.catNoFood : def.fedNow || CONFIG.text.catFed); } }, { label: "Back away", alt: true }] });
 }
-function feedCat(def) { /* only a cat with bribe:true takes it; she leaves her post and the can leaves your bag */
-  if (!def.bribe) return say(def.name, def.noFood || CONFIG.text.catNoFood);
-  S.items.splice(S.items.indexOf("catfood"), 1); S.fed[def.id] = 1; sfx("mew"); sfx("heal"); paintHud();
-  const n = live.find(l => l.def.id === def.id); if (n) n.wait = 2.5;
-  say(def.name, def.fedNow || CONFIG.text.catFed);
+function feedCat(def) { /* "none" = you have no cat food; "no" = this cat won't take it; "yes" = she takes it, leaves her post and starts roaming the house */
+  const i = S.items.indexOf("catfood"); if (i < 0) return "none"; if (!def.bribe) return "no";
+  S.items.splice(i, 1); S.fed[def.id] = 1; sfx("mew"); sfx("heal"); paintHud();
+  const n = live.find(l => l.def.id === def.id); if (n) { n.wait = 0; roam(n); }
+  return "yes";
 }
+function roam(n) { /* a bought-off guard picks somewhere indoors, anywhere in the house, and trots there */
+  for (let k = 0; k < 30; k++) { const x = (Math.random() * MW) | 0, y = 27 + ((Math.random() * (MH - 27)) | 0), r = roomAt(x, y);
+    if (!r || MAP[y][x] !== "." || !passable(x, y) || Math.abs(x - n.x) + Math.abs(y - n.y) < 12) continue;
+    const path = findPath(n.x, n.y, (a, b) => a === x && b === y); if (!path || !path.length) continue;
+    n.route = path; n.rs = 7; n.done = () => { n.wait = 1 + Math.random() * 4; }; return; }
+  n.wait = 1;
+}
+
 function openBag() {
   if (dlg || B || RV || !S.started) return;
   const names = S.items.map(id => CONFIG.items[id].name);
@@ -1402,6 +1378,7 @@ const ISZ = { present: [62, 54], can: [22, 40], bottle: [26, 84], carton: [34, 5
 const JOINT_TIP = { x: 214, y: 262 };
 function openReach(id, then) {
   const def = CONFIG.reach[id]; S.taken[id] = S.taken[id] || [];
+  S.viewed[id] = 1;
   if (S.high > 0 && !S.items.includes("water")) S.taken[id] = S.taken[id].filter(i => def.items[i] && def.items[i].item !== "water"); /* the cure is never out of stock */
   RV = { id, def, then, hand: { x: 180, y: 620 }, aim: { x: 180, y: 430 }, carry: null, anim: null, toast: def.title, prog: 0, lit: 0, held: {}, down: {}, voice: {}, cat: 0, ct: 0, walk: 0 };
   P.path = []; P.pending = null; keys.clear(); $("reach").hidden = false; $("hud").hidden = true; paintReach();
@@ -1468,7 +1445,7 @@ function drawCave(t) {
   g.save(); g.translate(264, 256); g.scale(1.5, 1.5); drawChar(d.look, t, "down", 0, false); g.restore();
   if (!S.iced) { const bob = reduced ? 0 : Math.sin(t * 3) * 2; drawIce(CAVE.ice[0], CAVE.ice[1] + bob, 1); }
   const px = r.px === undefined ? 264 : r.px, py = r.py === undefined ? 446 : r.py, hold = r.hold > 0, chug = r.chug > 0;
-  if (!(r.flash > 0 && (t * 14 | 0) % 2)) { g.save(); g.translate(px, py); g.scale(1.5, 1.5); drawChar(hold ? Object.assign({}, CONFIG.player.look, { cheer: true }) : chug ? Object.assign({}, CONFIG.player.look, { kneel: true, chug: true, gulp: reduced ? 0 : Math.sin(t * 15) * .08 }) : CONFIG.player.look, t, hold || chug ? "down" : r.dir || "up", ((r.step || 0) | 0) % 2, !!r.moving); g.restore(); }
+  if (!(r.flash > 0 && (t * 14 | 0) % 2)) { g.save(); g.translate(px, py); g.scale(1.5, 1.5); drawChar(hold ? Object.assign({}, plook(), { cheer: true }) : chug ? Object.assign({}, plook(), { kneel: true, chug: true, gulp: reduced ? 0 : Math.sin(t * 15) * .08 }) : plook(), t, hold || chug ? "down" : r.dir || "up", ((r.step || 0) | 0) % 2, !!r.moving); g.restore(); }
   if (hold) { const up = Math.min(1, (2.2 - r.hold) / .25), by = py - 90 + (1 - up) * 14;
     drawIce(px, by + 2, 1); for (let i = 0; i < 6; i++) { const a = i / 6 * 6.2832 + t * 1.5, r2 = 30 + (reduced ? 0 : Math.sin(t * 6 + i) * 3); seg("rgba(255,240,170,.8)", 1.4, px + Math.cos(a) * 22, by - 18 + Math.sin(a) * 22, px + Math.cos(a) * r2, by - 18 + Math.sin(a) * r2); } }
   for (const b of r.balls || []) { g.fillStyle = rad(b.x, b.y, 14, [[0, "rgba(255,160,50,.6)"], [1, "rgba(255,160,50,0)"]]); g.fillRect(b.x - 14, b.y - 14, 28, 28); ell("#d8401a", b.x, b.y, 6.4, 6.4); ell("#f29a2e", b.x, b.y, 4.4, 4.4); ell("#ffe9a0", b.x - 1, b.y - 1, 2, 2); }
@@ -1476,12 +1453,12 @@ function drawCave(t) {
 /* THE PIANO: two octaves, C to C. Keys are numbered by semitone from the left. */
 /* THE LAPTOP: this very game, a few builds behind, running on the office laptop. You can walk around in it.
    It shows the real house as it is right now (the kittens keep wandering). Walk into the desk inside it and you get
-   the build before: build 0 is the real art in fat pixels, build 1 is flat squares, build 2 has four greens, build 3 has two colours. */
+   the build before: build 0 is the real art in fat pixels, build 1 is flat squares, build 2 has four greens, build 3 has two colors. */
 const LAP = { W: 400, H: 560, sx: 16, sy: 84, sw: 368, sh: 286, bar: 18, msg: 60, tile: [12, 8, 16, 32], ver: ["0.9", "0.1", "0.01", "0.001"] };
 const LAPC = { out: "#0b1512", wall: "#d9d2c0", win: "#3b5a78", door: "#6b3a22", wood: "#5a3d2a", trav: "#cbb994", stone: "#565a6c", paver: "#a0624e", stair: "#8a7458", thing: "#a8763e" };
 const LAPT = { tree: "#2f7a52", gifts: "#b3273a", fridge: "#e6e0d2", ovens: "#e6e0d2", counter: "#e6e0d2", island: "#e6e0d2", sofa: "#8a8d92", secv: "#a8622e", sech: "#a8622e", piano: "#1c1a17", plant: "#3f9a66", pot: "#3f9a66", desk: "#e3c898", toilet: "#f6f3ec", sink: "#f6f3ec", coats: "#3b4a7a", sign: "#f3e6c8", dining: "#96673b", roundtable: "#96673b", chaise: "#35506a", chaisev: "#35506a", bins: "#7f8a8a" };
 let lapGrid = null, lapBg = null;
-function lapBuild() { /* build 1 and older: one flat colour per square of the real map. Build 0: the real floor plan and furniture, drawn once at 6 dots a square */
+function lapBuild() { /* build 1 and older: one flat color per square of the real map. Build 0: the real floor plan and furniture, drawn once at 6 dots a square */
   lapGrid = []; for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) { const ch = MAP[y][x], r = roomAt(x, y), f = CONFIG.furniture.find(f => f.t !== "gap" && x >= f.x && x < f.x + (f.w || 2) && y >= f.y && y < f.y + (f.h || 2));
     lapGrid.push(ch === " " ? LAPC.out : ch === "W" || ch === "B" ? LAPC.win : ch === "D" ? LAPC.door : "#Hc".includes(ch) ? LAPC.wall : f ? LAPT[f.t] || LAPC.thing : "sug=".includes(ch) ? LAPC.stair : ch === "p" ? LAPC.stone : LAPC[(r && r.floor) || "wood"] || LAPC.wood); }
   if (!staticCv) buildStatic(2);
@@ -1501,10 +1478,10 @@ function lapSay(m, txt, who) { m.msg = String(txt).replace(/\s+/g, " "); m.who =
 function lapUse(m, x, y) { /* walk into something: people talk, things describe themselves, the desk goes one laptop deeper */
   const key = x + "," + y; if (m.bump === key) return; m.bump = key;
   const n = lapNpc(x, y), d = RV.def;
-  if (n) { const k = n.def.kind; return k === "monster" ? lapSay(m, fill(d.monster, { name: n.def.name })) : lapSay(m, k === "person" ? fill(n.def.lines[0][0]) : k === "beast" ? "Hrrrgh." : "Meow.", n.def.name); }
+  if (n) { const k = n.def.kind; if (k !== "monster") lapSay(m, k === "person" ? fill(n.def.lines[0][0]) : k === "beast" ? "Hrrrgh." : "Meow.", n.def.name); return; }
   const ch = thingAt(x, y);
   if (ch === "desk") { if (m.d >= LAP.tile.length - 1) return lapSay(m, d.bottom); m.d++; m.fx = m.x; m.fy = m.y; m.flash = .5; sfx("stairs"); RV.toast = d.deeper[Math.min(m.d, d.deeper.length) - 1]; paintReach(); return lapSay(m, d.inside); }
-  if (CONFIG.views[ch]) return lapSay(m, fill(d.noView, { name: ch }));
+  if (CONFIG.views[ch]) return; /* the builds on the laptop have no close-up views: nothing happens */
   const lines = CONFIG.objects[ch]; if (lines) lapSay(m, fill(lines[0]));
 }
 function lapView(m) { const s = LAP.tile[m.d], mh = LAP.sh - LAP.bar - LAP.msg, cols = LAP.sw / s, rows = mh / s, fx = m.d ? m.x : m.fx, fy = m.d ? m.y : m.fy, snap = v => m.d ? Math.round(v) : Math.round(v * 6) / 6; /* square size, and which squares are on screen; only build 0 scrolls smoothly */
@@ -1558,7 +1535,7 @@ function drawLaptop(t) {
   if (!d) { /* build 0: the real art in fat pixels, people as small sprites, a proper text box */
     bx("#12221d", L.sx, L.sy, L.sw, L.sh); g.imageSmoothingEnabled = false; g.drawImage(lapBg, v.cx0 * 6, v.cy0 * 6, v.cols * 6, v.rows * 6, L.sx, v.top, v.cols * s, v.rows * s); g.imageSmoothingEnabled = true;
     const sn = q => Math.round(q / 2) * 2, list = live.map(n => ({ y: n.fy, f: () => lapSprite(n.def.kind, n.def.look || {}, sn(X(n.fx)), sn(Y(n.fy)), Math.floor((n.fx + n.fy) * 2)) }));
-    list.push({ y: m.fy + .01, f: () => lapSprite("person", { skin: "#e8b990", shirt: "#f3e6c8", pants: "#3a4a6a" }, sn(X(m.fx)), sn(Y(m.fy)), m.step, true) });
+    list.push({ y: m.fy + .01, f: () => lapSprite("person", plook(), sn(X(m.fx)), sn(Y(m.fy)), m.step, true) });
     list.sort((p, q) => p.y - q.y).forEach(o => o.f());
     bx("#1c3b33", L.sx, L.sy, L.sw, L.bar); g.fillStyle = "#e2a93b"; g.font = "700 11px ui-monospace, Menlo, monospace"; g.textAlign = "left"; g.fillText("White Elephant: The Game", L.sx + 6, L.sy + 13); g.textAlign = "right"; g.fillText("v" + L.ver[0], L.sx + L.sw - 6, L.sy + 13);
     if (room) { const nm = room.name.toUpperCase(); g.font = "700 9px ui-monospace, Menlo, monospace"; const w = g.measureText(nm).width + 10; bx("#1c1a17", L.sx + 5, v.top + 5, w + 2, 15); bx("#f3e6c8", L.sx + 6, v.top + 6, w, 13); g.fillStyle = "#1c1a17"; g.textAlign = "left"; g.fillText(nm, L.sx + 11, v.top + 16); }
@@ -1873,7 +1850,7 @@ function drawGiftIcon(key, x, y, s) {
 const exIds = () => ["player"].concat(CONFIG.npcs.filter(n => n.inExchange).map(n => n.id));
 function exSeats() { const ids = exIds(), n = ids.length, out = {}; ids.forEach((id, i) => { const a = Math.PI / 2 + i * 2 * Math.PI / n; out[id] = { x: 180 + Math.cos(a) * 128, y: 256 + Math.sin(a) * 86 }; }); return out; }
 const pileSlot = id => ({ x: 180 + ((id % 4) - 1.5) * 25 + (((id / 4) | 0) % 2) * 11, y: 250 + ((id / 4) | 0) * 15 });
-function exTick(dt) { const a = XV.anim; if (!a) return; const t0 = a.t; a.t += dt; if (a.ev.type === "open" && t0 < 1.9 && a.t >= 1.9 && !a.quiet) clip("open") || sfx("open"); if (a.t >= (a.ev.type === "open" ? 3 : a.ev.type === "keep" ? .7 : 1.9)) { XV.anim = null; paintExchange(); } }
+function exTick(dt) { const a = XV.anim; if (!a) return; const X = CONFIG.exchangeAnim, t0 = a.t, cue = 1.9 - X.openLead * X.speed; a.t += dt * X.speed; if (a.ev.type === "open" && t0 < cue && a.t >= cue && !a.quiet) clip("open") || sfx("open"); if (a.t >= (a.ev.type === "open" ? 3 : a.ev.type === "keep" ? .7 : 1.9)) { XV.anim = null; paintExchange(); } }
 function drawExchange(t) {
   const ex = S.ex; if (!ex) return; const dpr = window.devicePixelRatio || 1, w = xcv.clientWidth || 360, W = Math.round(w * dpr);
   if (xcv.width !== W) { xcv.width = W; xcv.height = Math.round(W * 380 / 360); }
@@ -1894,7 +1871,7 @@ function drawExchange(t) {
   const list = [];
   exIds().forEach((id, i) => { const p = pos(id), def = npcById[id]; list.push({ y: p.y, f: () => {
     if (id === ex.current && ex.phase !== "done" && !a) { g.strokeStyle = "#ffd35a"; g.lineWidth = 2 + Math.sin(t * 5) * .6; g.beginPath(); g.ellipse(p.x, p.y, 17, 6, 0, 0, 6.2832); g.stroke(); }
-    g.save(); g.translate(p.x, p.y); g.scale(1.12, 1.12); drawChar(id === "player" ? CONFIG.player.look : def.look, t + i, "down", Math.floor(T * 8) % 2, !!a && id === ev.who && T < 1.5 && ev.type !== "keep"); g.restore();
+    g.save(); g.translate(p.x, p.y); g.scale(1.12, 1.12); drawChar(id === "player" ? plook() : def.look, t + i, "down", Math.floor(T * 8) % 2, !!a && id === ev.who && T < 1.5 && ev.type !== "keep"); g.restore();
     const nm = id === "player" ? "You" : def.name.replace(/^The (One Who )?/, ""), num = ex.order.indexOf(id) + 1;
     g.font = "700 10px ui-monospace, Menlo, monospace"; g.textAlign = "center"; g.lineJoin = "round"; g.lineWidth = 2.8; g.strokeStyle = "#17140f"; g.strokeText(nm, p.x, p.y + 13); g.fillStyle = id === "player" ? "#ffd35a" : "#f3e6c8"; g.fillText(nm, p.x, p.y + 13);
     ell("#17140f", p.x - 15, p.y - 44, 6.4, 6.4); ell(num - 1 < ex.idx || ex.phase !== "turns" ? "#8a8477" : "#e2a93b", p.x - 15, p.y - 44, 5.4, 5.4); g.fillStyle = "#17140f"; g.font = "700 8px ui-monospace, Menlo, monospace"; g.fillText(num, p.x - 15, p.y - 41.2);
@@ -1990,15 +1967,27 @@ cv.addEventListener("pointerdown", tap);
 addEventListener("pointerdown", () => { if (S && S.started) auInit(); });
 $("dialog").addEventListener("click", advanceDlg);
 addEventListener("pointerdown", () => { P.kbd = 0; }, true);
+const DESKTOP = matchMedia("(hover:hover) and (pointer:fine)");
+function paintKeyHint() { /* desktop only: keep naming the keys until each has been used once */
+  const el = $("keyhint"), k = S.keys || {}, show = DESKTOP.matches && S.started && !S.done && !(k.arrows && k.space) && !dlg && !B && !RV && !ENC && $("exchange").hidden && $("end").hidden && $("book").hidden;
+  const want = !show ? "" : (k.arrows ? "" : "<b>Arrow keys</b> walk") + (k.arrows || k.space ? "" : " &nbsp;\u00B7&nbsp; ") + (k.space ? "" : "<b>Space</b> talks to or uses what you're facing");
+  if (el._h !== want) { el._h = want; el.innerHTML = want; el.hidden = !want; }
+}
 addEventListener("keydown", e => { if (/^Arrow|^[wasd ]$/i.test(e.key)) P.kbd = 1;
   if (!$("book").hidden) { if (e.key === "Escape" || e.key === "Enter" || e.key === " ") { e.preventDefault(); $("book").hidden = true; } return; }
   if (!S.started || B || (RV && !RV.def.cave && !RV.def.laptop) || e.target.tagName === "INPUT" || !$("exchange").hidden || !$("end").hidden) return;
   const k = { ArrowUp: "up", ArrowDown: "down", ArrowLeft: "left", ArrowRight: "right", w: "up", s: "down", a: "left", d: "right" }[e.key];
-  if (k) { e.preventDefault(); if (!dlg) { keys.add(k); P.path = []; P.pending = null; } }
-  else if (e.key === " " || e.key === "Enter") { e.preventDefault(); if (e.repeat) return; if (RV && RV.def.laptop) { const m = RV.m; if (m) { m.bump = ""; lapUse(m, m.x + m.dx, m.y + m.dy); } return; } if (RV) { if (RV.py < CAVE.top + 14 && CAVE.fires.some(fx => Math.abs(RV.px - fx) < 34)) caveAnger(RV); return; } if (dlg) advanceDlg(); else interactFacing(); }
+  if (k) { e.preventDefault(); if (!dlg) { keys.add(k); P.path = []; P.pending = null; if (!RV) S.keys.arrows = 1; } }
+  else if (e.key === " " || e.key === "Enter") { e.preventDefault(); if (e.repeat) return; if (e.key === " " && !RV && (dlg || facingTarget())) S.keys.space = 1; if (RV && RV.def.laptop) { const m = RV.m; if (m) { m.bump = ""; lapUse(m, m.x + m.dx, m.y + m.dy); } return; } if (RV) { if (RV.py < CAVE.top + 14 && CAVE.fires.some(fx => Math.abs(RV.px - fx) < 34)) caveAnger(RV); return; } if (dlg) advanceDlg(); else interactFacing(); }
 });
 addEventListener("keyup", e => { const k = { ArrowUp: "up", ArrowDown: "down", ArrowLeft: "left", ArrowRight: "right", w: "up", s: "down", a: "left", d: "right" }[e.key]; if (k) keys.delete(k); });
 addEventListener("blur", () => keys.clear());
+function paintLooks() { /* the character choices on the first screen */
+  const box = $("looks"), og = g, oc = ctx; box.textContent = "";
+  CONFIG.player.looks.forEach((look, i) => { const b = document.createElement("button"), c = document.createElement("canvas"), x = c.getContext("2d"); b.type = "button"; b.setAttribute("role", "radio"); b.setAttribute("aria-checked", String(i === (S.look || 0))); b.setAttribute("aria-label", "Character " + (i + 1));
+    c.width = 120; c.height = 188; x.setTransform(4, 0, 0, 4, 60, 176); ctx = x; g = x; drawChar(look, 0, "down", 0, false); b.appendChild(c); b.addEventListener("click", () => { S.look = i; paintLooks(); }); box.appendChild(b); });
+  ctx = oc; g = og;
+}
 $("startform").addEventListener("submit", e => {
   e.preventDefault(); auInit(); S.name = $("pname").value.trim() || "Guest"; S.started = true;
   $("title").hidden = true; $("hud").hidden = false; $("pname").blur(); paintHud();
@@ -2011,12 +2000,12 @@ function approach(o, tx, ty, d) {
   o.fx += dx / m * d; o.fy += dy / m * d; return false;
 }
 function update(dt) {
-  auWant();
+  auWant(); paintKeyHint();
   if (dlg) { const page = dlg.pages[dlg.i]; if (dlg.n < page.length) { const n0 = dlg.n; dlg.n += dt * 55; if (((dlg.n / 4) | 0) !== ((n0 / 4) | 0)) sfx("blip"); paintDlg(); } }
   const busy = !S.started || dlg || B || ENC || RV || !$("exchange").hidden || !$("end").hidden || !$("book").hidden;
   if (!busy && S.fq.length) { showFaq(S.fq.shift()); return; }
   // player
-  const arrived = approach(P, S.x, S.y, dt * 12);
+  const arrived = approach(P, S.x, S.y, dt * CONFIG.player.speed);
   if (!arrived) P.step += dt * 9;
   else if (!busy) {
     let next = null;
@@ -2030,7 +2019,7 @@ function update(dt) {
   }
   // characters with somewhere to be
   for (const n of live) if (n.route) {
-    if (!approach(n, n.x, n.y, dt * 4.5)) { n.step += dt * 9; continue; }
+    if (!approach(n, n.x, n.y, dt * (n.rs || 4.5))) { n.step += dt * 9; continue; }
     if (!n.route.length) { const d = n.done; n.route = null; n.done = null; if (d) d(); continue; }
     const [nx, ny] = n.route[0]; if (ny === S.y && (nx === S.x || (n.def.wide && nx + 1 === S.x))) continue;
     n.route.shift(); n.dir = nx < n.x ? "left" : nx > n.x ? "right" : ny < n.y ? "up" : "down"; n.x = nx; n.y = ny;
@@ -2042,6 +2031,7 @@ function update(dt) {
     if (!approach(n, n.x, n.y, dt * (kit ? 8 : 4))) { n.step += dt * 9; continue; }
     if (dlg) continue;
     n.wait -= dt;
+    if (n.wait <= 0 && n.def.guard) { roam(n); continue; } /* an off-duty guard has the run of the house */
     if (n.wait <= 0) {
       n.wait = kit ? .2 + Math.random() * 1.5 : 1 + Math.random() * 4;
       const d = DIRS[(Math.random() * 4) | 0], nx = n.x + d[0], ny = n.y + d[1];
@@ -2589,7 +2579,7 @@ function draw(t, dt) {
     if (S.started && !S.talked[n.def.id] && k !== "monster" && !(QG.spot && QG.spot.npc === n)) { const b = reduced ? 0 : Math.sin(t * 4 + n.def.x) * 1.4, yy = -top - 13 + b; rr(INK, -4.5, yy, 9, 12, 2.4); rr("#f3e6c8", -3.5, yy + 1, 7, 10, 1.6); rr("#b3273a", -1.1, yy + 2.4, 2.2, 4.6, .8); rr("#b3273a", -1.1, yy + 8, 2.2, 1.8, .8); }
     ctx.restore();
   } });
-  list.push({ k: P.fy + .01, who: P, f: () => { ctx.save(); ctx.translate(Math.round(P.fx * TS) + 8, Math.round(P.fy * TS) + 15); drawChar(CONFIG.player.look, t, P.dir, (P.step | 0) % 2, P.fx !== S.x || P.fy !== S.y); ctx.restore(); } });
+  list.push({ k: P.fy + .01, who: P, f: () => { ctx.save(); ctx.translate(Math.round(P.fx * TS) + 8, Math.round(P.fy * TS) + 15); drawChar(plook(), t, P.dir, (P.step | 0) % 2, P.fx !== S.x || P.fy !== S.y); ctx.restore(); } });
   list.sort((a, b) => a.k - b.k).forEach(o => o.f());
   // a waist-high thing drawn after a character may hide their legs, never their head: redraw above the waist
   for (const o of list) { if (!o.who) continue; const w = o.who, x0 = w.fx * TS - 3, x1 = (w.fx + (w.def && w.def.wide ? 2 : 1)) * TS + 3, foot = w.fy * TS + 15;
@@ -2616,6 +2606,9 @@ function draw(t, dt) {
     const b = G.spot.npc ? npcBox(G.spot.npc) : tileBox(G.spot.tiles), mx = (b[0] + b[2]) / 2, my = b[1] - 7 - (reduced ? 0 : Math.abs(Math.sin(t * 4)) * 4);
     corners(b, "#ffd66e", 5, 1.2, gk);
     g.save(); g.translate(mx, my); g.scale(gk, gk); poly("rgba(0,0,0,.6)", [[-6.4, -8.4], [6.4, -8.4], [0, 1.6]]); poly("#ffd66e", [[-4.6, -7.2], [4.6, -7.2], [0, 0]]); poly("#fff3c8", [[-2.6, -6.6], [.4, -6.6], [-.6, -4.2]]); g.restore(); } }
+  if (S.started && !RV && !B) for (const v of CONFIG.marks || []) { if (S.viewed[v] || (QG.spot && !QG.spot.npc && questAim() && questAim().view === v)) continue; /* a "!" over the extras nobody has opened yet */
+    const sp = questSpots({ view: v })[0]; if (!sp) continue; const b = tileBox(sp.tiles), x = (b[0] + b[2]) / 2, yy = b[1] - 15 + (reduced ? 0 : Math.sin(t * 4 + x) * 1.4);
+    rr(INK, x - 4.5, yy, 9, 12, 2.4); rr("#f3e6c8", x - 3.5, yy + 1, 7, 10, 1.6); rr("#b3273a", x - 1.1, yy + 2.4, 2.2, 4.6, .8); rr("#b3273a", x - 1.1, yy + 8, 2.2, 1.8, .8); }
   if (P.kbd && S.started && !dlg && !RV && !B) { const f = facingTarget(); if (f) corners(f.type === "npc" ? npcBox(f.n) : tileBox(targetTiles(f.x, f.y)), "#ffe9a8", 5, 1.2); } /* keyboard players: frame whatever Space would use */
   if (P.path.length) { const gp = P.path[P.path.length - 1]; ell("rgba(243,230,200,.85)", gp[0] * TS + 8, gp[1] * TS + 8, 2.6, 2.6); }
   if (S.high > 0 && !reduced) meltCanvas(cv, ctx, t);
@@ -2629,11 +2622,11 @@ function frame(ms) {
   update(dt); if (B) { bTick(dt); if (B) { drawBattle(t); if (S.high > 0 && !reduced) meltCanvas(bcv, bctx, t); } } else if (RV) { reachTick(dt); if (RV) { drawReach(t); if (S.high > 0 && !reduced) meltCanvas(rcv, rctx, t); } } else if (S.ex && !$("exchange").hidden) { exTick(dt); drawExchange(t); if (S.high > 0 && !reduced) meltCanvas(xcv, xctx, t); } else draw(t, dt); requestAnimationFrame(frame);
 }
 function start(data) {
-  S = data && data.v === 15 ? data : fresh();
+  S = data && data.v === 16 ? data : fresh();
   live = CONFIG.npcs.concat(CONFIG.monsters.filter(m => !S.defeated[m.id])).map(n => ({ def: n, x: n.x, y: n.y, fx: n.x, fy: n.y, dir: "down", wait: Math.random() * 3, step: 0 }));
   P.fx = S.x; P.fy = S.y;
   if (S.started) { $("title").hidden = true; $("hud").hidden = false; paintHud(); if (S.ex) showExchange(); }
-  S.taken = S.taken || {}; S.high = +S.high || 0; applyTrip(); resize(); requestAnimationFrame(frame);
+  S.taken = S.taken || {}; S.high = +S.high || 0; applyTrip(); resize(); paintLooks(); requestAnimationFrame(frame);
 }
 const hot = window.claude && window.claude.hot;
 if (hot && hot.snapshot) hot.snapshot(() => S);

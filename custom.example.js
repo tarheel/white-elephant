@@ -59,7 +59,7 @@ window.CUSTOM = {
     "bring": "One wrapped gift, about $[TBD]. No name on it."
   },
 
-  // THE FAQS. One per stop on the quest, in this order: sign, bell, coats, bath, cave, coraline, piano, rules, charlotte, moldover, food, bar, louis.
+  // THE FAQS. One per stop on the quest, in this order: sign, bell, coats, bath, coraline, rules, charlotte, moldover, food, bar, louis.
   // goal  = the hint shown in the corner while that stop is next
   // title = the question on the card;  text = the answer (a list makes several pages)
   // says  = what that person says when the guest reaches them (people only)
@@ -85,20 +85,10 @@ window.CUSTOM = {
       "title": "Where's the bathroom?",
       "text": "Off the entry, first door past the stairs.\n[TBD: anything else guests should know. The lock, for instance.]"
     },
-    "cave": {
-      "goal": "Investigate the hole in the wall by the bathroom",
-      "title": "Will there be drinking games?",
-      "text": "Only the one. If you find a Smirnoff Ice, you take a knee and finish it. Those are the rules and we did not write them.\n[TBD: anything real about this.]"
-    },
     "coraline": {
       "goal": "Meet Coraline, on the stairs",
       "title": "Are there pets?",
-      "text": "Four cats: Coraline, Hobbes, Pom Pom and Top Hat. They will investigate your coat and your gift.\nUpstairs and the garage are closed.\n[TBD: allergy note.]"
-    },
-    "piano": {
-      "goal": "Try the piano in the living room",
-      "title": "Is this a quiet party?",
-      "text": "No. There are instruments and you may touch them.\n[TBD: music, noise, and when it winds down.]"
+      "text": "Four cats: Coraline, Hobbes, Pompom and Top Hat. They will investigate your coat and your gift.\nUpstairs and the garage are closed.\n[TBD: allergy note.]"
     },
     "rules": {
       "goal": "Ask the Rules Lawyer how this works",
@@ -142,7 +132,7 @@ window.CUSTOM = {
       "title": "Anything else?",
       "text": "[TBD: RSVP by when, and to whom.]\n[TBD: who to text if you get lost on the front steps.]",
       "says": [
-        "You found everything. Most people never make it past the cave.",
+        "You found everything. Most people never make it past the yeti.",
         "One last thing before we play."
       ]
     }
@@ -276,24 +266,22 @@ window.CUSTOM = {
       ]
     },
     "k1": {
-      "name": "Pom Pom",
+      "name": "Pompom",
       "lines": [
         [
-          "Pom Pom holds the office doorway. Pom Pom is mostly tail and has never lost.",
+          "Pompom holds the office doorway. Pompom is mostly tail and has never lost.",
           "She cannot be beaten. She can, possibly, be bought. She keeps glancing toward the kitchen."
         ]
       ],
       "fedNow": [
-        "Pom Pom considers the can. Pom Pom considers her post.",
-        "The can wins. She abandons the doorway without a backward glance.",
-        "The office is open."
+        "Pompom takes the can and abandons her post without a backward glance. The office is open."
       ],
       "fed": [
         [
-          "Pom Pom is off duty. She regrets nothing."
+          "Pompom is off duty. She regrets nothing."
         ],
         [
-          "(Pom Pom licks her whiskers and pretends not to know you.)"
+          "(Pompom licks her whiskers and pretends not to know you.)"
         ]
       ]
     },
@@ -333,19 +321,24 @@ window.CUSTOM = {
 
   // What you read when you look at things in the house, by thing.
   objects: {
-    "tree": [
-      "A tree. It is doing its best."
+    "sign": [
+      "A sign, staked into the planter with real commitment."
     ],
-    "gifts": [
-      "The gift pile. Yours is in there somewhere, anonymous and wrapped.",
-      "Talk to the host when you're ready to start."
+    "coats": [
+      "The coat closet. Coats go here. Yes, there is room."
+    ],
+    "toilet": [
+      "The bathroom. You found it without asking anyone. Well done."
+    ],
+    "sink": [
+      "Wash your hands. There is shared cheese."
+    ],
+    "bell": [
+      "The doorbell."
     ],
     "tv": [
       "The TV is displaying art. It is not for watching. This has been discussed.",
       "Below it, a fire. Stockings hung with care, and one hung with indifference."
-    ],
-    "fireplace": [
-      "A second fireplace. This house does not ration them."
     ],
     "fridge": [
       "The fridge. Mostly water at this point."
@@ -356,161 +349,11 @@ window.CUSTOM = {
     "island": [
       "The island. Every party ends up standing around it. This one will too."
     ],
-    "stools": [
-      "Three stools. Four people will try."
-    ],
-    "sofa": [
-      "Prime exchange seating. Claim it early."
-    ],
-    "chaise": [
-      "The chaise. Whoever gets it is not getting up to steal anything."
-    ],
-    "chaisev": [
-      "A chaise. Technically office furniture."
-    ],
-    "door": [
-      "This door stays shut. Use the other one like everybody else."
-    ],
-    "coffee": [
-      "A coffee table. Coasters are implied."
-    ],
-    "ottoman": [
-      "An ottoman. Technically seating."
-    ],
-    "chair": [
-      "A chair with opinions about posture."
-    ],
-    "rocker": [
-      "A rocking chair. Sit at your own tempo."
-    ],
     "piano": [
       "A piano. If you can play, you may. If you can't, you also may, briefly."
     ],
-    "guitar": [
-      "A guitar. No Wonderwall."
-    ],
-    "guitars": [
-      "Two more guitars. Still no Wonderwall."
-    ],
-    "bookshelf": [
-      "Books, sorted by color. Do not re-shelve them by author."
-    ],
-    "bookside": [
-      "Books, sorted by color. Do not re-shelve them by author."
-    ],
-    "nook": [
-      "More books. The low shelf is not a seat."
-    ],
-    "armoire": [
-      "An armoire. It has seen things. Mostly coats."
-    ],
-    "roundtable": [
-      "A round table. Neutral ground for people avoiding the island."
-    ],
-    "dining": [
-      "The dining table. It has a lazy Susan. Spin responsibly."
-    ],
-    "sideboard": [
-      "Candles, a lamp, and a place to put a drink you will forget about."
-    ],
-    "bench": [
-      "A bench with a view of the family room, for guests who prefer to heckle."
-    ],
-    "ovens": [
-      "Something is in the oven. It is not ready. Stop opening it."
-    ],
-    "cabinets": [
-      "Cabinets. The glasses are in the one you open last."
-    ],
     "desk": [
       "A desk. Someone is definitely not checking work email on it."
-    ],
-    "toilet": [
-      "The bathroom. You found it without asking anyone. Well done."
-    ],
-    "sink": [
-      "Wash your hands. There is shared cheese."
-    ],
-    "plant": [
-      "A plant. Do not put your drink in it."
-    ],
-    "shelves": [
-      "Books, sorted by color. Do not re-shelve them by author."
-    ],
-    "catbed": [
-      "A cat bed. Unoccupied, which means a cat is on your coat."
-    ],
-    "globe": [
-      "A globe. Spin it and go wherever your finger lands. After the party."
-    ],
-    "pouf": [
-      "A pouf and a side table. Overflow seating for the fashionably late."
-    ],
-    "cattree": [
-      "A cat tree. Reserved seating. You are not on the list."
-    ],
-    "lamp": [
-      "A lamp, doing mood lighting on purpose."
-    ],
-    "mirror": [
-      "A mirror with a garland. You look ready to lose a gift."
-    ],
-    "art": [
-      "Art. Nod thoughtfully."
-    ],
-    "window": [
-      "Dark out. It's December."
-    ],
-    "H": [
-      "A half wall with garland. The family room is down there. Use the steps like a civilized guest."
-    ],
-    "c": [
-      "Columns. Load-bearing, probably. Do not lean with intent."
-    ],
-    "W": [
-      "A wall of windows. Somewhere out there is the backyard."
-    ],
-    "B": [
-      "The backyard. It's December. Stay in."
-    ],
-    "shoebasket": [
-      "A basket of shoes. Shoes off is the house rule. The cats can smell your choices."
-    ],
-    "rattan": [
-      "A rattan cabinet. Shoes in the bottom, mysteries in the top."
-    ],
-    "basket": [
-      "An empty basket. It is waiting for something to deserve it."
-    ],
-    "mailbox": [
-      "The mailbox. Nothing but catalogs. And one more catalog."
-    ],
-    "pot": [
-      "A potted plant. It has seen many coats come and go."
-    ],
-    "maple": [
-      "A Japanese maple, lit from below like it is about to make an announcement."
-    ],
-    "bell": [
-      "The doorbell."
-    ],
-    "sign": [
-      "A sign, staked into the planter with real commitment."
-    ],
-    "pantry": [
-      "The pantry. Crackers live here. So does the good chocolate, which you did not see."
-    ],
-    "coats": [
-      "The coat closet. Coats go here. Yes, there is room."
-    ],
-    "bins": [
-      "Trash, compost, recycling. In that order. There will be a quiz."
-    ],
-    "canebench": [
-      "A cane bench behind the couch. Mostly it holds whatever the cats knock off the windowsill."
-    ],
-    "kidtable": [
-      "A very small table. No kids tonight, so it's available. You will not fit."
     ]
   },
 
@@ -549,8 +392,9 @@ window.CUSTOM = {
       "You faint, gracefully.",
       "You wake up on the sectional with full HP. Nobody mentions it."
     ],
-    "petPurr": [
-      "Purring. +1 HP. The way remains closed."
+    "catNeedFood": [
+      "You have nothing a cat would want.",
+      "There's a can of cat food in the fridge."
     ],
     "catNoFood": [
       "Not interested. The cat food stays yours."
@@ -786,12 +630,10 @@ window.CUSTOM = {
       "inside": "A laptop. On its screen: this game, but an older build.",
       "deeper": [
         "A laptop, inside the laptop. An older build: the art budget had not arrived yet.",
-        "Another one. This build predates most colours.",
+        "Another one. This build predates most colors.",
         "And another. This build predates the rest of them."
       ],
-      "bottom": "It's laptops all the way down. Go back to the party.",
-      "noView": "{name}: not implemented in this build.",
-      "monster": "A wild {name}. Combat is not implemented. It wins on a technicality."
+      "bottom": "It's laptops all the way down. Go back to the party."
     },
     "tv": {
       "title": "The Frame TV. Tap to press the power button.",
