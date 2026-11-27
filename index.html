@@ -68,7 +68,9 @@ button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
 button.alt{background:var(--paper);color:var(--ink)}
 button:focus-visible,input:focus-visible,.gift:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 .overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;overflow-y:auto;padding:16px}
-#title{justify-content:center;background:rgba(14,28,25,.82);text-align:center;gap:14px}
+#title{background:rgba(14,28,25,.82);text-align:center;gap:14px}
+#title::before,#title::after{content:"";flex:1 0 0;margin:-7px 0}
+@media (pointer:coarse){.hint .kbd{display:none}}
 h1{font-family:var(--display);font-weight:700;font-size:clamp(44px,13vw,84px);line-height:.86;margin:0;color:var(--paper);text-shadow:4px 4px 0 var(--cranberry);text-wrap:balance}
 h1 small{display:block;font-size:.36em;font-weight:600;letter-spacing:.3em;color:var(--gold);text-shadow:none;margin-top:14px}
 #title p{max-width:30ch;margin:0}
@@ -77,7 +79,7 @@ h1 small{display:block;font-size:.36em;font-weight:600;letter-spacing:.3em;color
 #looks{display:flex;gap:10px;justify-content:center}
 #looks button{padding:4px 6px 2px;background:#22352f;box-shadow:none;border:3px solid transparent;line-height:0}
 #looks button[aria-checked="true"]{background:var(--paper);border-color:var(--gold)}
-#looks canvas{position:static;inset:auto;width:60px;height:94px;display:block;touch-action:auto}
+#looks canvas{position:static;inset:auto;width:54px;height:112px;display:block;touch-action:auto}
 #keyhint{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);padding:4px 12px 5px;font-size:20px;white-space:nowrap;pointer-events:none}
 #keyhint b{font-family:var(--display);font-weight:600;font-size:14px;background:var(--ink);color:var(--paper);padding:1px 6px 2px;margin:0 2px}
 input{font-family:var(--body);font-size:26px;text-align:center;width:220px;padding:4px 8px;background:var(--paper);color:var(--ink);border:3px solid var(--ink);-webkit-user-select:text;user-select:text}
@@ -159,10 +161,11 @@ body.trip .panel,body.trip .win{animation:tripWob 5s ease-in-out infinite;text-s
     <form id="startform">
       <label for="pname">Your name</label>
       <input id="pname" maxlength="16" autocomplete="off" placeholder="Guest">
-      <div id="looks" role="radiogroup" aria-label="Pick your character"></div>
+      <label id="lookslbl">Choose your fighter</label>
+      <div id="looks" role="radiogroup" aria-labelledby="lookslbl"></div>
       <button id="startbtn" type="submit">Walk in</button>
     </form>
-    <p class="hint">Follow the dotted trail, or tap anywhere to walk there. Tap a person, cat, monster or object to bother it. Keyboard: arrows and Space.</p>
+    <p class="hint">Follow the dotted trail, or tap anywhere to walk there. Tap a person, cat, monster or object to bother it. <span class="kbd">Keyboard: arrows and Space.</span></p>
   </div>
 
   <div id="exchange" class="overlay" hidden><div class="wrap">
@@ -504,7 +507,7 @@ const CONFIG = {
   player: { hp: 10, speed: 15, // speed = squares walked per second
     looks: [ // the characters offered on the first screen
       { skin: "#e8b990", hair: "#3a2a20", hairStyle: "short", shirt: "#f3e6c8", trim: "#b3273a", pattern: "zigzag", pants: "#3b4a7a", hat: "santa" },
-      { skin: "#e8b990", hair: "#8a4f2a", hairStyle: "long", shirt: "#2f7a52", top: "dress", trim: "#f3e6c8", pattern: "zigzag", tights: "#f3e6c8", shoes: "#7a2a2a", hat: "santa" },
+      { skin: "#e8b990", hair: "#8a4f2a", hairStyle: "lob", shirt: "#2f7a52", top: "dress", trim: "#f3e6c8", pattern: "zigzag", tights: "#f3e6c8", shoes: "#7a2a2a", hat: "santa" },
       { skin: "#e8b990", hair: "#2a211c", hairStyle: "bob", shirt: "#3f6f9a", top: "hoodie", trim: "#f3e6c8", pants: "#4a4a55", hat: "santa" } ] },
   faintAt: { x: 10, y: 59 },   // where you wake up after losing a fight
   items: {                     // heal: HP restored when eaten (0 = trophy)
@@ -1985,7 +1988,7 @@ addEventListener("blur", () => keys.clear());
 function paintLooks() { /* the character choices on the first screen */
   const box = $("looks"), og = g, oc = ctx; box.textContent = "";
   CONFIG.player.looks.forEach((look, i) => { const b = document.createElement("button"), c = document.createElement("canvas"), x = c.getContext("2d"); b.type = "button"; b.setAttribute("role", "radio"); b.setAttribute("aria-checked", String(i === (S.look || 0))); b.setAttribute("aria-label", "Character " + (i + 1));
-    c.width = 120; c.height = 188; x.setTransform(4, 0, 0, 4, 60, 176); ctx = x; g = x; drawChar(look, 0, "down", 0, false); b.appendChild(c); b.addEventListener("click", () => { S.look = i; paintLooks(); }); box.appendChild(b); });
+    c.width = 120; c.height = 248; x.setTransform(4, 0, 0, 4, 60, 238); /* a character with a hat is 57 units tall */ ctx = x; g = x; drawChar(look, 0, "down", 0, false); b.appendChild(c); b.addEventListener("click", () => { S.look = i; paintLooks(); }); box.appendChild(b); });
   ctx = oc; g = og;
 }
 $("startform").addEventListener("submit", e => {
