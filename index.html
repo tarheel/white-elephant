@@ -35,13 +35,13 @@ canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;displa
 @media (max-width:560px){#hud{display:flex;flex-wrap:wrap;align-items:center}#hud .br{display:block;flex-basis:100%;height:0}#faqs{margin-left:auto}#goal{flex:1 1 100%;max-width:none;text-align:left;justify-content:space-between}}
 #dialog.card{bottom:0;top:0;height:fit-content;margin:auto;max-width:540px;padding:20px 16px 26px;box-shadow:0 0 0 4px var(--gold),0 0 0 7px var(--ink),0 12px 0 3px rgba(0,0,0,.45)}
 #dialog.card #dname{background:var(--gold);color:var(--ink);top:-19px}
-#dtitle{font-family:var(--display);font-weight:700;font-size:25px;line-height:1;color:var(--cranberry);margin:4px 0 8px;text-wrap:balance}
+#dtitle{font-family:var(--body);font-weight:400;font-size:32px;line-height:.95;color:var(--cranberry);margin:4px 0 8px;text-wrap:balance}
 #book{background:rgba(14,28,25,.96);z-index:30;gap:12px}
 #book .bookwrap{width:100%;max-width:580px;display:flex;flex-direction:column;gap:10px;margin:0 auto}
 #book h2{display:flex;justify-content:space-between;align-items:baseline;margin:4px 0}
 #bookn{font-family:var(--body);font-weight:400;font-size:24px;color:var(--gold)}
 .faqitem{padding:8px 12px 10px}
-.faqitem b{display:block;font-family:var(--display);font-weight:700;font-size:18px;color:var(--cranberry)}
+.faqitem b{display:block;font-family:var(--body);font-weight:400;font-size:26px;line-height:1;color:var(--cranberry)}
 .faqitem p{margin:3px 0 0;white-space:pre-wrap;font-size:22px;line-height:1.08}
 .faqitem.locked{opacity:.6}.faqitem.locked b{color:var(--dim)}
 #bookclose{align-self:center;position:sticky;bottom:8px}
@@ -49,13 +49,13 @@ canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;displa
 /* Phones and tablets: the pixel font runs small, so everything you read gets a size up. */
 @media (max-width:700px),(pointer:coarse){
   #hud .pill,#stats,#snd,#goal,#faqs{font-size:24px}#room{font-size:16px!important}#goalgo{font-size:14px}
-  #dtext{font-size:29px}#dname{font-size:17px;top:-19px}#dtitle{font-size:27px}#dialog{min-height:128px}#dmore{font-size:18px}
+  #dtext{font-size:29px}#dname{font-size:17px;top:-19px}#dtitle{font-size:36px}#dialog{min-height:128px}#dmore{font-size:18px}
   button{font-size:18px}
   .win{font-size:27px}button.cmd{font-size:30px}.dimtxt{font-size:23px}
   #exmsg{font-size:27px}#exprompt{font-size:24px}#order{font-size:22px}#exturn{font-size:22px}
   #rtoast{font-size:26px}#rbag{font-size:26px}
   #details{font-size:25px}.hint{font-size:21px}#title p{font-size:24px}#title label{font-size:22px}#verdict{font-size:25px}
-  .faqitem p{font-size:26px}.faqitem b{font-size:19px}
+  .faqitem p{font-size:26px}.faqitem b{font-size:30px}
 }
 #dialog{position:absolute;left:16px;right:16px;bottom:16px;max-width:640px;margin:0 auto;padding:12px 14px 16px;min-height:112px;cursor:pointer}
 #dname{position:absolute;top:-17px;left:10px;background:var(--cranberry);color:var(--paper);border:3px solid var(--ink);padding:1px 10px 3px;font-family:var(--display);font-weight:600;font-size:15px}
@@ -80,6 +80,7 @@ h1 small{display:block;font-size:.36em;font-weight:600;letter-spacing:.3em;color
 #looks button{padding:4px 6px 2px;background:#22352f;box-shadow:none;border:3px solid transparent;line-height:0}
 #looks button[aria-checked="true"]{background:var(--paper);border-color:var(--gold)}
 #looks canvas{position:static;inset:auto;width:54px;height:112px;display:block;touch-action:auto}
+@media (max-width:700px),(max-height:760px){#looks canvas{width:36px;height:75px}#looks button{padding:3px 5px 1px}}
 #keyhint{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);padding:4px 12px 5px;font-size:20px;white-space:nowrap;pointer-events:none}
 #keyhint b{font-family:var(--display);font-weight:600;font-size:14px;background:var(--ink);color:var(--paper);padding:1px 6px 2px;margin:0 2px}
 input{font-family:var(--body);font-size:26px;text-align:center;width:220px;padding:4px 8px;background:var(--paper);color:var(--ink);border:3px solid var(--ink);-webkit-user-select:text;user-select:text}
@@ -211,9 +212,9 @@ body.trip .panel,body.trip .win{animation:tripWob 5s ease-in-out infinite;text-s
 </div>
 
 <!-- Your own settings: an optional file named custom.js next to this page. See custom.example.js. -->
-<script src="custom.js"></script>
+<script>document.write('<script src="custom.js?' + Date.now() + '"><\/script>'); /* the number makes the browser fetch the latest copy every time instead of a saved one */</script>
 <!-- Your own songs: an optional file named songs.js next to this page (midi2song.py can write it). -->
-<script src="songs.js"></script>
+<script>document.write('<script src="songs.js?' + Date.now() + '"><\/script>');</script>
 <script>
 //<CONFIG>
 /* ============================================================================
@@ -537,6 +538,7 @@ const CONFIG = {
      kind: can | bottle | carton | jar | wedge | slice | plate.  item = key in `items` above. */
   /* (set these in custom.js) YOUR OWN SOUNDS: file names or addresses of sound files sitting next to this page (mp3 works everywhere).
      Leave a slot empty ("") to keep the built-in synthesized sound. A list plays one at random each time. */
+  soundVolume: { stairs: .5 }, /* how loud each of your sound files plays, by the same names as sounds: 1 = as recorded, .5 = half */
   mediaDir: "media/",     /* folder for sound and video files named without a folder; "" = next to the HTML file */
   sounds: {
     stairs: "",            // walking down into the cave, e.g. "stairs.mp3"
@@ -1271,7 +1273,7 @@ function auInit() {
   AU.delay = c.createDelay(1); AU.delay.delayTime.value = .41; AU.fb = c.createGain(); AU.fb.gain.value = .55; AU.send = c.createGain(); AU.send.gain.value = 0;
   AU.mix.connect(AU.send); AU.send.connect(AU.delay); AU.delay.connect(AU.fb); AU.fb.connect(AU.delay); AU.delay.connect(AU.filter);
   AU.lbus = c.createGain(); AU.lbus.gain.value = .8; AU.lbus.connect(AU.mix); AU.lbus.connect(AU.delay);
-  AU.sfx = c.createGain(); AU.sfx.gain.value = .9; AU.sfx.connect(AU.master);
+  AU.sfx = c.createGain(); AU.sfx.gain.value = .9; AU.sfx.connect(AU.master); clipWarm();
   const lfo = c.createOscillator(); lfo.frequency.value = .21; AU.wob = c.createGain(); AU.wob.gain.value = 0; lfo.connect(AU.wob); lfo.start();
   const len = (c.sampleRate * .5) | 0, buf = c.createBuffer(1, len, c.sampleRate), d = buf.getChannelData(0); for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1; AU.noise = buf;
   try { const bin = atob(LAUGH_MP3), u8 = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i); c.decodeAudioData(u8.buffer, b => { AU.laughBuf = b; }, () => {}); } catch (e) {}
@@ -1357,9 +1359,17 @@ const CLIPS = {};
 function clip(key) { // plays one of CONFIG.sounds[key]; false means "nothing set (or the file is broken), use the built-in sound"
   const c = CONFIG.sounds && CONFIG.sounds[key], list = (Array.isArray(c) ? c : [c]).filter(u => u && CLIPS[u] !== false); if (!list.length) return false; if (!AU.on) return true;
   let i = Math.floor(Math.random() * list.length); if (list.length > 1 && list[i] === CLIPS["last:" + key]) i = (i + 1) % list.length; const src = list[i]; CLIPS["last:" + key] = src;
+  const sv = (CONFIG.soundVolume || {})[key], vol = Math.max(0, Math.min(1, sv === undefined ? 1 : +sv));
+  if (vol < 1 && AU.ctx) { /* a turned-down sound goes through the game's own mixer, because iPhones ignore the volume of a plain audio file */
+    const buf = CLIPBUF[src]; if (buf && buf !== 1) { const c = AU.ctx, n = c.createBufferSource(), gn = c.createGain(); n.buffer = buf; gn.gain.value = vol / .6; n.connect(gn); gn.connect(AU.master); n.start(); return true; }
+    if (buf === undefined) clipLoad(src);
+  }
   let a = CLIPS[src]; if (!a) { a = CLIPS[src] = new Audio(mediaUrl(src)); a.preload = "auto"; a.onerror = () => { CLIPS[src] = false; }; }
-  try { a.currentTime = 0; } catch (e) {} const pr = a.play(); if (pr && pr.catch) pr.catch(() => {}); return true;
+  a.volume = vol; try { a.currentTime = 0; } catch (e) {} const pr = a.play(); if (pr && pr.catch) pr.catch(() => {}); return true;
 }
+const CLIPBUF = {}; /* file -> decoded sound, 1 while loading, false if it can't be loaded this way (the plain player is used instead) */
+function clipLoad(src) { CLIPBUF[src] = 1; try { fetch(mediaUrl(src)).then(r => { if (!r.ok) throw 0; return r.arrayBuffer(); }).then(b => AU.ctx.decodeAudioData(b)).then(buf => { CLIPBUF[src] = buf; }).catch(() => { CLIPBUF[src] = false; }); } catch (e) { CLIPBUF[src] = false; } }
+function clipWarm() { for (const [key, v] of Object.entries(CONFIG.soundVolume || {})) if (+v < 1) for (const src of [].concat((CONFIG.sounds || {})[key] || [])) if (src && CLIPBUF[src] === undefined) clipLoad(src); } /* get the turned-down sounds ready before they are first needed */
 function paintSound() { $("snd").textContent = !AU.on ? "Sound: off" : AU.ctx && AU.ctx.state !== "running" ? "Sound: tap here" : "Sound: on"; }
 function auUnlock() { /* phones only let sound start from a finished tap, and can pause it again later */
   if (!S || !S.started) return; auInit(); const c = AU.ctx; if (!c) return;

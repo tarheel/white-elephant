@@ -13,7 +13,7 @@ A small browser game that doubles as the FAQ for our white elephant party. Every
 | `tools/midi2song.py` | Turns a MIDI file into a song for the game. |
 | `.nojekyll` | Tells GitHub Pages to serve the files as they are. |
 
-Sound and video files go in `media/`. A bare file name in `custom.js` (`"doorbell.mp3"`) is looked up there; change the folder with `mediaDir`.
+Sound and video files go in `media/`. To turn one of your sounds down, set its level in `soundVolume`, e.g. `soundVolume: { stairs: .5 }`. `custom.js` and `songs.js` are fetched fresh on every page load. A bare file name in `custom.js` (`"doorbell.mp3"`) is looked up there; change the folder with `mediaDir`.
 
 ## The FAQ quest
 
