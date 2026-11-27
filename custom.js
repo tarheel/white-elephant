@@ -576,11 +576,12 @@ window.CUSTOM = {
     },
     laptop: {
       title: "The office laptop. Someone left a game running.",
-      boot: "White Elephant: The Game. Early build. Arrows or tap to move. Walk into things.",
-      inside: "A laptop. On its screen: this game, but older.",
+      boot: "White Elephant: The Game. Arrows or tap to move. Walk into people and things.",
+      inside: "A laptop. On its screen: this game, but an older build.",
       deeper: [
-        "A laptop, inside the laptop. The graphics have not improved.",
-        "Another one. This build predates colour.",
+        "A laptop, inside the laptop. An older build: the art budget had not arrived yet.",
+        "Another one. This build predates most colours.",
+        "And another. This build predates the rest of them.",
       ],
       bottom: "It's laptops all the way down. Go back to the party.",
       noView: "{name}: not implemented in this build.",
