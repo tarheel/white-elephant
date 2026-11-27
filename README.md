@@ -23,7 +23,7 @@ The stops, in order: the sign, the doorbell, the coat closet, the bathroom, Cora
 
 The card text is placeholder: every `[TBD]` in the `faqs` section of `custom.js` is a fact to fill in. Each stop has a `goal` (the hint), a `title` (the question), a `text` (the answer) and, for people, `says` (their line when the guest arrives).
 
-Not on the quest, but marked with a "!" until opened: the cave, the piano, the TV and the fridge. The fridge holds only water (the cure for Moldover's joint) and a can of cat food. Feed Pompom the cat food and she leaves the office doorway. The laptop on the office desk is worth a look.
+Not on the quest, but marked with a "!" until opened: the cave, the piano, the TV, the fridge and the office laptop. The fridge holds only water (the cure for Moldover's joint) and a can of cat food. Feed Pompom the cat food and she leaves the office doorway. The laptop on the office desk is worth a look.
 
 ## Settings (`custom.js`)
 
