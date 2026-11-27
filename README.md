@@ -19,11 +19,11 @@ Sound and video files go in `media/`. A bare file name in `custom.js` (`"doorbel
 
 Guests collect one FAQ card at each of 13 stops, then play a practice exchange with Louis. The corner of the screen names the next stop, a dotted trail leads to it, and the GO button walks there. A stop also counts if a guest wanders into it early.
 
-The stops, in order: the sign, the doorbell, the coat closet, the bathroom, the cave, Coraline, the piano, the Rules Lawyer, Charlotte, Moldover, the fridge, the bar, Louis.
+The stops, in order: the sign, the doorbell, the coat closet, the bathroom, the cave, Coraline, the piano, the Rules Lawyer, Charlotte, Moldover, the food (on the island), the bar (on the counter), Louis.
 
 The card text is placeholder: every `[TBD]` in the `faqs` section of `custom.js` is a fact to fill in. Each stop has a `goal` (the hint), a `title` (the question), a `text` (the answer) and, for people, `says` (their line when the guest arrives).
 
-Not on the quest: feed Pom Pom the cat food from the fridge and she leaves the office doorway. The laptop on the office desk is worth a look.
+Not on the quest: the fridge holds only water (the cure for Moldover's joint) and a can of cat food. Feed Pom Pom the cat food and she leaves the office doorway. The laptop on the office desk is worth a look.
 
 ## Settings (`custom.js`)
 

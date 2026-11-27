@@ -225,15 +225,15 @@ const CONFIG = {
      p porch   d doorway   s main stairs (entry down to kitchen level)   u stairs up   g stairs down to garage
      = family room steps   H half wall with garland   c column ledge   (space) outside */
   map: [
-    "                                ..                ",
-    "                             .......              ",
-    "                            .........             ",
-    "                           ........               ",
+    "                                                  ",
+    "                              .....               ",
+    "                            .......               ",
+    "                           ......                 ",
     "                           .......                ",
-    "                          .........               ",
-    "                          .........               ",
-    "                          .   ......              ",
-    "                               .....              ",
+    "                          ........                ",
+    "                          ..  .....               ",
+    "                              .....               ",
+    "                               ....               ",
     "                               .....              ",
     "                               .....              ",
     "                               .....              ",
@@ -311,6 +311,9 @@ const CONFIG = {
     { name: "Family room", x0: 5,  y0: 51, x1: 23, y1: 66, floor: "wood", depth: 2 }
   ],
   start: { x: 30, y: 2 },  // at the bottom of the front steps
+  /* The front walk, from the landing up to the street: three steps (this many squares deep), then two curved slabs.
+     Each slab is [length in squares, the heading it ends on in radians]; 0 = straight up the screen, larger = leaning further left. */
+  walk: { steps: 2.4, upper: [4.2, .42], lower: [3.2, .52] },
 
   rugs: [ // styles: kilim, moroccan, persian, coral, red, mat
     { x0: 21, y0: 25, x1: 22, y1: 25, style: "mat" }, { x0: 19, y0: 29, x1: 23, y1: 29, style: "stripe" },
@@ -379,8 +382,8 @@ const CONFIG = {
     gifts: ["The gift pile. Yours is in there somewhere, anonymous and wrapped.", "Talk to the host when you're ready to start."],
     tv: ["The TV is displaying art. It is not for watching. This has been discussed.", "Below it, a fire. Stockings hung with care, and one hung with indifference."],
     fireplace: ["A second fireplace. This house does not ration them."],
-    fridge: ["The fridge is full of things labeled FOR THE PARTY. This is the party. Leave them."],
-    counter: ["Snacks. You are allowed to eat these. This has been a FAQ."],
+    fridge: ["The fridge. Mostly water at this point."],                                    // these three open views instead (see views)
+    counter: ["The bar. Drinks live here."],
     island: ["The island. Every party ends up standing around it. This one will too."],
     stools: ["Three stools. Four people will try."],
     sofa: ["Prime exchange seating. Claim it early."],
@@ -467,8 +470,8 @@ const CONFIG = {
               ["No kids this year. Arrange your evening accordingly."]] },
     { id: "g5", name: "Moldover", kind: "person", joint: true, x: 37, y: 56,
       look: { skin: "#eec0a2", hair: "#140f0c", hairStyle: "curly", shirt: "#1b1714", top: "leather", inner: "#1f5a3a", trim: "#e8952a", pants: "#e8c6bd", prop: "joint", tall: 1.05 }, // black leather jacket over a green jersey, pale pink pants
-      lines: [["I rolled one for the occasion. Want some? We'll crack a window."]],
-      again: ["Back already. I rolled another. I always roll another. Round two?"],
+      lines: [["I rolled one for the occasion. It's my special blend: salvia and kratom.", "Want some? We'll crack a window."]],
+      again: ["Back already. I rolled another. Same blend: salvia and kratom. Round two?"],
       no: ["Respect. Offer stands."], lit: ["There it is.", "If the walls start dripping, drink some water. There's some in the fridge."],
       after: ["You good? You're staring at the wall again. Water. Fridge. Go."] },
     { id: "coraline", name: "Coraline", kind: "cat", guard: true, wide: true, x: 18, y: 36, look: { fur: "#8f949a", stripe: "#5d636b", patch: "#f1eee8", muzzle: "#f1eee8", eye: "#a5d05c" },
@@ -492,7 +495,7 @@ const CONFIG = {
   quest: [
     { id: "sign", thing: "sign" }, { id: "bell", thing: "bell" }, { id: "coats", thing: "coats" }, { id: "bath", thing: ["toilet", "sink"] },
     { id: "cave", view: "cave" }, { id: "coraline", npc: "coraline" }, { id: "piano", view: "piano" }, { id: "rules", npc: "g1" },
-    { id: "charlotte", npc: "charlotte" }, { id: "moldover", npc: "g5" }, { id: "fridge", view: "fridge" }, { id: "bar", view: "bar" }, { id: "louis", npc: "louis" }
+    { id: "charlotte", npc: "charlotte" }, { id: "moldover", npc: "g5" }, { id: "food", view: "food" }, { id: "bar", view: "bar" }, { id: "louis", npc: "louis" }
   ],
   /* One entry per stop, by id. goal = the hint in the corner; title + text = the FAQ card the guest collects (a list = several pages);
      says = what that person says when the guest reaches them (people only; leave it out to keep their usual line).
@@ -510,7 +513,7 @@ const CONFIG = {
     charlotte: { goal: "Find Charlotte in the kitchen", title: "What should I bring?", text: "{bring}\n[TBD: price range, how weird is too weird, and whether regifting counts.]",
                  says: ["Hi {player}! You made it past the yeti.", "What to bring? {bring}"] },
     moldover:  { goal: "Say hi to Moldover, in the kitchen", title: "Who's invited?", text: "Adults only this year. No kids.\n[TBD: plus-ones, and what the party is and isn't friendly to.]" },
-    fridge:    { goal: "Raid the fridge", title: "Will there be food?", text: "[TBD: dinner or snacks, and what to eat beforehand.]\n[TBD: where to send dietary restrictions.]" },
+    food:      { goal: "Check out the food, on the kitchen island", title: "Will there be food?", text: "[TBD: dinner or snacks, and what to eat beforehand.]\n[TBD: where to send dietary restrictions.]" },
     bar:       { goal: "Visit the bar, on the kitchen counter", title: "What about drinks?", text: "[TBD: what we're providing, and whether to bring your own.]\nThere will be things without alcohol in them too." },
     louis:     { goal: "Find Louis by the tree, down in the family room", title: "Anything else?", text: "[TBD: RSVP by when, and to whom.]\n[TBD: who to text if you get lost on the front steps.]",
                  says: ["You found everything. Most people never make it past the cave.", "One last thing before we play."] }
@@ -548,7 +551,7 @@ const CONFIG = {
     eggnog:    { name: "Eggnog",          heal: 4, note: "Restores 4 HP. Thick." },
     seltzer:   { name: "Seltzer",         heal: 2, note: "Restores 2 HP. Hydration counts." },
     pickle:    { name: "Mystery pickle",  heal: 1, note: "Restores 1 HP. Undated." },
-    catfood:   { name: "Cat food",        heal: 1, note: "Restores 1 HP if you eat it. Someone smaller might want it more." },
+    catfood:   { name: "Cat food",        heal: 0, note: "Not for you. Someone smaller might want it." }, // heal 0 = you can't eat it
     red:       { name: "Glass of red",    heal: 3, note: "Restores 3 HP. Goes with everything on the island." },
     white:     { name: "Glass of white",  heal: 3, note: "Restores 3 HP. Chilled, unlike the conversation about steal rules." },
     bubbly:    { name: "Glass of bubbly", heal: 3, note: "Restores 3 HP. You are now celebrating something." },
@@ -574,17 +577,19 @@ const CONFIG = {
     open: "",              // a gift being unwrapped; a list plays one at random
     yeti: ["", "", ""]     // Gary the yeti; one is picked at random, e.g. ["roar1.mp3", "roar2.mp3", "roar3.mp3"]
   },
-  views: { fridge: "fridge", counter: "bar", tv: "tv", piano: "piano", cave: "cave", desk: "laptop" },
+  views: { fridge: "fridge", island: "food", counter: "bar", tv: "tv", piano: "piano", cave: "cave", desk: "laptop" },
   reach: {
-    fridge: { title: "The fridge. Tap something to take it.", items: [
-      { item: "platter", kind: "plate", x: 180, y: 120, tag: "FOR THE PARTY" },
-      { item: "cheese", kind: "wedge", x: 70, y: 230 }, { item: "pizza", kind: "slice", x: 132, y: 230 }, { item: "eggnog", kind: "carton", x: 196, y: 230, color: "#f3e6c8", label: "NOG" }, { item: "seltzer", kind: "can", x: 246, y: 230, color: "#5fb0a0" }, { item: "seltzer", kind: "can", x: 276, y: 230, color: "#d96a9a" }, { item: "water", kind: "bottle", x: 314, y: 230, color: "#9fd3e6", label: "#ffffff" },
-      { item: "pickle", kind: "jar", x: 70, y: 336, color: "#7a9a3a" }, { item: "seltzer", kind: "can", x: 122, y: 336, color: "#e8892b" }, { item: "cheese", kind: "wedge", x: 180, y: 336 }, { item: "catfood", kind: "can", x: 240, y: 336, color: "#8a5a3a", squat: true }, { item: "pickle", kind: "jar", x: 292, y: 336, color: "#c8a03a" },
-      { item: "pizza", kind: "slice", x: 80, y: 444 }, { item: "eggnog", kind: "carton", x: 150, y: 444, color: "#f3e6c8", label: "NOG" }, { item: "seltzer", kind: "can", x: 210, y: 444, color: "#5fb0a0" }, { item: "cheese", kind: "wedge", x: 268, y: 444 }, { item: "water", kind: "bottle", x: 316, y: 444, color: "#9fd3e6", label: "#ffffff" } ] },
+    fridge: { title: "The fridge. Someone got here first.", items: [
+      { item: "water", kind: "bottle", x: 96, y: 230, color: "#9fd3e6", label: "#ffffff" }, { item: "water", kind: "bottle", x: 140, y: 230, color: "#9fd3e6", label: "#ffffff" }, { item: "water", kind: "bottle", x: 262, y: 336, color: "#9fd3e6", label: "#ffffff" },
+      { item: "catfood", kind: "can", x: 110, y: 444, color: "#8a5a3a", squat: true } ] },
+    food: { title: "The food, on the island. Tap something to take it.", items: [
+      { item: "platter", kind: "plate", x: 104, y: 250, tag: "FOR THE PARTY" }, { item: "cookie", kind: "plate", x: 256, y: 250, tag: "COOKIES" },
+      { item: "cheese", kind: "wedge", x: 62, y: 352 }, { item: "cheese", kind: "wedge", x: 116, y: 352 }, { item: "pickle", kind: "jar", x: 180, y: 356, color: "#7a9a3a" }, { item: "pizza", kind: "slice", x: 244, y: 352 }, { item: "pizza", kind: "slice", x: 300, y: 352 },
+      { item: "pizza", kind: "slice", x: 70, y: 452 }, { item: "cheese", kind: "wedge", x: 132, y: 452 }, { item: "pickle", kind: "jar", x: 232, y: 456, color: "#c8a03a" }, { item: "cheese", kind: "wedge", x: 294, y: 452 } ] },
     bar: { title: "The bar. Tap a drink to take it.", items: [
       { item: "red", kind: "bottle", x: 52, y: 330, color: "#3a1420", label: "#b3273a" }, { item: "white", kind: "bottle", x: 96, y: 330, color: "#b9c98a", label: "#f3e6c8" }, { item: "bubbly", kind: "bottle", x: 140, y: 330, color: "#1f4a3a", label: "#e2a93b", foil: true },
       { item: "whiskey", kind: "bottle", x: 192, y: 330, color: "#a8622e", label: "#17140f", squat: true }, { item: "cider", kind: "bottle", x: 244, y: 330, color: "#d9a441", label: "#3f9a66" }, { item: "beer", kind: "can", x: 286, y: 330, color: "#e2a93b" }, { item: "beer", kind: "can", x: 316, y: 330, color: "#e2a93b" },
-      { item: "cookie", kind: "plate", x: 110, y: 450, tag: "COOKIES" }, { item: "seltzer", kind: "can", x: 226, y: 446, color: "#5fb0a0" }, { item: "seltzer", kind: "can", x: 258, y: 446, color: "#d96a9a" }, { item: "red", kind: "bottle", x: 306, y: 452, color: "#3a1420", label: "#b3273a" } ] },
+      { item: "eggnog", kind: "carton", x: 62, y: 448, color: "#f3e6c8", label: "NOG" }, { item: "seltzer", kind: "can", x: 118, y: 446, color: "#e8892b" }, { item: "seltzer", kind: "can", x: 226, y: 446, color: "#5fb0a0" }, { item: "seltzer", kind: "can", x: 258, y: 446, color: "#d96a9a" }, { item: "red", kind: "bottle", x: 306, y: 452, color: "#3a1420", label: "#b3273a" } ] },
     cave: { title: "A cave. In the hallway. Sure. Walk around.", cave: true, items: [], say: ["IT'S DANGEROUS TO GO", "ALONE! TAKE THIS."], got: ["YOU'VE BEEN ICED.", "TAKE A KNEE."], again: ["ONE PER CUSTOMER.", ""],
             look: { skin: "#e8c9a8", hair: "#f2f2f2", hairStyle: "bald", beard: "#f6f6f6", shirt: "#7a2a2a", pattern: "plaid", trim: "#d9b98a", pants: "#4a4a55", prop: "mug" } },
     piano: { title: "The piano. Recently tuned. Go on.", piano: true, items: [],
@@ -732,7 +737,7 @@ const cv = $("c"); let ctx = cv.getContext("2d");
 const npcById = Object.fromEntries(CONFIG.npcs.map(n => [n.id, n]));
 
 let S; // saved state: plain JSON
-const fresh = () => ({ v: 14, faq: {}, fq: [], fed: {}, name: "", started: false, x: CONFIG.start.x, y: CONFIG.start.y, talked: {}, talkIdx: {}, done: false, ex: null, result: null,
+const fresh = () => ({ v: 15, faq: {}, fq: [], fed: {}, name: "", started: false, x: CONFIG.start.x, y: CONFIG.start.y, talked: {}, talkIdx: {}, done: false, ex: null, result: null,
   hp: CONFIG.player.hp, maxHp: CONFIG.player.hp, xp: 0, lvl: 1, items: [], got: {}, defeated: {}, taken: {}, high: 0, smoked: 0 });
 const P = { fx: 0, fy: 0, dir: "down", path: [], pending: null, step: 0 };
 let live = [];
@@ -1397,6 +1402,7 @@ const ISZ = { present: [62, 54], can: [22, 40], bottle: [26, 84], carton: [34, 5
 const JOINT_TIP = { x: 214, y: 262 };
 function openReach(id, then) {
   const def = CONFIG.reach[id]; S.taken[id] = S.taken[id] || [];
+  if (S.high > 0 && !S.items.includes("water")) S.taken[id] = S.taken[id].filter(i => def.items[i] && def.items[i].item !== "water"); /* the cure is never out of stock */
   RV = { id, def, then, hand: { x: 180, y: 620 }, aim: { x: 180, y: 430 }, carry: null, anim: null, toast: def.title, prog: 0, lit: 0, held: {}, down: {}, voice: {}, cat: 0, ct: 0, walk: 0 };
   P.path = []; P.pending = null; keys.clear(); $("reach").hidden = false; $("hud").hidden = true; paintReach();
 }
@@ -1742,7 +1748,7 @@ function drawHand(t) {
 function drawReach(t) {
   const dpr = window.devicePixelRatio || 1, q = reachXform(), r = RV;
   if (rcv.width !== Math.round(q.w * dpr) || rcv.height !== Math.round(q.h * dpr)) { rcv.width = Math.round(q.w * dpr); rcv.height = Math.round(q.h * dpr); }
-  g = rctx; g.setTransform(dpr, 0, 0, dpr, 0, 0); g.fillStyle = r.def.pile ? "#5a1722" : r.def.lighter ? "#0b1614" : r.def.remote ? "#e6dfd0" : r.id === "bar" ? "#efe9dc" : "#cdd5d7"; g.fillRect(0, 0, q.w, q.h);
+  g = rctx; g.setTransform(dpr, 0, 0, dpr, 0, 0); g.fillStyle = r.def.pile ? "#5a1722" : r.def.lighter ? "#0b1614" : r.def.remote ? "#e6dfd0" : r.id === "bar" ? "#efe9dc" : r.id === "food" ? "#33443f" : "#cdd5d7"; g.fillRect(0, 0, q.w, q.h);
   g.setTransform(dpr * q.sc, 0, 0, dpr * q.sc, dpr * q.ox, dpr * q.oy);
   if (r.def.piano) { drawPiano(t); return; }
   if (r.def.cave) { drawCave(t); return; }
@@ -1773,6 +1779,14 @@ function drawReach(t) {
     for (const [px, c, hgt] of [[28, "#2f7a52", 30], [58, "#27684a", 22], [316, "#2f7a52", 34]]) { rr("#3a342c", px - 9, 312, 18, 20, 3); for (let i = -3; i < 4; i++) curve(c, 3, [px, 314, px + i * 3, 314 - hgt * .5, px + i * 6, 314 - hgt * .8, px + i * 8, 314 - hgt + Math.abs(i) * 4]); }
     for (const cx2 of [270, 284]) { rr("#17140f", cx2 - 1.5, 296, 3, 36, 1); rr("#fffaf0", cx2 - 2, 286, 4, 12, 1); poly("#ffd38a", [[cx2 - 2, 286], [cx2 + 2, 286], [cx2 + Math.sin(t * 9 + cx2) * .8, 278]]); }
     rr("#17140f", 60, 390, 240, 300, 6); g.fillStyle = rad(180, 520, 150, [[0, "rgba(255,170,90,.75)"], [1, "rgba(255,170,90,0)"]]); g.fillRect(60, 390, 240, 200);
+  } else if (r.id === "food") { /* looking down the kitchen island: pendant lamps, marble, a long board and a runner */
+    g.fillStyle = lin(0, -300, 0, 150, [[0, "#1d2a28"], [1, "#33443f"]]); g.fillRect(-400, -300, 1160, 450);
+    for (const lx of [60, 180, 300]) { bx("#17140f", lx - .8, -300, 1.6, 356); g.fillStyle = rad(lx, 96, 120, [[0, "rgba(255,226,160,.42)"], [1, "rgba(255,226,160,0)"]]); g.fillRect(lx - 120, -24, 240, 240); poly("#c9a04a", [[lx - 8, 56], [lx + 8, 56], [lx + 24, 86], [lx - 24, 86]]); poly("#e6c46a", [[lx - 8, 56], [lx, 56], [lx - 8, 86], [lx - 24, 86]]); ell("#fff3c9", lx, 87, 15, 5); }
+    g.fillStyle = "#d6d2ca"; g.fillRect(-400, 150, 1160, 8); g.fillStyle = lin(0, 158, 0, 540, [[0, "#ece9e2"], [.1, "#fbfaf7"], [1, "#f1eee8"]]); g.fillRect(-400, 158, 1160, 400);
+    for (let i = 0; i < 10; i++) curve("rgba(120,120,125,.26)", 1.2, [-70 + i * 56, 190 + hash(i, 2) * 300, -24 + i * 56, 220 + hash(i, 3) * 250, 20 + i * 56, 180 + hash(i, 4) * 320, 70 + i * 56, 230 + hash(i, 5) * 260]);
+    rr("rgba(0,0,0,.14)", 18, 188, 328, 286, 8); rr("#b3273a", 14, 182, 332, 286, 6); rr("#c5384a", 22, 190, 316, 270, 4); for (let i = 0; i < 9; i++) { poly("#e2a93b", [[40 + i * 35, 196], [46 + i * 35, 202], [40 + i * 35, 208], [34 + i * 35, 202]]); poly("#e2a93b", [[40 + i * 35, 442], [46 + i * 35, 448], [40 + i * 35, 454], [34 + i * 35, 448]]); }
+    rr("rgba(0,0,0,.2)", 30, 300, 304, 70, 10); rr("#8a5a34", 28, 294, 304, 70, 10); rr("#a8743f", 28, 294, 304, 62, 10); for (let i = 0; i < 5; i++) bx("rgba(70,40,20,.18)", 40, 304 + i * 11, 280, 1.2); ell("#6b4426", 318, 328, 5, 5);
+    g.fillStyle = "#d6d2ca"; g.fillRect(-400, 540, 1160, 8); g.fillStyle = "#4a3424"; g.fillRect(-400, 548, 1160, 400);
   } else if (r.id === "bar") {
     g.fillStyle = "#f6f3ec"; g.fillRect(-400, -300, 1160, 372); for (let i = 0; i < 9; i++) { g.fillStyle = "#dcd6ca"; g.fillRect(-40 + i * 56, -300, 2, 372); } g.fillStyle = "#fff3c9"; g.fillRect(-400, 72, 1160, 4);
     g.fillStyle = lin(0, 76, 0, 300, [[0, "#fffdf6"], [1, "#e6e1d6"]]); g.fillRect(-400, 76, 1160, 226); for (let yy = 100; yy < 300; yy += 34) { g.fillStyle = "rgba(0,0,0,.06)"; g.fillRect(-400, yy, 1160, 1.5); for (let i = -6; i < 14; i++) g.fillRect(i * 62 + ((yy / 34 | 0) % 2) * 31, yy, 1.5, 34); }
@@ -2081,7 +2095,7 @@ function hStairs(ch, x, y) {
     else { bx("#b08575", px + l, yy, r - l + .2, 3); bx("#d3a898", px + l, yy + 3, r - l + .2, 5); if (L) bx("#8f5e58", px + l, yy, 1.2, 8); if (Rr) bx("#8f5e58", px + r - 1.2, yy, 1.2, 8); for (let k = 0; k < 2; k++) { const mx = px + 4 + k * 8 + ((x + j) % 2) * 2; if (mx > px + l + 2 && mx < px + r - 2) poly("#8f5e58", [[mx, yy + 4], [mx + 1.3, yy + 5.5], [mx, yy + 7], [mx - 1.3, yy + 5.5]]); } } }
   if (!trav) for (const [on, ex] of [[L, .6], [Rr, 15.4]]) if (on) { bx("#17140f", px + ex - .6, py, 1.2, TS); for (let k = 0; k < 4; k++) ell("#17140f", px + ex, py + 2 + k * 4, 1.1, 1.1); }
 }
-function hYard() { // street: four half-round steps, a long slab, a turn to another slab, one step, the landing, then seven walled steps to the porch
+function hYard() { // street: four half-round steps, a slab that barely curves, a step, a slab that curves into three steps, the landing, then seven walled steps to the porch
   const T = TS, PAVE = "#b0705a", P0 = [33.5000, 14.0000], P1 = [33.5000, 8.5000], P2 = [31.6221, 4.9682], A2 = [-0.0000, -1.0000], N2 = [1.0000, -0.0000], A1 = [-0.4695, -0.8829], N1 = [0.8829, -0.4695];
   const at = (o, a, n, s, t) => [(o[0] + a[0] * s + n[0] * t) * T, (o[1] + a[1] * s + n[1] * t) * T];
   const quad = (o, a, n, s0, s1, w) => [at(o, a, n, s0, -w), at(o, a, n, s0, w), at(o, a, n, s1, w), at(o, a, n, s1, -w)];
@@ -2091,10 +2105,18 @@ function hYard() { // street: four half-round steps, a long slab, a turn to anot
   const riser = (o, a, n, s) => { for (const [d, c, lw] of [[.12, "rgba(0,0,0,.45)", 1.6], [-.05, "#d9a892", 1]]) { const A = at(o, a, n, s + d, -2.5), B = at(o, a, n, s + d, 2.5); g.strokeStyle = c; g.lineWidth = lw; g.beginPath(); g.moveTo(A[0], A[1]); g.lineTo(B[0], B[1]); g.stroke(); } };
   const tread = (x0, y0, x1, y1) => { bx("rgba(0,0,0,.38)", x1 - 1.6, y0, 1.6, y1 - y0); bx("#d9a892", x1 - 2.6, y0, 1, y1 - y0); };
   g.save(); g.globalCompositeOperation = "destination-out"; g.fillStyle = "#000"; g.fillRect(19 * T, 0, 31 * T, 14 * T); g.restore();
-  g.save(); g.beginPath(); g.rect(0, 0, MW * T, P1[1] * T); g.clip(); slab(P1, A1, N1, -1.6, 4, 2.5 * Math.abs(A1[1])); g.restore(); slab(P0, A2, N2, 0, 5.5); // the angled slab stops where the straight one begins
-  { const y = P1[1] * T; bx("rgba(0,0,0,.5)", (P0[0] - 2.5) * T, y - .2, 5 * T, 2.2); bx("#d9a892", (P0[0] - 2.5) * T, y + 2, 5 * T, 1); } // the step between the slabs riser(P0, A2, N2, 5.5);                          // the two slabs, with a step where they meet
-  riser(P0, A2, N2, 0);                                                                              // one step up to the landing
-  g.save(); g.translate(P2[0] * T, P2[1] * T); g.rotate(Math.atan2(N1[1], N1[0]));                    // four half-round steps, widest at the street
+  /* The walk is one line that bends as it climbs: th is its heading in radians (0 = straight up the screen, positive = leaning left). */
+  const W = CONFIG.walk, dA = th => [-Math.sin(th), -Math.cos(th)], dN = th => [Math.cos(th), -Math.sin(th)];
+  const bend = (o, th0, th1, len) => { const pts = [], n = 24; let q = o.slice(); for (let i = 0; i <= n; i++) { pts.push({ p: q.slice(), th: th0 + (th1 - th0) * i / n }); const a = dA(th0 + (th1 - th0) * (i + .5) / n); q = [q[0] + a[0] * len / n, q[1] + a[1] * len / n]; } return pts; };
+  const side = (k, t) => { const n = dN(k.th); return [(k.p[0] + n[0] * t) * T, (k.p[1] + n[1] * t) * T]; };
+  const cslab = (pts, hw, every) => { const q = pts.map(k => side(k, -hw)).concat(pts.slice().reverse().map(k => side(k, hw))); poly(PAVE, q); g.save(); g.beginPath(); q.forEach((p, i) => i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1])); g.closePath(); g.clip();
+    g.strokeStyle = "rgba(80,45,35,.55)"; g.lineWidth = .7; for (let t = -hw; t <= hw + .01; t += hw / 2) { g.beginPath(); pts.forEach((k, i) => { const p = side(k, t); i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]); }); g.stroke(); }
+    for (let i = every; i < pts.length - 1; i += every) { const A = side(pts[i], -hw), B = side(pts[i], hw); g.beginPath(); g.moveTo(A[0], A[1]); g.lineTo(B[0], B[1]); g.stroke(); } g.restore(); };
+  const edge = (k, hw) => { const a = dA(k.th); for (const [d, c, lw] of [[.1, "rgba(0,0,0,.5)", 2], [-.06, "#d9a892", 1]]) { const A = side(k, -hw), B = side(k, hw); g.strokeStyle = c; g.lineWidth = lw; g.beginPath(); g.moveTo(A[0] + a[0] * d * T, A[1] + a[1] * d * T); g.lineTo(B[0] + a[0] * d * T, B[1] + a[1] * d * T); g.stroke(); } };
+  const up = bend([P0[0], P0[1] - W.steps], 0, W.upper[1], W.upper[0]), J = up[up.length - 1], low = bend(J.p, W.upper[1], W.lower[1], W.lower[0]), E = low[low.length - 1];
+  cslab(low, 2.5, 9); cslab(up, 2.5, 8); edge(J, 2.5);                                                 // the two curved slabs, with a step where they meet
+  slab(P0, A2, N2, 0, W.steps + .05); for (let k = 0; k < 3; k++) riser(P0, A2, N2, k * W.steps / 3);    // three steps up to the landing
+  g.save(); g.translate(E.p[0] * T, E.p[1] * T); g.rotate(Math.atan2(dN(E.th)[1], dN(E.th)[0]));      // four half-round steps, widest at the street
   for (let k = 0; k < 4; k++) { const rx = (5.5 - k) * T, ry = (3.84 - k * .95) * T; g.beginPath(); g.ellipse(0, 0, rx, ry, 0, Math.PI, 0, false); g.closePath(); g.fillStyle = shade(PAVE, .05 * k - .08); g.fill();
     g.strokeStyle = "rgba(0,0,0,.4)"; g.lineWidth = 1.6; g.beginPath(); g.ellipse(0, 0, rx + .5, ry + .5, 0, Math.PI, 0, false); g.stroke(); g.strokeStyle = "#d9a892"; g.lineWidth = 1; g.beginPath(); g.ellipse(0, 0, rx - 1.2, ry - 1.2, 0, Math.PI, 0, false); g.stroke();
     if (k < 3) { g.strokeStyle = "rgba(80,45,35,.5)"; g.lineWidth = .6; for (let a = 1; a < 8; a++) { const t = Math.PI + a / 8 * Math.PI; g.beginPath(); g.moveTo(Math.cos(t) * (rx - T), Math.sin(t) * (ry - T * .95)); g.lineTo(Math.cos(t) * rx, Math.sin(t) * ry); g.stroke(); } } }
@@ -2607,7 +2629,7 @@ function frame(ms) {
   update(dt); if (B) { bTick(dt); if (B) { drawBattle(t); if (S.high > 0 && !reduced) meltCanvas(bcv, bctx, t); } } else if (RV) { reachTick(dt); if (RV) { drawReach(t); if (S.high > 0 && !reduced) meltCanvas(rcv, rctx, t); } } else if (S.ex && !$("exchange").hidden) { exTick(dt); drawExchange(t); if (S.high > 0 && !reduced) meltCanvas(xcv, xctx, t); } else draw(t, dt); requestAnimationFrame(frame);
 }
 function start(data) {
-  S = data && data.v === 14 ? data : fresh();
+  S = data && data.v === 15 ? data : fresh();
   live = CONFIG.npcs.concat(CONFIG.monsters.filter(m => !S.defeated[m.id])).map(n => ({ def: n, x: n.x, y: n.y, fx: n.x, fy: n.y, dir: "down", wait: Math.random() * 3, step: 0 }));
   P.fx = S.x; P.fy = S.y;
   if (S.started) { $("title").hidden = true; $("hud").hidden = false; paintHud(); if (S.ex) showExchange(); }

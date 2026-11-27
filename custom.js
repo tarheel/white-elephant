@@ -62,7 +62,7 @@ window.CUSTOM = {
     bring: "One wrapped gift, about $[TBD]. No name on it.",
   },
 
-  // THE FAQS. One per stop on the quest, in this order: sign, bell, coats, bath, cave, coraline, piano, rules, charlotte, moldover, fridge, bar, louis.
+  // THE FAQS. One per stop on the quest, in this order: sign, bell, coats, bath, cave, coraline, piano, rules, charlotte, moldover, food, bar, louis.
   // goal  = the hint shown in the corner while that stop is next
   // title = the question on the card;  text = the answer (a list makes several pages)
   // says  = what that person says when the guest reaches them (people only)
@@ -127,8 +127,8 @@ window.CUSTOM = {
       title: "Who's invited?",
       text: "Adults only this year. No kids.\n[TBD: plus-ones, and what the party is and isn't friendly to.]",
     },
-    fridge: {
-      goal: "Raid the fridge",
+    food: {
+      goal: "Check out the food, on the kitchen island",
       title: "Will there be food?",
       text: "[TBD: dinner or snacks, and what to eat beforehand.]\n[TBD: where to send dietary restrictions.]",
     },
@@ -207,8 +207,13 @@ window.CUSTOM = {
     },
     g5: {
       name: "Moldover",
-      lines: [["I rolled one for the occasion. Want some? We'll crack a window."]],
-      again: ["Back already. I rolled another. I always roll another. Round two?"],
+      lines: [
+        [
+          "I rolled one for the occasion. It's my special blend: salvia and kratom.",
+          "Want some? We'll crack a window.",
+        ],
+      ],
+      again: ["Back already. I rolled another. Same blend: salvia and kratom. Round two?"],
       no: ["Respect. Offer stands."],
       lit: [
         "There it is.",
@@ -293,8 +298,8 @@ window.CUSTOM = {
       "Below it, a fire. Stockings hung with care, and one hung with indifference.",
     ],
     fireplace: ["A second fireplace. This house does not ration them."],
-    fridge: ["The fridge is full of things labeled FOR THE PARTY. This is the party. Leave them."],
-    counter: ["Snacks. You are allowed to eat these. This has been a FAQ."],
+    fridge: ["The fridge. Mostly water at this point."],
+    counter: ["The bar. Drinks live here."],
     island: ["The island. Every party ends up standing around it. This one will too."],
     stools: ["Three stools. Four people will try."],
     sofa: ["Prime exchange seating. Claim it early."],
@@ -462,7 +467,7 @@ window.CUSTOM = {
     },
     catfood: {
       name: "Cat food",
-      note: "Restores 1 HP if you eat it. Someone smaller might want it more.",
+      note: "Not for you. Someone smaller might want it.",
     },
     red: {
       name: "Glass of red",
@@ -551,7 +556,10 @@ window.CUSTOM = {
   // First-person views: the line at the top, plus the cave's lines and the piano's running commentary.
   viewText: {
     fridge: {
-      title: "The fridge. Tap something to take it.",
+      title: "The fridge. Someone got here first.",
+    },
+    food: {
+      title: "The food, on the island. Tap something to take it.",
     },
     bar: {
       title: "The bar. Tap a drink to take it.",
