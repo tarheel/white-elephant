@@ -362,7 +362,8 @@ const CONFIG = {
     { t: "sech", x: 6, ox: .3, y: 62, oy: .5, w: 7, h: 2.5, color: "#a8622e", p1: "#c9552f", p2: "#6f8a5a", p3: "#3f5f78" }, // ...then the corner, a seat, and a backless square
     { t: "coffee", x: 9, y: 57 }, { t: "lamp", x: 6, ox: .3, y: 54, table: true }, { t: "gap", x: 5, y: 54, w: 1, h: 10 },
     { t: "canebench", x: 7, y: 65, w: 3, h: 1 }, { t: "plant", x: 10, y: 65, w: 1, h: 1, k: .8, v: "stand" }, // behind the sectional, under the windows
-    { t: "chaise", x: 17, y: 65, w: 3 }, { t: "sideboard", x: 22, y: 56, h: 5 },
+    { t: "chaise", x: 13, y: 55, w: 3, ox: -.5, oy: .4, rot: 2.53 }, { t: "gap", x: 12, y: 56, w: 2, h: 2 }, // back to the corner of the steps, pointed at the coffee table
+    { t: "sidetable", x: 14, y: 63, w: 1.4, h: 1.4, ox: -.25, oy: -.35 }, // the little marble table by the end of the sectional, { t: "sideboard", x: 22, y: 56, h: 5 },
     { t: "tree", x: 20, y: 61, w: 3, h: 3 }, { t: "gifts", x: 17, y: 62 }
   ],
   /* CURVED FRONT WALLS. Columns x0..x1 of a room; the wall bows up from row yBase by d pixels (16 per square). */
@@ -2361,6 +2362,10 @@ const F = {
     rr(c, 5.8, .4, D - 6.2, h - 6.4, 2); rr(c, D + .4, .4, D - 1.2, h - 6.4, 2); rr(l, 6.6, 1, D - 7.8, 1.1, .55); rr(l, D + 1.2, 1, D - 2.8, 1.1, .55);
     rr(c, 2 * D + .4, 1.2, w - 2 * D - 1.2, h - 2.4, 2.4); rr(l, 2 * D + 1.2, 1.9, w - 2 * D - 2.8, 1.1, .55); rr(shade(c, -.06), 2 * D + .4, h - 3.2, w - 2 * D - 1.2, 2, 1);
     if (f.p1) pillow(f.p1, 6.6, 3.2); if (f.p2) pillow(f.p2, 12.6, 1.4); if (f.p3) pillow(f.p3, 6.4, -5); },
+  sidetable(f, w, h) { const cx = w / 2, cy = h / 2 + .6, r = w / 2 - .7; /* small round marble top on a wooden frame, with a trailing plant */
+    ell(SHD, cx + .5, cy + 1.6, r, r * .92); for (const a of [.6, 2.2, 3.9, 5.4]) seg("#a8743f", 1, cx, cy + .6, cx + Math.cos(a) * (r + .5), cy + .9 + Math.sin(a) * (r + .1)); ell("#a8743f", cx, cy + .5, r + .25, r * .92 + .25);
+    ell("#f3f1ec", cx, cy, r, r * .9); ell("#fdfcfa", cx - .3, cy - .4, r - .9, r * .9 - .9); curve("rgba(120,120,125,.3)", .35, [cx - r + 1, cy - 1, cx - 1, cy + .4, cx + .6, cy - 1.2, cx + r - 1, cy + .8]);
+    ell("#9a8f7d", cx + .6, cy - .2, 1.7, 1.5); ell("#c9bfae", cx + .6, cy - .5, 1.5, 1.2); for (const [lx, ly, a] of [[-.9, -1.4, -.5], [1.9, -1.6, .5], [.5, -2.2, 0], [-.6, .6, -1], [2.2, .5, 1]]) { g.save(); g.translate(cx + lx, cy + ly); g.rotate(a); ell("#dfe6a8", 0, 0, 1.2, .8); ell("#3f8f55", 0, 0, .8, .45); g.restore(); } },
   chaise(f, w, h) { rr(SHD, .6, 3, w, h - 2, 3); rr("#35506a", 0, 1.6, w, h - 2.6, 3); rr("#557a94", 4, 2.6, w - 5, h - 5.4, 2.2); rr("#6f93ad", 4.8, 3.2, w - 7, 1.2, .6); rr("#3f5c72", .4, 2, 4, h - 3.4, 2); pillow("#f0e8dc", 5, 4.4); rr("#c8621e", w - 12.4, 4.2, 9.4, 7.2, 1.4); rr("#e8782b", w - 12.6, 4, 9, 7, 1.4); bx("#f29a4a", w - 11.6, 5, 7, .7); bx("#f29a4a", w - 11.6, 7, 7, .7); },
   dining(f, w, h) { const r = w / 2 - 2, cx = w / 2, cy = h / 2, rt = f.t === "roundtable", n = rt ? 3 : 6;
     for (let i = 0; i < n; i++) { const a = rt ? -Math.PI / 2 + (i - 1) * 2.1 : i * Math.PI / 3 + Math.PI / 6; g.save(); g.translate(cx + Math.cos(a) * (r + 2.4), cy - 1 + Math.sin(a) * (r + 2.4)); g.rotate(a + Math.PI / 2); rr(SHD, -3.2, -2.4, 7, 7, 1.4); rr("#4a2e1e", -3.6, -3.4, 7.2, 7.2, 1.4); rr("#a8522e", -2.8, -2.4, 5.6, 5, 1); for (let k = 0; k < 3; k++) bx("rgba(0,0,0,.18)", -2.6 + k * 1.9, -2.2, .5, 4.6); bx("#5a3a26", -3.6, 2.4, 7.2, 1.5); g.restore(); }
@@ -2628,7 +2633,7 @@ function draw(t, dt) {
   for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) if (MAP[y][x] === "H") for (let i = 0; i < 2; i++) { const on = reduced || Math.sin(t * 2.5 + y * 1.7 + i * 2.4) > -.3, c = BULBS[(y + i) % 4], lx = x * TS + 6 + i * 4, ly = y * TS + 3.5 + i * 8; if (on) { g.fillStyle = rad(lx, ly, 3.6, [[0, c + "cc"], [1, c + "00"]]); g.fillRect(lx - 3.6, ly - 3.6, 7.2, 7.2); } ell(on ? c : "#6b6355", lx, ly, .8, .8); }
   const tvDraw = d => { const fl = flick(t, 1); g.save(); g.translate(d.x * TS, (d.y - 1) * TS); g.scale(2, 2); DECOR.tv((d.w || 2) / 2, d); g.fillStyle = rad(16, 11, 10, [[0, "rgba(255,170,90,.7)"], [1, "rgba(255,170,90,0)"]]); g.fillRect(8, 7.4, 16, 6.6); poly("#e8892b", [[12, 13.6], [20, 13.6], [17 + fl * .3, 8.6 - fl * .4], [15, 10.6]]); poly("#ffe38a", [[14, 13.6], [18, 13.6], [16.2, 10.4 - fl * .3]]); rr("#4a2e1e", 11, 13, 10, 1, .4); g.restore(); } /* the TV wall is drawn with the sorted sprites, so anyone standing north of it goes behind */
   const list = [];
-  const LOW = { island: 1, counter: 1, bench: 1, coffee: 1, ottoman: 1, kidtable: 1, dining: 1, roundtable: 1, desk: 1, sofa: 1, chaise: 1, chaisev: 1, stools: 1, sideboard: 1, secv: 1, sech: 1, canebench: 1 };
+  const LOW = { island: 1, counter: 1, bench: 1, coffee: 1, ottoman: 1, kidtable: 1, dining: 1, roundtable: 1, desk: 1, sofa: 1, chaise: 1, chaisev: 1, stools: 1, sideboard: 1, secv: 1, sech: 1, canebench: 1, sidetable: 1 };
   for (const d of CONFIG.decor) if (d.t === "tv") list.push({ k: d.y - 1.5, f: () => tvDraw(d) });
   for (const f of CONFIG.furniture) if (!f.under) list.push({ k: f.y + (f.h || 2) - 1 + .2, low: LOW[f.t] ? f : null, f: () => drawFurn(ctx, f, t) });
   for (const n of live) list.push({ k: n.fy, who: n, f: () => {
