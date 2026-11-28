@@ -538,7 +538,7 @@ const CONFIG = {
      kind: can | bottle | carton | jar | wedge | slice | plate.  item = key in `items` above. */
   /* (set these in custom.js) YOUR OWN SOUNDS: file names or addresses of sound files sitting next to this page (mp3 works everywhere).
      Leave a slot empty ("") to keep the built-in synthesized sound. A list plays one at random each time. */
-  soundVolume: { stairs: .5 }, /* how loud each of your sound files plays, by the same names as sounds: 1 = as recorded, .5 = half */
+  soundVolume: { stairs: .25 }, /* how loud each of your sound files plays, by the same names as sounds: 1 = as recorded, .5 = half */
   mediaDir: "media/",     /* folder for sound and video files named without a folder; "" = next to the HTML file */
   sounds: {
     stairs: "",            // walking down into the cave, e.g. "stairs.mp3"
@@ -1159,7 +1159,7 @@ function roam(n) { /* a bought-off guard picks somewhere indoors, anywhere in th
   for (let k = 0; k < 30; k++) { const x = (Math.random() * MW) | 0, y = 27 + ((Math.random() * (MH - 27)) | 0), r = roomAt(x, y);
     if (!r || MAP[y][x] !== "." || !passable(x, y) || Math.abs(x - n.x) + Math.abs(y - n.y) < 12) continue;
     const path = findPath(n.x, n.y, (a, b) => a === x && b === y); if (!path || !path.length) continue;
-    n.route = path; n.rs = 7; n.done = () => { n.wait = 1 + Math.random() * 4; }; return; }
+    n.route = path; n.rs = n.roamed ? 2.8 : 7; n.roamed = 1; n.done = () => { n.wait = 1 + Math.random() * 4; }; return; } /* she leaves her post at a trot, then ambles */
   n.wait = 1;
 }
 
@@ -2067,7 +2067,7 @@ function update(dt) {
     if (n.wait <= 0) {
       n.wait = kit ? .2 + Math.random() * 1.5 : 1 + Math.random() * 4;
       const d = DIRS[(Math.random() * 4) | 0], nx = n.x + d[0], ny = n.y + d[1];
-      if (passable(nx, ny)) { n.x = nx; n.y = ny; if (d[0]) n.dir = d[0] < 0 ? "left" : "right"; }
+      if (passable(nx, ny)) { n.x = nx; n.y = ny; n.dir = d[0] < 0 ? "left" : d[0] > 0 ? "right" : d[1] < 0 ? "up" : "down"; }
     }
   }
 }
@@ -2526,6 +2526,28 @@ function drawChar(c, t, dir, step, moving) {
 function drawCatWalk(c, t, dir, moving, small) {
   g.save(); const s = small ? .8 : 1; g.scale(dir === "left" ? -s : s, s);
   const fur = c.fur, dk = shade(fur, -.3), sw = moving && !reduced ? Math.sin(t * 14) * 2.4 : 0, tw = reduced ? 0 : Math.sin(t * 2.2) * 2.2;
+  if (dir === "down" || dir === "up") { /* walking toward you or away: seen end on, so narrower, with two legs showing */
+    const eye = c.eye || "#e2a93b", tailW = c.fluffy ? 4.2 : 2.2, lift = ph => Math.max(0, sw * ph) * .7, pink = "#d9a0a0";
+    const legs = () => { for (const [lx, ph] of [[-3.2, 1], [3.2, -1]]) { rr(dk, lx - 1.9, -6.4 - lift(ph), 3.8, 6.6, 1.6); rr(fur, lx - 1.5, -6.4 - lift(ph), 3, 6, 1.4); if (c.patch && c.patch !== fur) rr(c.patch, lx - 1.5, -2.4 - lift(ph), 3, 2, 1); } };
+    const ears = y => { for (const m of [-1, 1]) { poly(dk, [[m * 5.9, y + 2.2], [m * 5.1, y - 4.6], [m * 1.2, y - .6]]); poly(fur, [[m * 5.2, y + 1.6], [m * 4.8, y - 3.2], [m * 1.9, y - .4]]); } };
+    ell("rgba(0,0,0,.32)", 0, 0, 8, 3);
+    if (dir === "down") {
+      curve(dk, tailW + 1, [3, -10, 8, -11, 9.5 + tw, -16, 8 + tw, -21]); curve(fur, tailW, [3, -10, 8, -11, 9.5 + tw, -16, 8 + tw, -21]);
+      ell(dk, 0, -9.4, 7.8, 6.8); ell(fur, 0, -9.8, 7.3, 6.3); if (c.stripe) for (const m of [-1, 1]) for (let i = 0; i < 3; i++) seg(c.stripe, 1.2, m * 7, -12.4 + i * 2.6, m * 5, -12 + i * 2.6);
+      legs(); if (c.patch && c.patch !== fur) ell(c.patch, 0, -6.2, 2.6, 2.4);
+      ears(-16.2); for (const m of [-1, 1]) poly(pink, [[m * 4.6, -15.4], [m * 4.5, -18.2], [m * 2.8, -16.2]]);
+      ell(dk, 0, -11.6, 6.4, 5.4); ell(fur, 0, -12, 5.9, 4.9); if (c.stripe) for (const x of [-1.5, 0, 1.5]) seg(c.stripe, 1, x, -16.6, x, -14.8);
+      if (c.muzzle) ell(c.muzzle, 0, -10, 3, 2.2);
+      for (const m of [-1, 1]) { ell(eye, m * 2.6, -12.6, 1.5, 1.4); ell("#17140f", m * 2.6, -12.6, .55, 1.1); seg("rgba(255,255,255,.7)", .4, m * 2.4, -10.2, m * 7.2, -10.8); seg("rgba(255,255,255,.7)", .4, m * 2.4, -9.7, m * 7.2, -9); }
+      ell("#c9807a", 0, -10.7, .85, .6);
+    } else {
+      ears(-17.6); ell(dk, 0, -14.6, 5.6, 4.6); ell(fur, 0, -15, 5.1, 4.1); if (c.stripe) for (const x of [-1.5, 0, 1.5]) seg(c.stripe, 1, x, -18.4, x, -16.2);
+      legs(); ell(dk, 0, -8.6, 7.8, 6.8); ell(fur, 0, -9, 7.3, 6.3); ell(shade(fur, .2), 0, -13.2, 4.4, 1.4);
+      if (c.stripe) for (const m of [-1, 1]) for (let i = 0; i < 3; i++) seg(c.stripe, 1.2, m * 7, -11.4 + i * 2.6, m * 4.2, -11.8 + i * 2.6);
+      curve(dk, tailW + 1, [0, -8, 0, -13, tw * 1.4, -17, tw * 1.8, -22]); curve(fur, tailW, [0, -8, 0, -13, tw * 1.4, -17, tw * 1.8, -22]);
+    }
+    g.restore(); return;
+  }
   ell("rgba(0,0,0,.32)", 0, 0, 11.5, 3);
   curve(dk, c.fluffy ? 5.4 : 3.2, [-9, -8.4, -15, -9, -16.5 + tw, -15, -13.5 + tw, -19.5]); curve(fur, c.fluffy ? 4.2 : 2.2, [-9, -8.4, -15, -9, -16.5 + tw, -15, -13.5 + tw, -19.5]);
   for (const [lx, ph] of [[-6.4, 1], [-3.4, -1], [3.8, -1], [6.8, 1]]) { rr(ph > 0 ? dk : fur, lx + sw * ph * .5 - 1.4, -6.2, 2.9, 6.4, 1.4); }
