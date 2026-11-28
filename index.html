@@ -505,7 +505,7 @@ const CONFIG = {
   /* RPG LAYER. Small on purpose. */
   /* LOOKS for people: skin, hair, hairStyle (short long bob bun curly pony bald), beard, glasses, shirt, top (sweater hoodie blazer vest dress),
      trim + pattern (zigzag dots), scarf, pants, hat (santa beanie antlers), prop (wine gift clipboard mug plate joint), tall, wide. */
-  player: { hp: 10, speed: 15, // speed = squares walked per second
+  player: { hp: 10, speed: 14, // speed = squares walked per second once you get going (the first two squares from a standstill are slower)
     looks: [ // the characters offered on the first screen
       { skin: "#e8b990", hair: "#3a2a20", hairStyle: "short", shirt: "#f3e6c8", trim: "#b3273a", pattern: "zigzag", pants: "#3b4a7a", hat: "santa" },
       { skin: "#e8b990", hair: "#8a4f2a", hairStyle: "lob", shirt: "#2f7a52", top: "dress", trim: "#f3e6c8", pattern: "zigzag", tights: "#f3e6c8", shoes: "#7a2a2a", hat: "santa" },
@@ -538,7 +538,7 @@ const CONFIG = {
      kind: can | bottle | carton | jar | wedge | slice | plate.  item = key in `items` above. */
   /* (set these in custom.js) YOUR OWN SOUNDS: file names or addresses of sound files sitting next to this page (mp3 works everywhere).
      Leave a slot empty ("") to keep the built-in synthesized sound. A list plays one at random each time. */
-  soundVolume: { stairs: .25 }, /* how loud each of your sound files plays, by the same names as sounds: 1 = as recorded, .5 = half */
+  soundVolume: { stairs: .25, ice: .7 }, /* how loud each of your sound files plays, by the same names as sounds: 1 = as recorded, .5 = half */
   mediaDir: "media/",     /* folder for sound and video files named without a folder; "" = next to the HTML file */
   sounds: {
     stairs: "",            // walking down into the cave, e.g. "stairs.mp3"
@@ -1296,18 +1296,29 @@ function auPump() {
   const c = AU.ctx, sg = AU.cur; if (!c || c.state !== "running") return;
   if (AU.hi && c.currentTime > AU.nextLaugh && !(RV && RV.def.piano)) { laugh(); AU.nextLaugh = c.currentTime + 42 + Math.random() * 6; }
   AU.rate += ((AU.hi ? .7 : 1) - AU.rate) * .06; AU.pitch += ((AU.hi ? .5 : 1) - AU.pitch) * .06; // glides, like a record slowing down
-  if (!sg) return; const sd = 60 / sg.bpm / 4 / AU.rate, pitch = AU.pitch;
+  if (!sg) return; const sd = 60 / sg.bpm / 4 / AU.rate, pitch = AU.pitch, lo = AU.lofi | 0; /* lo: 0 = the real arrangement; 1 to 4 = the laptop's builds, each plainer than the last */
   if (AU.next < c.currentTime) AU.next = c.currentTime + .06;
   while (AU.next < c.currentTime + .3) {
     const st = AU.step, t = AU.next + (sg.swing && st % 4 === 2 ? sd * 2 * sg.swing : 0);
-    sg.parts.forEach((p, i) => { const bus = AU.pbus && AU.pbus[i], L = p.ev.len; AU.out = bus;
+    let hiN = null, loN = null;
+    sg.parts.forEach((p, i) => { const bus = AU.pbus && AU.pbus[i], L = p.ev.len; AU.out = lo >= 2 ? null : bus;
       if (bus && p.ccMap) for (const [fr, val] of p.ccMap[st % L] || []) bus.gain.setTargetAtTime(val, t + fr * sd, .008); // volume / expression, even in the middle of a note
-      const evs = p.ev.map[st % L]; if (evs) for (const e of evs) for (const f of e.f) INST[p.inst](f * pitch, t, e.len * sd, p.vol * e.v); });
-    AU.out = AU.dbus; if (sg.drums) for (const k in sg.drums) { if (k === "vol" || k === "cc") continue; const ch = sg.drums[k][st % sg.drums[k].length], lv = ch === "x" ? 1 : ch >= "1" && ch <= "9" ? +ch / 10 : 0; if (lv) DRUM[k](t, sg.drums.vol * lv); }
+      const evs = p.ev.map[st % L]; if (!evs) return;
+      if (lo >= 2) { for (const e of evs) for (const f of e.f) { if (!hiN || f > hiN.f) hiN = { f, v: e.v, len: e.len }; if (!loN || f < loN.f) loN = { f, v: e.v, len: e.len }; } return; } /* older builds: only the highest and lowest notes of each moment survive */
+      if (lo) { for (const e of evs) for (const f of e.f) tone(i === lofiRoles(sg).indexOf(0) ? "square" : "triangle", f * pitch, t, e.len * sd * .9, p.vol * e.v * (i === lofiRoles(sg).indexOf(0) ? .26 : .7), { lp: 5000 }); return; } /* the laptop's own build: every part, on plain chip waves */
+      for (const e of evs) for (const f of e.f) INST[p.inst](f * pitch, t, e.len * sd, p.vol * e.v); });
+    if (hiN) { AU.out = null; tone("square", hiN.f * pitch, t, lo >= 4 ? Math.min(.055, hiN.len * sd * .6) : hiN.len * sd * .85, (lo >= 4 ? .085 : .046) * (.5 + .5 * hiN.v)); /* the tune: one square wave; in the oldest build, just a blip */
+      if (lo === 2 && loN.f < hiN.f * .7) tone("triangle", loN.f * pitch, t, loN.len * sd * .85, .13 * (.5 + .5 * loN.v)); } /* one build back keeps a bass note under it */
+    AU.out = AU.dbus; if (lo === 1 && sg.drums) { for (const k in sg.drums) { if (k === "vol" || k === "cc") continue; const ch = sg.drums[k][st % sg.drums[k].length]; if (ch === "x" || (ch >= "1" && ch <= "9")) { if (k === "k") tone("square", 82 * pitch, t, .035, sg.drums.vol * .5, { to: 50 * pitch }); else noise(t, .025, sg.drums.vol * .3, { hp: 5200, bus: AU.out || AU.music }); } } } /* one build back: drums become blips */
+    else if (!lo && sg.drums) for (const k in sg.drums) { if (k === "vol" || k === "cc") continue; const ch = sg.drums[k][st % sg.drums[k].length], lv = ch === "x" ? 1 : ch >= "1" && ch <= "9" ? +ch / 10 : 0; if (lv) DRUM[k](t, sg.drums.vol * lv); }
     AU.out = null;
     AU.step++; AU.next += sd;
   }
 }
+function lofiRoles(sg) { /* which part carries the tune (0), which is the bass (1), and the rest (2): the highest and lowest parts on average */
+  if (sg._roles) return sg._roles; const m = sg.parts.map(p => { let sum = 0, n = 0; for (const k in p.ev.map) for (const e of p.ev.map[k]) for (const f of e.f) { sum += Math.log(f); n++; } return n ? sum / n : null; });
+  let hi = -1, low = -1; m.forEach((v, i) => { if (v === null) return; if (hi < 0 || v > m[hi]) hi = i; if (low < 0 || v < m[low]) low = i; });
+  return sg._roles = m.map((v, i) => i === hi ? 0 : i === low ? 1 : 2); }
 function ccAt(p, st) { // the part's volume curve value at a step (the last change at or before it, else the curve's start)
   if (!p.cc) return 1; let v = p.cc[0][1]; for (const [s0, val] of p.cc) { if (s0 <= st) v = val; else break; } return v; }
 function auSong(name) { // crossfade: the old tune fades under the new one
@@ -1408,7 +1419,7 @@ function openReach(id, then) {
   RV = { id, def, then, hand: { x: 180, y: 620 }, aim: { x: 180, y: 430 }, carry: null, anim: null, toast: def.title, prog: 0, lit: 0, held: {}, down: {}, voice: {}, cat: 0, ct: 0, walk: 0 };
   P.path = []; P.pending = null; keys.clear(); $("reach").hidden = false; $("hud").hidden = true; paintReach();
 }
-function closeReach() { if (RV && RV.anim) reachRelease(false); if (RV && RV.def.piano) pianoStop(RV); const r = RV; RV = null; tvEmbed(null); tvVideo(false); $("rlink").hidden = true; $("reach").hidden = true; $("hud").hidden = false; keys.clear(); burnSound(false); if (r && (!r.def.cave || S.iced)) questMark(questFor("view", r.id)); paintHud(); if (r && r.then) r.then(r); }
+function closeReach() { if (RV && RV.anim) reachRelease(false); if (RV && RV.def.piano) pianoStop(RV); const r = RV; RV = null; tvEmbed(null); tvVideo(false); $("rlink").hidden = true; $("reach").hidden = true; $("hud").hidden = false; keys.clear(); burnSound(false); AU.lofi = 0; if (r && (!r.def.cave || S.iced)) questMark(questFor("view", r.id)); paintHud(); if (r && r.then) r.then(r); }
 function paintReach() { $("rtoast").textContent = RV.toast; $("rbag").hidden = !!(RV.def.piano || RV.def.cave || RV.def.laptop); $("rbag").textContent = RV.def.pile ? "Your lap" : "Bag " + S.items.length; $("rbag").classList.toggle("hot", RV.carry != null); const l = $("rlink"), d = RV.def; const live2 = !!(d.remote && RV.on && RV.onT > .9); const vid = !!(d.video && !d.videoBroken); l.hidden = !live2 || !!d.embed || vid; if (d.link) { const q = reachXform(); l.href = d.link; l.innerHTML = "<span></span>"; l.firstChild.textContent = d.linkLabel; l.style.cssText = "left:" + (q.ox + 32 * q.sc) + "px;top:" + (q.oy + 102 * q.sc) + "px;width:" + 296 * q.sc + "px;height:" + 174 * q.sc + "px"; } tvEmbed(live2 && d.embed && !vid ? d.embedUrl : null); tvVideo(vid && d.remote && RV.on, live2); }
 function tvVideo(on, show) { /* CONFIG.reach.tv.video: started by the remote tap itself (phones only allow sound from a tap), shown once the static clears */
   let v = $("rvideo"); const d = CONFIG.reach.tv; if (!on) { if (v) { v.pause(); v.remove(); } return; }
@@ -1518,7 +1529,7 @@ function lapTap(p) { const m = RV.m; if (!m) return; const v = lapView(m);
   m.path = findPath(m.x, m.y, (x, y) => Math.abs(x - tx) + Math.abs(y - ty) <= 1, lapOk) || []; if (m.path.length || Math.abs(m.x - tx) + Math.abs(m.y - ty) <= 1) m.use = [tx, ty];
 }
 function lapTick(dt) {
-  const r = RV; if (!lapGrid) lapBuild();
+  const r = RV; if (!lapGrid) lapBuild(); AU.lofi = (r.m ? r.m.d : 0) + 1; /* the music matches the build on screen */
   const m = r.m || (r.m = { x: S.x, y: S.y, fx: S.x, fy: S.y, d: 0, path: [], use: null, cd: .3, dx: 0, dy: -1, msg: "", who: "", mt: 0, flash: 0, bump: "", step: 0 }); if (!m.msg) lapSay(m, r.def.boot);
   const stepT = m.d ? .085 : .13, sp = dt / stepT; m.fx += Math.max(-sp, Math.min(sp, m.x - m.fx)); m.fy += Math.max(-sp, Math.min(sp, m.y - m.fy));
   m.mt += dt; m.flash = Math.max(0, m.flash - dt); m.cd -= dt; if (m.cd > 0) return;
@@ -2037,7 +2048,7 @@ function update(dt) {
   const busy = !S.started || dlg || B || ENC || RV || !$("exchange").hidden || !$("end").hidden || !$("book").hidden;
   if (!busy && S.fq.length) { showFaq(S.fq.shift()); return; }
   // player
-  const arrived = approach(P, S.x, S.y, dt * CONFIG.player.speed);
+  const arrived = approach(P, S.x, S.y, dt * CONFIG.player.speed * (P.run <= 1 ? .45 : P.run === 2 ? .7 : 1)); /* the first square from a standstill is slow, so a quick tap of a key moves exactly one square */
   if (!arrived) P.step += dt * 9;
   else if (!busy) {
     let next = null;
@@ -2045,9 +2056,9 @@ function update(dt) {
     else if (P.pending) { const t = P.pending; P.pending = null; interact(t); }
     else if (keys.size) { const k = [...keys].pop(), d = DIRS.find(d => d[2] === k); P.dir = k; next = [S.x + d[0], S.y + d[1]]; }
     if (next) {
-      if (passable(next[0], next[1])) { face(next[0], next[1]); S.x = next[0]; S.y = next[1]; paintHud(); }
-      else { P.path = []; if (thingAt(next[0], next[1]) === "cave") { face(next[0], next[1]); keys.clear(); openReach("cave"); } }
-    }
+      if (passable(next[0], next[1])) { face(next[0], next[1]); S.x = next[0]; S.y = next[1]; P.run = (P.run || 0) + 1; paintHud(); }
+      else { P.run = 0; P.path = []; if (thingAt(next[0], next[1]) === "cave") { face(next[0], next[1]); keys.clear(); openReach("cave"); } }
+    } else P.run = 0;
   }
   // characters with somewhere to be
   for (const n of live) if (n.route) {

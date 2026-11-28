@@ -26,7 +26,7 @@ window.CUSTOM = {
     yeti: []                    // the yeti, e.g. ["roar1.mp3", "roar2.mp3", "roar3.mp3"]
   },
   // How loud each of your sound files plays, by the same names as above: 1 = as recorded, .5 = half.
-  soundVolume: { stairs: .25 },
+  soundVolume: { stairs: .25, ice: .7 },
 
 
   // The TV: a video file (mp4, H.264 + AAC) plays on the screen when you press the remote.
