@@ -20,6 +20,7 @@ window.CUSTOM = {
     doorbell: "",               // ringing the front doorbell, e.g. "dingdong.mp3"
     gulp: [],                   // each gulp while pounding the Ice, one picked at random, e.g. ["gulp1.mp3", "gulp2.mp3"]
     burp: "",                   // the burp after the last gulp, e.g. "burp.mp3"
+    burn: "",                   // the joint catching; loops while the flame is on it, e.g. "burn.mp3"
     steal: [],                  // a gift being stolen in the exchange, one picked at random, e.g. ["steal1.mp3", "steal2.mp3"]
     open: [],                   // a gift being unwrapped, one picked at random, e.g. ["rip1.mp3", "rip2.mp3"]
     yeti: []                    // the yeti, e.g. ["roar1.mp3", "roar2.mp3", "roar3.mp3"]

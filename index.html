@@ -546,6 +546,7 @@ const CONFIG = {
     doorbell: "",          // the doorbell, e.g. "dingdong.mp3"
     gulp: "",              // each gulp while pounding the Ice; a list plays one at random, e.g. ["gulp1.mp3", "gulp2.mp3"]
     burp: "",              // after the last gulp, e.g. "burp.mp3"
+    burn: "",              // the joint catching; loops while the flame is on it, e.g. "burn.mp3"
     steal: "",             // a gift being stolen in the exchange; a list plays one at random
     open: "",              // a gift being unwrapped; a list plays one at random
     yeti: ["", "", ""]     // Gary the yeti; one is picked at random, e.g. ["roar1.mp3", "roar2.mp3", "roar3.mp3"]
@@ -1287,7 +1288,7 @@ function ha(t, f, d, v) { // one "ha": a buzzy voice through three vowel filters
   e.connect(AU.lbus); o.start(t); o.stop(t + d + .05); noise(t - .035, .07, v * .2, { bp: 2400, q: .7, bus: AU.lbus });
 }
 function laugh() { // somewhere, someone finds this very funny
-  if (AU.laughBuf) { const c = AU.ctx, src = c.createBufferSource(), gn = c.createGain(); src.buffer = AU.laughBuf; src.playbackRate.value = .92; gn.gain.value = .6; src.connect(gn); gn.connect(AU.master); gn.connect(AU.delay); src.start(); return; }
+  if (AU.laughBuf) { const c = AU.ctx, src = c.createBufferSource(), gn = c.createGain(); src.buffer = AU.laughBuf; src.playbackRate.value = .92; gn.gain.value = .3; src.connect(gn); gn.connect(AU.master); gn.connect(AU.delay); src.start(); return; }
   const c = AU.ctx, t = c.currentTime + .08, base = (Math.random() < .4 ? 300 : 150) * (1 + (Math.random() - .5) * .1), n = 5 + ((Math.random() * 4) | 0); let at = 0;
   for (let i = 0; i < n; i++) { ha(t + at, base * Math.pow(.95, i), .15 + i * .015, .55 * Math.pow(.9, i)); at += .2 + i * .03; }
 }
@@ -1370,6 +1371,17 @@ function clip(key) { // plays one of CONFIG.sounds[key]; false means "nothing se
 const CLIPBUF = {}; /* file -> decoded sound, 1 while loading, false if it can't be loaded this way (the plain player is used instead) */
 function clipLoad(src) { CLIPBUF[src] = 1; try { fetch(mediaUrl(src)).then(r => { if (!r.ok) throw 0; return r.arrayBuffer(); }).then(b => AU.ctx.decodeAudioData(b)).then(buf => { CLIPBUF[src] = buf; }).catch(() => { CLIPBUF[src] = false; }); } catch (e) { CLIPBUF[src] = false; } }
 function clipWarm() { for (const [key, v] of Object.entries(CONFIG.soundVolume || {})) if (+v < 1) for (const src of [].concat((CONFIG.sounds || {})[key] || [])) if (src && CLIPBUF[src] === undefined) clipLoad(src); } /* get the turned-down sounds ready before they are first needed */
+function burnSound(on, dt) { /* the joint catching: your own file from sounds.burn on a loop, otherwise a synthesized hiss and crackle */
+  const c = AU.ctx; if (!c || !AU.on) on = false;
+  const src = [].concat((CONFIG.sounds || {}).burn || [])[0];
+  if (src && CLIPS[src] !== false) { let a = CLIPS[src]; if (!a) { a = CLIPS[src] = new Audio(mediaUrl(src)); a.loop = true; a.preload = "auto"; a.onerror = () => { CLIPS[src] = false; }; }
+    const sv = (CONFIG.soundVolume || {}).burn; a.volume = Math.max(0, Math.min(1, sv === undefined ? 1 : +sv));
+    if (on && a.paused) { const pr = a.play(); if (pr && pr.catch) pr.catch(() => {}); } else if (!on && !a.paused) { a.pause(); try { a.currentTime = 0; } catch (e) {} } return; }
+  if (!c) return;
+  if (on && !AU.burn) { const n = c.createBufferSource(), f = c.createBiquadFilter(), gn = c.createGain(); n.buffer = AU.noise; n.loop = true; f.type = "bandpass"; f.frequency.value = 4200; f.Q.value = .5; gn.gain.value = 0; n.connect(f); f.connect(gn); gn.connect(AU.sfx); n.start(); AU.burn = gn; }
+  if (!AU.burn) return; AU.burn.gain.setTargetAtTime(on ? .06 : 0, c.currentTime, .07);
+  if (on && Math.random() < (dt || .016) * 11) noise(c.currentTime, .015 + Math.random() * .035, .1 + Math.random() * .22, { hp: 1500 + Math.random() * 4500 }); /* the crackle: short bright pops at random */
+}
 function paintSound() { $("snd").textContent = !AU.on ? "Sound: off" : AU.ctx && AU.ctx.state !== "running" ? "Sound: tap here" : "Sound: on"; }
 function auUnlock() { /* phones only let sound start from a finished tap, and can pause it again later */
   if (!S || !S.started) return; auInit(); const c = AU.ctx; if (!c) return;
@@ -1396,7 +1408,7 @@ function openReach(id, then) {
   RV = { id, def, then, hand: { x: 180, y: 620 }, aim: { x: 180, y: 430 }, carry: null, anim: null, toast: def.title, prog: 0, lit: 0, held: {}, down: {}, voice: {}, cat: 0, ct: 0, walk: 0 };
   P.path = []; P.pending = null; keys.clear(); $("reach").hidden = false; $("hud").hidden = true; paintReach();
 }
-function closeReach() { if (RV && RV.anim) reachRelease(false); if (RV && RV.def.piano) pianoStop(RV); const r = RV; RV = null; tvEmbed(null); tvVideo(false); $("rlink").hidden = true; $("reach").hidden = true; $("hud").hidden = false; keys.clear(); if (r && (!r.def.cave || S.iced)) questMark(questFor("view", r.id)); paintHud(); if (r && r.then) r.then(r); }
+function closeReach() { if (RV && RV.anim) reachRelease(false); if (RV && RV.def.piano) pianoStop(RV); const r = RV; RV = null; tvEmbed(null); tvVideo(false); $("rlink").hidden = true; $("reach").hidden = true; $("hud").hidden = false; keys.clear(); burnSound(false); if (r && (!r.def.cave || S.iced)) questMark(questFor("view", r.id)); paintHud(); if (r && r.then) r.then(r); }
 function paintReach() { $("rtoast").textContent = RV.toast; $("rbag").hidden = !!(RV.def.piano || RV.def.cave || RV.def.laptop); $("rbag").textContent = RV.def.pile ? "Your lap" : "Bag " + S.items.length; $("rbag").classList.toggle("hot", RV.carry != null); const l = $("rlink"), d = RV.def; const live2 = !!(d.remote && RV.on && RV.onT > .9); const vid = !!(d.video && !d.videoBroken); l.hidden = !live2 || !!d.embed || vid; if (d.link) { const q = reachXform(); l.href = d.link; l.innerHTML = "<span></span>"; l.firstChild.textContent = d.linkLabel; l.style.cssText = "left:" + (q.ox + 32 * q.sc) + "px;top:" + (q.oy + 102 * q.sc) + "px;width:" + 296 * q.sc + "px;height:" + 174 * q.sc + "px"; } tvEmbed(live2 && d.embed && !vid ? d.embedUrl : null); tvVideo(vid && d.remote && RV.on, live2); }
 function tvVideo(on, show) { /* CONFIG.reach.tv.video: started by the remote tap itself (phones only allow sound from a tap), shown once the static clears */
   let v = $("rvideo"); const d = CONFIG.reach.tv; if (!on) { if (v) { v.pause(); v.remove(); } return; }
@@ -1680,7 +1692,7 @@ function reachTick(dt) {
   if (r.def.piano) { for (const k in r.down) r.down[k] = Math.max(0, r.down[k] - (Object.values(r.held).includes(+k) || (r.song && r.song.key === +k) ? 0 : dt)); r.cat = Math.max(0, r.cat - dt * 1.4); pianoSongTick(dt); return; }
   if (r.def.remote) { ty = Math.max(400, ty); r.press = Math.max(0, (r.press || 0) - dt); if (r.on) { const o = r.onT; r.onT += dt; if (o <= .9 && r.onT > .9) paintReach(); } }
   if (r.def.lighter) {
-    const d = Math.hypot(r.hand.x - JOINT_TIP.x, r.hand.y - 80 - JOINT_TIP.y);
+    const d = Math.hypot(r.hand.x - JOINT_TIP.x, r.hand.y - 80 - JOINT_TIP.y); burnSound(r.lit ? r.lit < 1.7 : d < 24, dt);
     if (r.lit) { r.lit += dt; if (r.lit > 2) closeReach(); }
     else { r.prog = Math.max(0, Math.min(1, r.prog + (d < 24 ? dt / 1.1 : -dt))); if (r.prog >= 1) { r.lit = .001; S.high = 1; S.smoked = (S.smoked || 0) + 1; applyTrip(); r.toast = CONFIG.text.lit; sfx("lit"); paintReach(); } }
   } else if (a) {
