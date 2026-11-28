@@ -14,6 +14,7 @@ window.CUSTOM = {
     ice: "item.wav", // raising the Smirnoff Ice, e.g. "item.mp3"
     gulp: "gulp.wav",
     burp: "burp.wav",
+    burn: "burning.mp3", // the joint catching; loops while the flame is on it
     doorbell: "doorbell.mp3", // ringing the front doorbell, e.g. "dingdong.mp3"
     yeti: [
       "Chewbacca sound-1.mp3",
