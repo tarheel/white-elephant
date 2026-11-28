@@ -58,9 +58,10 @@ window.CUSTOM = {
 
   // The party details, shown on the sign out front.
   party: {
-    when: "[date and time TBD]",
-    where: "[address TBD]",
-    bring: "One wrapped gift, about $[TBD]. No name on it.",
+    when: "Saturday, 12/5, 7 pm",
+    where: "75 Sheridan Rd, Oakland",
+    bring:
+      "One wrapped gift that's nice but not too expensive (maybe like $20 to $40?). Don't put your name on it!",
   },
 
   // THE FAQS. One per stop on the quest, in this order: sign, bell, coats, bath, coraline, rules, charlotte, moldover, food, bar, louis.
@@ -71,71 +72,76 @@ window.CUSTOM = {
   faqs: {
     sign: {
       goal: "Read the sign by the front steps",
-      title: "When and where is it?",
-      text: "When: {when}\nWhere: {where}\n[TBD: parking, and which door.]",
+      title: "When and where is this party?",
+      text: "When: {when}\nWhere: {where}\nWhy: Each of us has to answer that question for ourselves.",
     },
     bell: {
-      goal: "Ring the doorbell, beside the front door",
-      title: "How do I get in?",
-      text: "Ring the bell. Knocking loses to the music every time.\n[TBD: what time to show up, and how late is too late.]",
+      goal: "Ring the doorbell next to the front door",
+      title: "Is this party kid-friendly?",
+      text: "Sorry, no kids. You didn't want to bring them anyway.",
     },
     coats: {
-      goal: "Find the coat closet, off the entry",
+      goal: "Find the coat closet just inside",
       title: "Where do coats and shoes go?",
-      text: "Coats: the closet off the entry, next to the bathroom.\nShoes: [TBD: on or off].\nGifts: under the tree, down in the family room.",
+      text: "Coats: the closet off the entry, next to the bathroom.\nShoes: off, please. Even better, just show up barefoot.\nGifts: under the tree down in the family room.",
     },
     bath: {
-      goal: "Find the bathroom, next to the coat closet",
+      goal: "Find the bathroom",
       title: "Where's the bathroom?",
-      text: "Off the entry, first door past the stairs.\n[TBD: anything else guests should know. The lock, for instance.]",
+      text: "Next to the coat closet. We promise it will have been cleaned since the last time our children used it.",
     },
     coraline: {
-      goal: "Meet Coraline, on the stairs",
-      title: "Are there pets?",
-      text: "Four cats: Coraline, Hobbes, Pompom and Top Hat. They will investigate your coat and your gift.\nUpstairs and the garage are closed.\n[TBD: allergy note.]",
+      goal: "Meet Coraline on the stairs",
+      title: "What's the cat situation?",
+      text: [
+        "You'll be very impressed to hear that we have four cats: Coraline, Hobbes, and our two newest additions, Pompom and Top Hat.",
+        "Don't take their cutting remarks personally. They can be quite catty.",
+      ],
     },
     rules: {
-      goal: "Ask the Rules Lawyer how this works",
-      title: "How does the exchange work?",
+      goal: "Ask the Rules Nerd how this works",
+      title: "How exactly does the white elephant gift exchange work?",
       text: [
-        "Everyone draws a number. On your turn you open a wrapped gift or steal an opened one. If yours is stolen, you go again right away.",
-        "A gift can be stolen {maxSteals} times, then it's locked. You can't steal back what was just taken from you.\n[TBD: house rules.]",
+        "To start, everyone draws a playing card to establish the order. On your turn, you either open a wrapped gift or steal an opened one. If yours is stolen, you go again right away.",
+        "A gift can be stolen {maxSteals} times, then it's locked. You can't steal back what was just taken from you. When a steal happens, both players involved have to take a shot...",
+        "unless you're taking BART later, in which case you're exempt, obviously.",
       ],
       says: [
-        "On your turn you either open a wrapped gift or steal an opened one.",
-        "If yours gets stolen, you go again right away. Open or steal.",
-        "A gift can be stolen {maxSteals} times. After that it's locked and its owner is safe.",
+        "We adhere to the official International White Elephant Rules of Engagement, as laid out in the Geneva Convention of 1949.",
       ],
     },
     charlotte: {
       goal: "Find Charlotte in the kitchen",
-      title: "What should I bring?",
-      text: "{bring}\n[TBD: price range, how weird is too weird, and whether regifting counts.]",
-      says: ["Hi {player}! You made it past the yeti.", "What to bring? {bring}"],
+      title: "What should I bring for the gift exchange?",
+      text: "{bring}\nIt can be funny or weird, but make it something that someone (you, for example) would actually want.",
+      says: ["Hi, {player}! You made it past the yeti.", "What to bring? {bring}"],
     },
     moldover: {
-      goal: "Say hi to Moldover, in the kitchen",
-      title: "Who's invited?",
-      text: "Adults only this year. No kids.\n[TBD: plus-ones, and what the party is and isn't friendly to.]",
+      goal: "Say hi to Moldover in the kitchen",
+      title: "Will there be drugs?",
+      text: "Yes, but probably only legal ones.",
     },
     food: {
-      goal: "Check out the food, on the kitchen island",
+      goal: "Check out the food on the kitchen island",
       title: "Will there be food?",
-      text: "[TBD: dinner or snacks, and what to eat beforehand.]\n[TBD: where to send dietary restrictions.]",
+      text: [
+        "We'll have an array of snacks and appetizer-type things. We recommend eating dinner before coming, but there will be no snackcidents on our watch.",
+        "If you want to bring something to add to the mix, go for it.",
+      ],
     },
     bar: {
-      goal: "Visit the bar, on the kitchen counter",
+      goal: "Visit the bar on the kitchen counter",
       title: "What about drinks?",
-      text: "[TBD: what we're providing, and whether to bring your own.]\nThere will be things without alcohol in them too.",
+      text: [
+        "There will be a solid assortment of beverages -- some festive and some a bit unsettling.",
+        "No need to bring anything, but feel free to do so if you'd like.",
+      ],
     },
     louis: {
-      goal: "Find Louis by the tree, down in the family room",
+      goal: "Find Louis by the tree down in the family room",
       title: "Anything else?",
       text: "[TBD: RSVP by when, and to whom.]\n[TBD: who to text if you get lost on the front steps.]",
-      says: [
-        "You found everything. Most people never make it past the yeti.",
-        "One last thing before we play.",
-      ],
+      says: ["You found everything! Congratulations.", "One last thing before we play."],
     },
   },
 
@@ -145,19 +151,20 @@ window.CUSTOM = {
   people: {
     louis: {
       name: "Louis",
-      lines: [["Welcome, {player}. Gifts go under the tree. Opinions go in the kitchen."]],
+      lines: [["Welcome, {player}. Gifts go under the tree."]],
     },
     charlotte: {
       name: "Charlotte",
       lines: [
         [
-          "Hi {player}! Coats go in the closet off the entry, next to the bathroom. Shoes are your call.",
+          "Hi, {player}! Coats go in the closet off the entry, next to the bathroom. Leave your shoes and your cares by the door.",
+          "Actually, keep your cares on hand. You're going to need them tonight.",
         ],
         ["If a cat is sitting on your gift, it's the cat's gift now. House rule."],
       ],
     },
     g1: {
-      name: "The Rules Lawyer",
+      name: "The Rules Nerd",
       lines: [
         [
           "On your turn you either open a wrapped gift or steal an opened one.",
@@ -165,34 +172,43 @@ window.CUSTOM = {
         ],
         [
           "A gift can be stolen {maxSteals} times. After that it's locked and its owner is safe.",
-          "And you can't steal back the thing that was just taken from you. Hold the grudge until later.",
+          "And you can't steal back the thing that was just taken from you.",
         ],
       ],
     },
     g2: {
       name: "The Regifter",
       lines: [
-        ["Is regifting allowed? It's encouraged. That candle has seen four of these parties."],
+        [
+          "Is regifting allowed? It's encouraged. But... don't regift something just because it sucks.",
+        ],
         ["What should you bring? {bring}"],
       ],
     },
     yeti: {
       name: "Rocky",
-      lines: [["HRRRAAAWWWRRGH."], ["Hrrnnngh. Rrrawwr. Wrrrgh."]],
+      lines: [
+        ["HRRRAAAWWWRRGH."],
+        ["Hrrnnngh. Rrrawwr. Wrrrgh."],
+        ["Awghghghghghghghghgh."],
+        ["Do you ever feel like no one truly understands you?"],
+        ["He is richest who is content with the least, for content is the wealth of nature."],
+      ],
     },
     g3: {
       name: "The Early Arriver",
       lines: [
-        [
-          "I got here twenty minutes early. The hosts were still vacuuming. We don't talk about it.",
-        ],
+        ["I got here 20 minutes early. I saw unspeakable things."],
         ["When is it? {when}. Not before."],
       ],
     },
     g4: {
-      name: "The One Who Brought Wine",
+      name: "The Oenophile",
       lines: [
-        ["Do you have to bring a gift to play? Yes. Wine is a separate, additional kindness."],
+        [
+          "Do you have to bring a gift to play? Yes. Wine is a separate, additional kindness.",
+          "Unless wine is your white elephant gift, I guess? Now I'm confused.",
+        ],
         ["No kids this year. Arrange your evening accordingly."],
       ],
     },
@@ -200,23 +216,23 @@ window.CUSTOM = {
       name: "Moldover",
       lines: [
         [
-          "I rolled one for the occasion. It's my special blend: salvia and kratom.",
-          "Want some? We'll crack a window.",
+          "I rolled one for the occasion. It's an old Moldover family recipe: salvia and kratom.",
+          "Want some? It'll numb the pain for a few minutes.",
         ],
       ],
-      again: ["Back already. I rolled another. Same blend: salvia and kratom. Round two?"],
-      no: ["Respect. Offer stands."],
+      again: ["Back already. I rolled another. You in?"],
+      no: ["Cool. Maybe later."],
       lit: [
         "There it is.",
-        "If the walls start dripping, drink some water. There's some in the fridge.",
+        "If the walls start dripping or you're hearing voices, drink water. There's some in the fridge.",
       ],
-      after: ["You good? You're staring at the wall again. Water. Fridge. Go."],
+      after: ["Water. Fridge. Unless you enjoy what's happening to your brain right now."],
     },
     coraline: {
       name: "Coraline",
-      lines: [["Coraline is sitting on the stairs. Upstairs is closed. She is the sign."]],
+      lines: [["Coraline is sitting on the stairs scowling. Upstairs is closed."]],
       noFood: [
-        "Coraline sniffs the can once and looks at you like you have insulted her ancestors.",
+        "Coraline sniffs the can once and looks at you in disgust.",
         "She does not move. The cat food stays yours.",
       ],
     },
@@ -224,21 +240,18 @@ window.CUSTOM = {
       name: "Hobbes",
       lines: [
         [
-          "Hobbes is loafed across the top of the garage stairs.",
-          "The game room is not part of the party. Hobbes is very much part of the party.",
+          "Hobbes is loafed across the top of the stairs.",
+          "The game room is not part of the party. Hobbes, on the other hand, is the life of the party.",
         ],
       ],
-      noFood: [
-        "Hobbes opens one eye, sees the can, and closes the eye.",
-        "He has standards. He also has a loaf to maintain.",
-      ],
+      noFood: ["Hobbes opens one eye, sees the can, and closes the eye.", "He has standards."],
     },
     k1: {
       name: "Pompom",
       lines: [
         [
-          "Pompom holds the office doorway. Pompom is mostly tail and has never lost.",
-          "She cannot be beaten. She can, possibly, be bought. She keeps glancing toward the kitchen.",
+          "Pompom blocks the office doorway. She may be small, but she's ferocious.",
+          "She cannot be beaten. She can, possibly, be bribed.",
         ],
       ],
       fedNow: [
@@ -252,13 +265,15 @@ window.CUSTOM = {
     k2: {
       name: "Top Hat",
       lines: [
-        ["(Top Hat attacks your shoelace and declares victory.)"],
-        ["(Top Hat is not part of the exchange. Top Hat disagrees.)"],
+        [
+          "(Top Hat lunges for your throat, then has a change of heart and decides to let you live. For now.)",
+        ],
+        ["Meow."],
       ],
     },
     bunny: {
       name: "Dust Bunny",
-      intro: ["A Dust Bunny rolls out from under the piano. The vacuuming was not thorough."],
+      intro: ["A fierce Dust Bunny rolls out from under the piano."],
       win: "The Dust Bunny disperses. The living room is, briefly, clean.",
     },
     lights: {
@@ -270,20 +285,22 @@ window.CUSTOM = {
     },
     cake: {
       name: "The Fruitcake",
-      intro: ["The Fruitcake. It has been regifted since 1987 and it has had enough."],
-      win: "The Fruitcake is defeated. It is still, technically, edible.",
+      intro: [
+        "The Fruitcake. It has been regifted at the last three white elephants and it's finally had enough.",
+      ],
+      win: "The Fruitcake is defeated, yet edible.",
     },
   },
 
   // What you read when you look at things in the house, by thing.
   objects: {
-    sign: ["A sign, staked into the planter with real commitment."],
-    coats: ["The coat closet. Coats go here. Yes, there is room."],
-    toilet: ["The bathroom. You found it without asking anyone. Well done."],
-    sink: ["Wash your hands. There is shared cheese."],
+    sign: ["A sign in the front yard? In this economy?"],
+    coats: ["The coat closet. Also a prime location for Seven Minutes in Heaven."],
+    toilet: ["If you see a cat drinking out of this, kindly stop it."],
+    sink: ["Flush and wash and be on your way."],
     bell: ["The doorbell."],
     tv: [
-      "The TV is displaying art. It is not for watching. This has been discussed.",
+      "The TV is displaying art.",
       "Below it, a fire. Stockings hung with care, and one hung with indifference.",
     ],
     fridge: ["The fridge. Mostly water at this point."],
@@ -296,14 +313,14 @@ window.CUSTOM = {
   // Narration, goals and short lines from around the house.
   text: {
     hostNotYet: ["Not yet, {player}. You still have {need} to collect.", "Next: {next}."],
-    hostReady: ["Everyone's here and nobody has left with the good snacks. Ready to do this?"],
+    hostReady: ["Everyone's here and the crowd is getting restless. Ready to do this?"],
     hostAfter: ["Same time next year. Bring something worse."],
     locked: ["Locked. The doorbell is on the wall to your right."],
     bellAgain: [
-      "You ring it again. From inside, a muffled HRRRNGH that means: it is open, come in.",
+      "And I'm thinkin' about my doorbell\nWhen you gonna ring it, and when you gonna ring it",
     ],
     bellWait: ["Patience. Something large is coming."],
-    bellRing: ["Ding-dong.", "Heavy footsteps. Very heavy. The floor complains."],
+    bellRing: ["Ding-dong.", "Heavy footsteps. Very heavy. The earth moves."],
     backAway: ["You back away slowly. It lets you. It has nowhere to be."],
     backAwayGuard: ["Wise."],
     faint: [
@@ -312,23 +329,18 @@ window.CUSTOM = {
     ],
     catNeedFood: ["You have nothing a cat would want.", "There's a can of cat food in the fridge."],
     catNoFood: ["Not interested. The cat food stays yours."],
-    catFed: ["It works. The way is open."],
-    firesWon: [
-      "The fires won. You wake up on the family room rug with all of your HP and none of your dignity.",
-    ],
+    catFed: ["It worked! The way is open."],
+    firesWon: ["The fires won. You wake up on the family room rug, oddly refreshed."],
     firesAngry: "The fires did not care for that.",
     pianoAuto: "Auto-meow engaged.",
     pianoDone: "The piano would like a treat.",
     unwrapHint: "Tap it to tear off the paper.",
-    water: "You drink it right there. The walls hold still.",
-    lit: "It's lit.",
-    chugStart: "You take a knee. Tradition is tradition.",
+    water: "You drink it right there. Your brain works again. Sort of.",
+    lit: "It's lit. Just like this party.",
+    chugStart: "You take a knee because you are a person of honor.",
     chugDone: "Pounded. +3 HP. Your dignity is somewhere back by the stairs.",
-    doorGreet: [
-      "HRRRAAAWWWRRGH!",
-      "(It steps aside and waves you in. The party hat survived the doorframe. Barely.)",
-    ],
-    goalHost: "Tell Louis you're ready, by the tree in the family room",
+    doorGreet: ["HRRRAAAWWWRRGH!", "(The beast steps aside and waves you in.)"],
+    goalHost: "Go down to the family room and tell Louis you're ready",
     goalWater: "Drink water from the fridge",
     goalDone: "Exchange survived",
     faqCard: "FAQ {n} of {total}",
@@ -338,15 +350,15 @@ window.CUSTOM = {
     verdicts: [
       {
         min: 8,
-        line: "A triumph. Guard it on the way to the car.",
+        line: "A triumph. You are truly the whitest of elephants.",
       },
       {
         min: 5,
-        line: "Respectable. You will use it once and mention it often.",
+        line: "Respectable.",
       },
       {
         min: 0,
-        line: "Somewhere, a regifter smiles. See you next year, when you bring it back.",
+        line: "You're going to bring this back next year, aren't you?",
       },
     ],
   },
@@ -359,7 +371,7 @@ window.CUSTOM = {
     },
     ice: {
       name: "Smirnoff Ice",
-      note: "Restores 3 HP. You know the rules.",
+      note: "Restores 3 HP. You know the rules and so do I.",
     },
     cheese: {
       name: "Cheese cube",
@@ -375,7 +387,7 @@ window.CUSTOM = {
     },
     slice: {
       name: "Fruitcake slice",
-      note: "Restores 1 HP. Costs some dignity.",
+      note: "Restores 1 HP. You may pay for it later.",
     },
     platter: {
       name: "Party platter",
@@ -440,13 +452,13 @@ window.CUSTOM = {
     },
     oil: {
       short: "Fancy olive oil",
-      name: "a bottle of fancy olive oil",
-      desc: "Someone here spent real money. Find them.",
+      name: "a bottle of fancy extra virgin olive oil",
+      desc: "This might be too nice of a gift for a white elephant.",
     },
     candle: {
       short: "Scented candle",
       name: "a scented candle",
-      desc: "The scent is called Cabin.",
+      desc: "The scent is called Elon Musk.",
     },
     waffle: {
       short: "Cat waffle iron",
@@ -454,14 +466,14 @@ window.CUSTOM = {
       desc: "Everyone in the room wants this.",
     },
     tickets: {
-      short: "Scratch tickets",
-      name: "ten dollars of scratch tickets",
+      short: "Lottery tickets",
+      name: "$25 of scratch tickets",
       desc: "There's a coin taped to the front.",
     },
     pickles: {
       short: "Mystery pickles",
       name: "a jar of mystery pickles",
-      desc: "Homemade. Undated.",
+      desc: "Homemade. Undated. Not sterile.",
     },
     blanket: {
       short: "Enormous blanket",
@@ -471,12 +483,12 @@ window.CUSTOM = {
     gong: {
       short: "Desk gong",
       name: "a desk gong",
-      desc: "Small gong, small mallet, large consequences.",
+      desc: "Always. Be. Closing.",
     },
     uke: {
       short: "Emergency ukulele",
       name: "an emergency ukulele",
-      desc: "Break glass in case of silence.",
+      desc: "You'll know when it's time.",
     },
     pillow: {
       short: "Dog sequin pillow",
@@ -491,7 +503,7 @@ window.CUSTOM = {
       title: "The fridge. Someone got here first.",
     },
     food: {
-      title: "The food, on the island. Tap something to take it.",
+      title: "The food on the island. Tap something to take it.",
     },
     bar: {
       title: "The bar. Tap a drink to take it.",
@@ -507,8 +519,8 @@ window.CUSTOM = {
       after: [
         [1, "That is not a piano sound."],
         [10, "Every key. Every single key is a cat."],
-        [40, "Somewhere, Top Hat is taking this personally."],
-        [100, "You have been at this a while. People are looking."],
+        [40, "Now you're getting the hang of it."],
+        [100, "You've been at this a while. People are looking."],
       ],
     },
     joint: {
@@ -517,11 +529,11 @@ window.CUSTOM = {
     laptop: {
       title: "The office laptop. Someone left a game running.",
       boot: "White Elephant: The Game. Arrows or tap to move. Walk into people and things.",
-      inside: "A laptop. On its screen: this game, but an older build.",
+      inside: "A laptop. On its screen: an older version of this game.",
       deeper: [
-        "A laptop, inside the laptop. An older build: the art budget had not arrived yet.",
-        "Another one. This build predates most colors.",
-        "And another. This build predates the rest of them.",
+        "A laptop inside the laptop. An even older build, so bad that it must have been made by a human.",
+        "Another one. Optimized for 8086 processors.",
+        "And another. What the fuck?",
       ],
       bottom: "It's laptops all the way down. Go back to the party.",
     },
